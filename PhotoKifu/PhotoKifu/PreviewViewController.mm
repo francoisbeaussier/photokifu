@@ -7,7 +7,7 @@
 //
 
 #import "PreviewViewController.h"
-#import "PhotoKifuCore.h"
+#import <PhotoKifuCore/PhotoKifuCore.h>
 
 @interface PreviewViewController ()
 
@@ -27,26 +27,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view.
-    /*
-    NSLayoutConstraint *cn = [NSLayoutConstraint constraintWithItem:self.gobanView
-                                                          attribute:NSLayoutAttributeHeight
-                                                          relatedBy:NSLayoutRelationEqual
-                                                             toItem:nil
-                                                          attribute:NSLayoutAttributeNotAnAttribute
-                                                         multiplier:1
-                                                           constant:200];
-    [self.gobanView addConstraint:cn];
-    
-    cn = [NSLayoutConstraint constraintWithItem:self.gobanView
-                                      attribute:NSLayoutAttributeWidth
-                                      relatedBy:NSLayoutRelationEqual
-                                         toItem:nil
-                                      attribute:NSLayoutAttributeNotAnAttribute
-                                     multiplier:1
-                                       constant:200];
-    [self.gobanView addConstraint: cn];
-    */
+
     [self.gobanView setStones: _stones];
 }
 
@@ -209,7 +190,5 @@
 {
     
 }
-
-
 
 @end

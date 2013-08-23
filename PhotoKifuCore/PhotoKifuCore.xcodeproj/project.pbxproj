@@ -16,8 +16,8 @@
 		B24C1D021757D4E500C462B3 /* geometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B24C1D001757D4E500C462B3 /* geometry.cpp */; };
 		B24C1D031757D4E500C462B3 /* geometry.h in Headers */ = {isa = PBXBuildFile; fileRef = B24C1D011757D4E500C462B3 /* geometry.h */; };
 		B24C1D061757D7FD00C462B3 /* GeometryTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B24C1D041757D7FD00C462B3 /* GeometryTests.mm */; };
+		B27A15F017C796EB003AA083 /* PhotoKifuCore.h in Headers */ = {isa = PBXBuildFile; fileRef = B2848E12171462FD00E0F0BB /* PhotoKifuCore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B2848E0E171462FD00E0F0BB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2848E0D171462FD00E0F0BB /* Foundation.framework */; };
-		B2848E13171462FD00E0F0BB /* PhotoKifuCore.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = B2848E12171462FD00E0F0BB /* PhotoKifuCore.h */; };
 		B2848E15171462FD00E0F0BB /* PhotoKifuCore.mm in Sources */ = {isa = PBXBuildFile; fileRef = B2848E14171462FD00E0F0BB /* PhotoKifuCore.mm */; };
 		B2848E1D171462FD00E0F0BB /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2848E1C171462FD00E0F0BB /* SenTestingKit.framework */; };
 		B2848E20171462FD00E0F0BB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2848E0D171462FD00E0F0BB /* Foundation.framework */; };
@@ -73,7 +73,6 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
-				B2848E13171462FD00E0F0BB /* PhotoKifuCore.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -270,6 +269,7 @@
 			files = (
 				B2A717F01719C9CE00198677 /* GobanDetector.h in Headers */,
 				B23706DB173BD7FB002F672D /* lineData.h in Headers */,
+				B27A15F017C796EB003AA083 /* PhotoKifuCore.h in Headers */,
 				B24C1D031757D4E500C462B3 /* geometry.h in Headers */,
 				B23C277C1769FD09001837B4 /* MinMaxFinder.h in Headers */,
 				B2A878221770AC08002059D6 /* PerspectiveGrid.h in Headers */,
@@ -490,7 +490,7 @@
 				INSTALL_PATH = "$(BUILT_PRODUCTS_DIR)";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PUBLIC_HEADERS_FOLDER_PATH = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "include/$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
 			name = Debug;
@@ -508,7 +508,7 @@
 				INSTALL_PATH = "$(BUILT_PRODUCTS_DIR)";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PUBLIC_HEADERS_FOLDER_PATH = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "include/$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
 			name = Release;

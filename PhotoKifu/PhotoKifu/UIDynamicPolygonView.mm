@@ -7,8 +7,8 @@
 //
 
 #import "UIDynamicPolygonView.h"
-#include "GobanDetector.h"
-#include "PerspectiveGrid.h"
+#import <PhotoKifuCore/GobanDetector.h>
+#import <PhotoKifuCore/PerspectiveGrid.h>
 
 
 @implementation UIDynamicPolygonView
