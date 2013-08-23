@@ -20,17 +20,6 @@
     return self;
 }
 
-/*
-- (id) initWithCoder:(NSCoder *)aCoder
-{
-    if(self = [super initWithCoder:aCoder])
-    {
-        [self configure];
-    }
-    return self;
-}
-*/
-
 -(void) configure
 {
     _gobanSize = 19;

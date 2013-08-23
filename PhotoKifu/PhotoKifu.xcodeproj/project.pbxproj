@@ -38,7 +38,6 @@
 		B2B7370817C72AB500283DFE /* DetailViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B23C27E0176A16FD001837B4 /* DetailViewController.mm */; };
 		B2B7370917C72AB500283DFE /* UIDynamicPolygonView.mm in Sources */ = {isa = PBXBuildFile; fileRef = B23C27FE176A986A001837B4 /* UIDynamicPolygonView.mm */; };
 		B2B7370A17C72AB500283DFE /* MagnifierView.mm in Sources */ = {isa = PBXBuildFile; fileRef = B24F0B8D177317B100769CF3 /* MagnifierView.mm */; };
-		B2B7370B17C72AB500283DFE /* TouchReader.m in Sources */ = {isa = PBXBuildFile; fileRef = B24F0B9417731A1500769CF3 /* TouchReader.m */; };
 		B2B7370C17C72AB500283DFE /* PreviewViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B2D66238178F2AE8001C6436 /* PreviewViewController.mm */; };
 		B2B7370D17C72AB500283DFE /* GobanView.mm in Sources */ = {isa = PBXBuildFile; fileRef = B2D6623B178F2F19001C6436 /* GobanView.mm */; };
 		B2B7370E17C72AB500283DFE /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B23C27CD176A16FD001837B4 /* main.m */; };
@@ -81,8 +80,6 @@
 		B24F0B8D177317B100769CF3 /* MagnifierView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MagnifierView.mm; sourceTree = "<group>"; };
 		B24F0B8F1773184400769CF3 /* magnify-mask@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "magnify-mask@2x.png"; path = "PhotoKifu/Art/magnify-mask@2x.png"; sourceTree = SOURCE_ROOT; };
 		B24F0B901773184400769CF3 /* magnify@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "magnify@2x.png"; path = "PhotoKifu/Art/magnify@2x.png"; sourceTree = SOURCE_ROOT; };
-		B24F0B9317731A1500769CF3 /* TouchReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TouchReader.h; sourceTree = "<group>"; };
-		B24F0B9417731A1500769CF3 /* TouchReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TouchReader.m; sourceTree = "<group>"; };
 		B2A8780C176F8CF5002059D6 /* target.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = target.png; sourceTree = "<group>"; };
 		B2A8780D176F8CF5002059D6 /* target.xcf */ = {isa = PBXFileReference; lastKnownFileType = file; path = target.xcf; sourceTree = "<group>"; };
 		B2A878121770A495002059D6 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
@@ -129,11 +126,6 @@
 			children = (
 				B2B7371217C72B2000283DFE /* libPhotoKifuCore.a */,
 				B2A8781C1770A4CF002059D6 /* xcode frameworks */,
-				B2A8781A1770A4B6002059D6 /* QuartzCore.framework */,
-				B2A878181770A4AD002059D6 /* CoreMedia.framework */,
-				B2A878161770A4A7002059D6 /* CoreVideo.framework */,
-				B2A878141770A49C002059D6 /* AVFoundation.framework */,
-				B2A878121770A495002059D6 /* ImageIO.framework */,
 				B23C27C7176A16FD001837B4 /* PhotoKifu */,
 				B23C27C0176A16FD001837B4 /* Frameworks */,
 				B23C27BF176A16FD001837B4 /* Products */,
@@ -151,6 +143,11 @@
 		B23C27C0176A16FD001837B4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B2A8781A1770A4B6002059D6 /* QuartzCore.framework */,
+				B2A878181770A4AD002059D6 /* CoreMedia.framework */,
+				B2A878161770A4A7002059D6 /* CoreVideo.framework */,
+				B2A878141770A49C002059D6 /* AVFoundation.framework */,
+				B2A878121770A495002059D6 /* ImageIO.framework */,
 				B2B7370317C728E100283DFE /* opencv2.framework */,
 				B2D6623D17909ADD001C6436 /* MessageUI.framework */,
 				B23C27C1176A16FD001837B4 /* UIKit.framework */,
@@ -202,8 +199,6 @@
 				B23C27FE176A986A001837B4 /* UIDynamicPolygonView.mm */,
 				B24F0B8C177317B100769CF3 /* MagnifierView.h */,
 				B24F0B8D177317B100769CF3 /* MagnifierView.mm */,
-				B24F0B9317731A1500769CF3 /* TouchReader.h */,
-				B24F0B9417731A1500769CF3 /* TouchReader.m */,
 				B2D66237178F2AE8001C6436 /* PreviewViewController.h */,
 				B2D66238178F2AE8001C6436 /* PreviewViewController.mm */,
 				B2D6623A178F2F19001C6436 /* GobanView.h */,
@@ -338,7 +333,6 @@
 				B2B7370817C72AB500283DFE /* DetailViewController.mm in Sources */,
 				B2B7370917C72AB500283DFE /* UIDynamicPolygonView.mm in Sources */,
 				B2B7370A17C72AB500283DFE /* MagnifierView.mm in Sources */,
-				B2B7370B17C72AB500283DFE /* TouchReader.m in Sources */,
 				B2B7370C17C72AB500283DFE /* PreviewViewController.mm in Sources */,
 				B2B7370D17C72AB500283DFE /* GobanView.mm in Sources */,
 				B2B7370E17C72AB500283DFE /* main.m in Sources */,
@@ -427,12 +421,14 @@
 		B23C27E5176A16FD001837B4 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../xcode frameworks\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PhotoKifu/PhotoKifu-Prefix.pch";
+				HEADER_SEARCH_PATHS = "$(PROJECT_TEMP_DIR)/../UninstalledProducts/include/**";
 				INFOPLIST_FILE = "PhotoKifu/PhotoKifu-Info.plist";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = PhotoKifu;
@@ -444,12 +440,14 @@
 		B23C27E6176A16FD001837B4 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../xcode frameworks\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PhotoKifu/PhotoKifu-Prefix.pch";
+				HEADER_SEARCH_PATHS = "$(PROJECT_TEMP_DIR)/../UninstalledProducts/include/**";
 				INFOPLIST_FILE = "PhotoKifu/PhotoKifu-Info.plist";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = PhotoKifu;

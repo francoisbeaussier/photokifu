@@ -7,12 +7,13 @@
 //
 
 #import <QuartzCore/QuartzCore.h>
+#import <PhotoKifuCore/GobanDetector.h>
+#import <PhotoKifuCore/PerspectiveGrid.h>
+#import <PhotoKifuCore/PhotoKifuCore.h>
+
 #import "DetailViewController.h"
 #import "GobanScanData.h"
 #import "UIDynamicPolygonView.h"
-#import "GobanDetector.h"
-#import "PhotoKifuCore.h"
-#import "TouchReader.h"
 #import "PreviewViewController.h"
 #import "Utils.h"
 

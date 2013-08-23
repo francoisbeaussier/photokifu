@@ -93,8 +93,7 @@
     CGContextAddLineToPoint(context, self.frame.size.width * 0.5, self.frame.size.height);
     
     CGContextStrokePath(context);
-
-
+    
     // draw magnifying glass
     [glass drawInRect: bounds];
 }
