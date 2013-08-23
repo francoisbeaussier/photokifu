@@ -28,6 +28,8 @@
 
 #endif
 
+- (void) viewWillAppear:(BOOL)animated;
+
 - (void) updateAfterZoom;
 
 @end

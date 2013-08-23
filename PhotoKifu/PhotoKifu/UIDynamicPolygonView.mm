@@ -50,8 +50,6 @@
                 [button setCenter: CGPointMake(defaultPositions[i * 2], defaultPositions[i * 2 + 1])];
             }
             
-//            [button addTarget: self action: @selector(buttonMoved:withEvent:) forControlEvents: UIControlEventTouchDragInside];
-//            [button addTarget: self action: @selector(buttonMoved:withEvent:) forControlEvents: UIControlEventTouchDragOutside];
             [button setImage: targetImage forState: UIControlStateNormal];
             [button setTag: i];
             
@@ -72,11 +70,14 @@
         
         loop = [[MagnifierView alloc] init];
         loop.viewToMagnify = self.imageView;
-        
-        [self updateAfterZoom];
     }
     
     return self;
+}
+
+- (void) viewWillAppear:(BOOL)animated
+{
+    [self updateAfterZoom];
 }
 
 float deltaTouchX, deltaTouchY;
@@ -165,6 +166,8 @@ float deltaTouchX, deltaTouchY;
     {
         CGPoint cornerPoint = [self.corners[button.tag] CGPointValue];
         CGPoint viewPoint = [self.imageView convertPoint: cornerPoint toView: self];
+        
+        NSLog(@"updateAfterZoom: set button from (%.0f, %.0f) to (%.0f, %.0f)", button.center.x, button.center.y, viewPoint.x, viewPoint.y);
         
         [button setCenter: viewPoint];
     }

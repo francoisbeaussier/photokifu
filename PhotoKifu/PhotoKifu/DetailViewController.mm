@@ -142,6 +142,7 @@ CGRect _scrollViewFrame;
                 self.polygonView = [[UIDynamicPolygonView alloc] initWithImageView: self.imageView andScrollView: self.scrollView andCorners: corners];
                 self.polygonView.backgroundColor = [UIColor clearColor];
                 [self.scrollView addSubview: self.polygonView];
+                [self.polygonView viewWillAppear:NO];
                 
                 // default grid size
                 [self setGridSize: 19];
