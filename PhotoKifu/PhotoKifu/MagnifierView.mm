@@ -68,7 +68,8 @@
     // this assumes that the viewToMagnify's superview is the scrollView, not so great
     UIScrollView *scrollView = (UIScrollView *) self.viewToMagnify.superview;
     
-    float magnifyScale = MIN(scrollView.zoomScale * 1.5, scrollView.maximumZoomScale);
+//    float magnifyScale = MIN(scrollView.zoomScale * 1.5, scrollView.maximumZoomScale);
+    float magnifyScale = scrollView.zoomScale * 1.5;
     
     CGContextTranslateCTM(context, 1 * (self.frame.size.width * 0.5), 1 * (self.frame.size.height * 0.5));
     CGContextScaleCTM(context, magnifyScale, magnifyScale);
