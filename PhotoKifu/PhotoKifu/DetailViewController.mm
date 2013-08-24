@@ -120,7 +120,7 @@ CGRect _scrollViewFrame;
         self.scrollView.minimumZoomScale = minScale;
         
         // 5
-        self.scrollView.maximumZoomScale = 1.5f;
+        self.scrollView.maximumZoomScale = 0.5f;
         self.scrollView.zoomScale = minScale;
         
         
