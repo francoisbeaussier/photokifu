@@ -17,6 +17,7 @@
 		B24C1D031757D4E500C462B3 /* geometry.h in Headers */ = {isa = PBXBuildFile; fileRef = B24C1D011757D4E500C462B3 /* geometry.h */; };
 		B24C1D061757D7FD00C462B3 /* GeometryTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B24C1D041757D7FD00C462B3 /* GeometryTests.mm */; };
 		B27A15F017C796EB003AA083 /* PhotoKifuCore.h in Headers */ = {isa = PBXBuildFile; fileRef = B2848E12171462FD00E0F0BB /* PhotoKifuCore.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B27A15F317D0242F003AA083 /* photo_7.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B27A15F217D0242F003AA083 /* photo_7.jpg */; };
 		B2848E0E171462FD00E0F0BB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2848E0D171462FD00E0F0BB /* Foundation.framework */; };
 		B2848E15171462FD00E0F0BB /* PhotoKifuCore.mm in Sources */ = {isa = PBXBuildFile; fileRef = B2848E14171462FD00E0F0BB /* PhotoKifuCore.mm */; };
 		B2848E1D171462FD00E0F0BB /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2848E1C171462FD00E0F0BB /* SenTestingKit.framework */; };
@@ -89,6 +90,7 @@
 		B24C1D011757D4E500C462B3 /* geometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = geometry.h; sourceTree = "<group>"; };
 		B24C1D041757D7FD00C462B3 /* GeometryTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GeometryTests.mm; sourceTree = "<group>"; };
 		B24C1D051757D7FD00C462B3 /* GeometryTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeometryTests.h; sourceTree = "<group>"; };
+		B27A15F217D0242F003AA083 /* photo_7.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = photo_7.jpg; sourceTree = "<group>"; };
 		B2848E0A171462FD00E0F0BB /* libPhotoKifuCore.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPhotoKifuCore.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		B2848E0D171462FD00E0F0BB /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		B2848E11171462FD00E0F0BB /* PhotoKifuCore-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PhotoKifuCore-Prefix.pch"; sourceTree = "<group>"; };
@@ -240,6 +242,7 @@
 				B2A717ED1717102B00198677 /* photo_4.jpg */,
 				B20CB850171DB100005E16C8 /* photo_5.jpg */,
 				B20CB851171DB100005E16C8 /* photo_6.jpg */,
+				B27A15F217D0242F003AA083 /* photo_7.jpg */,
 				B2848E2A171462FD00E0F0BB /* PhotoKifuCoreTests.h */,
 				B2848E2B171462FD00E0F0BB /* PhotoKifuCoreTests.mm */,
 				B24C1D051757D7FD00C462B3 /* GeometryTests.h */,
@@ -356,6 +359,7 @@
 				B2A717EE1717102B00198677 /* photo_4.jpg in Resources */,
 				B20CB852171DB100005E16C8 /* photo_5.jpg in Resources */,
 				B20CB853171DB100005E16C8 /* photo_6.jpg in Resources */,
+				B27A15F317D0242F003AA083 /* photo_7.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

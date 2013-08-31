@@ -79,6 +79,7 @@
                            @"photo_4.jpg",
                            @"photo_5.jpg",
                            @"photo_6.jpg",
+                           @"photo_7.jpg",
                            nil];
     
     NSMutableArray *images = [NSMutableArray array];
@@ -98,6 +99,7 @@
                        [[TestImageData alloc] initWithImage: [self loadImage:@"photo_1.jpg"] andCoordinates:CGPointMake(880, 477) :CGPointMake(2549, 526) :CGPointMake(2594, 2111) :CGPointMake(793, 2094)],
                        [[TestImageData alloc] initWithImage: [self loadImage:@"photo_2.jpg"] andCoordinates:CGPointMake(864, 1022) :CGPointMake(1740, 640) :CGPointMake(2512, 1288) :CGPointMake(1562, 1898)],
                        [[TestImageData alloc] initWithImage: [self loadImage:@"photo_3.jpg"] andCoordinates:CGPointMake(730, 788) :CGPointMake(1846, 810) :CGPointMake(1830, 1886) :CGPointMake(736, 1892)],
+                       [[TestImageData alloc] initWithImage: [self loadImage:@"photo_7.jpg"] andCoordinates:CGPointMake(484, 1948) :CGPointMake(1704, 1924) :CGPointMake(2108, 2984) :CGPointMake(92, 3056)],
                        nil];
     
     return images;
@@ -160,7 +162,7 @@
     [self outputTestResult:debugImages atPath:outputPath];
 }
 
-- (void) testPhotoKifuCoreStoneDetection
+- (void) _testPhotoKifuCoreStoneDetection
 {
     NSString *libraryPath = [[NSString alloc] initWithString: [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, TRUE) objectAtIndex:0]];
 
@@ -225,6 +227,8 @@
         
         srcImageId++;
     }
+    
+    [self outputTestResult:debugImages atPath:outputPath];
 }
 
 - (void) outputTestResult:(cv::vector<cv::vector<std::pair<const cv::Mat, const char *>>>)debugImages atPath:(NSString *)outputPath

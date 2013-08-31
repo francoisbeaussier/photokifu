@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MasterViewController : UITableViewController<UINavigationControllerDelegate, UIImagePickerControllerDelegate>
+@interface MasterViewController : UITableViewController<UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIActionSheetDelegate>
 
 @property (strong) NSMutableArray *scans;
 

@@ -494,47 +494,12 @@ cv::vector<cv::vector<cv::Point>> GobanDetector::extractGobanState(cv::Mat& imag
     cv::vector<cv::Point> blackStones = extractBlackStones(blackOnly);
     
     cv::vector<cv::Point> whiteStones = deduceWhiteStones(allStones, blackStones);
-    
-//    cv::Mat binary;
-    
-    /*
-    cv::cvtColor(warpedImage, binary, CV_BGR2GRAY);
-    
-    cv::Mat hist;
-    cv::equalizeHist(binary, hist);
-    addDebugImage(hist, "Hist");
-     
-    cv::threshold(binary, whiteOnly, 255 - 100, 255, CV_THRESH_BINARY_INV);
-    */
-    
-//    cv::threshold(binary, whiteOnly, 50, 255, CV_THRESH_BINARY);
 
-    /*
-    dilate(whiteOnly, whiteOnly, cv::Mat(), cv::Point(-1, -1), 1);
-    
-    erode(whiteOnly, whiteOnly, cv::Mat(), cv::Point(-1, -1), 1);
-    
-    cv::bitwise_not(whiteOnly, whiteOnly);
-    
-    addDebugImage(whiteOnly, "Threshold, dilate, erode and inverse image");
-    */
-    
-    
-    
-    //cv::Mat goban = extractStonePosition(blackOnly, whiteOnly);
-    
-    //cv::Mat debugGoban = scaleImage(goban, 20);
-    
-    //addDebugImage(debugGoban, "Final result");
-    
-    //cv::vector<cv::vector<cv::Point>> stones = extractStones(goban);
     
     cv::vector<cv::vector<cv::Point>> stones;
     
     stones.push_back(blackStones);
     stones.push_back(whiteStones);
-    
-    //= extractStones(goban);
     
     return stones;   
 }
@@ -619,7 +584,7 @@ cv::vector<cv::Point> GobanDetector::detectGoban(cv::Mat& image)
     addDebugImage(edge_output, "Erode");
 
     
-//    detectGobanLines(edge_output, lines, image);
+    //detectGobanLines(edge_output, lines, image);
     
     cv::vector<cv::Point> contourPoints = detectBoard(edge_output, image);
     
@@ -685,51 +650,6 @@ cv::vector<cv::vector<cv::Point>> GobanDetector::extractStones(cv::Mat& goban)
     stones.push_back(whiteStones);
     
     return stones;
-
-    /*
-    const char* letters = "abcdefghijklmnopqrstuvwxyz";
-//    const char* letters = "\x0061\x0062\x0063\x0064\x0065\x0066\x0067\x0068\x0069\x006A\x006B\x006C\x006D\x006E\x006F\x0070\x0071\x0072\x0073\x0074\x0075\x0076\x0077\x0078\x0079\x007A";
-    
-    std::ostringstream oss; // string as stream
-    
-    oss << "(;GM[1]SZ[19]FF[4]";
-
-    if (blackStones.size() > 0)
-    {
-        oss << "AB";
-        
-        for (cv::vector<int>::iterator it = blackStones.begin(); it != blackStones.end(); ++it)
-        {
-            int coord = *it;
-            
-            char x = letters[coord >> 4];
-            char y = letters[coord - x];
-            
-            oss << "[" << x << y << "]";
-        }
-    }
-    
-    if (whiteStones.size() > 0)
-    {
-        oss << "AW";
-
-        for (cv::vector<int>::iterator it = whiteStones.begin(); it != whiteStones.end(); ++it)
-        {
-            int coord = *it;
-            
-            char x = letters[coord >> 4];
-            char y = letters[coord - x];
-            
-            oss << "[" << x << y << "]";
-        }
-    }
-    
-    oss << ")";
-    
-    std::string sgf = oss.str(); // get string out of stream
-    
-    return sgf.c_str();
-     */
 }
 
 cv::Mat GobanDetector::extractStonePosition2(cv::Mat blackStones, cv::Mat whiteStones)
@@ -794,8 +714,52 @@ cv::Mat GobanDetector::extractStonePosition2(cv::Mat blackStones, cv::Mat whiteS
     return goban;
 }
 
-void GobanDetector::testBlockAverage(cv::Mat warpedImage)
+cv::Mat equalizeIntensity(const cv::Mat& inputImage)
 {
+    if (inputImage.channels() >= 3)
+    {
+        cv::Mat ycrcb;
+        
+        cvtColor(inputImage, ycrcb, CV_BGR2YCrCb);
+        
+        cv::vector<cv::Mat> channels;
+        split(ycrcb,channels);
+        
+        equalizeHist(channels[0], channels[0]);
+        
+        cv::Mat result;
+        merge(channels, ycrcb);
+        
+        cvtColor(ycrcb, result, CV_YCrCb2BGR);
+        
+        return result;
+    }
+    
+    return cv::Mat();
+}
+
+void GobanDetector::testBlockAverage(cv::Mat warpedImage)
+{/*
+    addDebugImage(warpedImage, "Before equalizeHist");
+    
+    warpedImage = equalizeIntensity(warpedImage); // Perform histogram equalization
+
+    addDebugImage(warpedImage, "After equalizeHist");
+    
+    */
+    int histBuckets = 256;
+    int hist[histBuckets];
+    int histBlue[histBuckets];
+    int histGreen[histBuckets];
+    int histRed[histBuckets];
+    
+    int gridAverages[19][19];
+    
+    memset(&hist, 0, sizeof(int) * histBuckets);
+    memset(&histBlue, 0, sizeof(int) * histBuckets);
+    memset(&histGreen, 0, sizeof(int) * histBuckets);
+    memset(&histRed, 0, sizeof(int) * histBuckets);
+    
     cv::Mat result = cv::Mat(warpedImage.cols, warpedImage.rows, CV_8UC3);
         
     for (int i = 0; i < 19; i++)
@@ -805,18 +769,27 @@ void GobanDetector::testBlockAverage(cv::Mat warpedImage)
             float dx = warpedImage.cols / 18.0;
             float dy = warpedImage.rows / 18.0;
             
-            int x1 = -dx / 2;
-            int y1 = -dy / 2;
+            int x1 = dx / 4;
+            int y1 = dy / 4;
             
-            int xMin = MAX(0, x1 + dx * i);
-            int xMax = MIN(warpedImage.cols - 1, x1 + dx * (i + 1) - 1);
+            int xMin = MAX(0, dx * i - x1);
+            int xMax = MIN(warpedImage.cols - 1, dx * i - 1 + x1);
             
-            int yMin = MAX(0, y1 + dy * j);
-            int yMax = MIN(warpedImage.rows - 1, y1 + dy * (j + 1) - 1);
+            int yMin = MAX(0, dy * j - y1);
+            int yMax = MIN(warpedImage.rows - 1, dy * j - 1 + y1);
             
             cv::Mat block = warpedImage.rowRange(xMin, xMax).colRange(yMin, yMax);
             
             cv::Scalar mean = cv::mean(block);
+            
+            int meanNormalized = (mean[0] + mean[1] + mean[2]) / 3;
+            
+            gridAverages[i][j] = meanNormalized;
+            hist[meanNormalized]++;
+            
+            histBlue[(int) mean[0]]++;
+            histGreen[(int) mean[1]]++;
+            histRed[(int) mean[2]]++;
             
             cv::Mat targetBlock = result.rowRange(xMin, xMax).colRange(yMin, yMax);
 
@@ -842,13 +815,73 @@ void GobanDetector::testBlockAverage(cv::Mat warpedImage)
             
             // debug
             rectangle(warpedImage, cv::Point(xMin, yMin), cv::Point(xMax, yMax), cv::Scalar(100));
-            rectangle(warpedImage, cv::Point(xMin, yMin), cv::Point(xMax, yMax), cv::Scalar(100));
+            //rectangle(warpedImage, cv::Point(xMin, yMin), cv::Point(xMax, yMax), cv::Scalar(100));
              
         }
     }
     
     addDebugImage(warpedImage, "average block segmentation");
     addDebugImage(result, "average block result");
+    
+    
+    cv::Mat histogram = createHistogram(hist, histBuckets, cv::Scalar(0, 0, 0), "Histogram");
+    
+    
+    // K-Means
+    cv::Mat samples(19 * 19, 1, CV_32FC1);
+    
+    for (int x = 0; x < 19; x++)
+        for (int y = 0; y < 19; y++)
+            for (int c = 0; c < 1; c++)
+                samples.at<float>(y + x * 19, c) = gridAverages[x][y];
+    
+    cv::EM model = cv::EM(3, cv::EM::COV_MAT_SPHERICAL);
+    
+    if (!model.train(samples))
+    {
+        printf("Error while training samples using EM");
+    }
+    
+    const cv::Mat& means = model.get<cv::Mat>("means");
+    double mean1 = means.at<double>(0, 0);
+    double mean2 = means.at<double>(1, 0);
+    double mean3 = means.at<double>(2, 0);
+    
+    printf("mean1 = %f, mean2 = %f, mean3 = %f\r\n", mean1, mean2, mean3);
+    
+    cv::line(histogram, cv::Point(mean1, 0), cv::Point(mean1, histogram.rows), cv::Scalar(255, 0, 0));
+    cv::line(histogram, cv::Point(mean2, 0), cv::Point(mean2, histogram.rows), cv::Scalar(255, 0, 0));
+    cv::line(histogram, cv::Point(mean3, 0), cv::Point(mean3, histogram.rows), cv::Scalar(255, 0, 0));
+    
+    addDebugImage(histogram, "Hist with Means");
+
+    int clusterCount = 3;
+    cv::Mat labels;
+    int attempts = 10;
+    cv::Mat centers;
+    cv::kmeans(samples, clusterCount, labels, cv::TermCriteria(CV_TERMCRIT_ITER|CV_TERMCRIT_EPS, 10000, 0.0001), attempts, cv::KMEANS_RANDOM_CENTERS, centers);
+
+    
+    int kmeanHist[histBuckets];
+    memset(&kmeanHist, 0, sizeof(int) * histBuckets);
+    
+    for (int x = 0; x < 19; x++)
+    {
+        for (int y = 0; y < 19; y++)
+        {
+            int cluster_idx = labels.at<int>(y + x * 19, 0);
+            
+            int avg = gridAverages[x][y];
+            
+            kmeanHist[avg] = cluster_idx + 1;
+        }
+    }
+        
+    createHistogram(kmeanHist, histBuckets, cv::Scalar(0, 0, 0), "K-Mean");
+    
+    createHistogram(histRed, histBuckets, cv::Scalar(255, 0, 0), "Histogram Red");
+    createHistogram(histGreen, histBuckets, cv::Scalar(0, 255, 0), "Histogram Green");
+    createHistogram(histBlue, histBuckets, cv::Scalar(0, 0, 255), "Histogram Blue");
     
     
     // need to create a point system.
@@ -858,6 +891,34 @@ void GobanDetector::testBlockAverage(cv::Mat warpedImage)
     
     
     //    goban.at<uchar>(1, 1) = 255;
+}
+
+cv::Mat GobanDetector::createHistogram(int histValues[], int histBuckets, cv::Scalar color, char * histTitle)
+{
+    cv::Mat histogram = cv::Mat(120, histBuckets, CV_8UC3, cv::Scalar(180, 180, 180));
+    
+    int maxValue = 0;
+    for (int i = 0; i < histBuckets; i++)
+    {
+        if (histValues[i] > maxValue)
+        {
+            maxValue = histValues[i];
+        }
+    }
+    
+    for (int i = 0; i < histBuckets; i++)
+    {
+        if (histValues[i] > 0)
+        {
+            int height = histogram.rows - ((histValues[i] * 100) / maxValue);
+            
+            cv::line(histogram, cv::Point(i, histogram.rows), cv::Point(i, height), color);
+        }
+    }
+    
+    addDebugImage(histogram, histTitle);
+    
+    return histogram;
 }
 
 cv::vector<cv::Point> GobanDetector::extractBlackStones(cv::Mat blackStones)
@@ -1145,7 +1206,6 @@ cv::vector<cv::Point> GobanDetector::detectBoard(cv::Mat& image, cv::Mat& debugD
 
     for (int i = 0; i < contourCount; i++)
     {
-        
         cv::vector<cv::Point> hull;
         cv::convexHull(contours[i], hull);
         
@@ -1160,9 +1220,10 @@ cv::vector<cv::Point> GobanDetector::detectBoard(cv::Mat& image, cv::Mat& debugD
             cv::drawContours(debugAllContours, contours, i, cv::Scalar((13 *  i) % 255, (131 *  i) % 255, (1313 *  i) % 255), 5, 8);
         }
         
-        if (contours_poly[i].size() == 4
-            && area > 10000
-            && isContourConvex(cv::Mat(contours_poly[i])))
+        if (contours_poly[i].size() > 3 && contours_poly[i].size() < 6 &&
+             area > 10000
+            //&& isContourConvex(cv::Mat(contours_poly[i]))
+            )
         {
             double maxCosine = 0;
             
@@ -1176,7 +1237,7 @@ cv::vector<cv::Point> GobanDetector::detectBoard(cv::Mat& image, cv::Mat& debugD
             
             cv::drawContours(debugAllQuadConvecContours, contours, i, cv::Scalar((13 *  i) % 255, (131 *  i) % 255, (1313 *  i) % 255), 5, 8);
 
-            if (maxCosine < 0.7)
+            //if (maxCosine < 0.7)
             {
                 if (area > largestPolyArea)
                 {
@@ -1215,7 +1276,24 @@ cv::vector<cv::Point> GobanDetector::detectBoard(cv::Mat& image, cv::Mat& debugD
         return cv::vector<cv::Point>();
     }
     
-    return cv::vector<cv::Point>(contours_poly[largestPolyIndex]);
+    cv::Mat largestContour = debugDrawImage.clone();
+    
+    cv::drawContours(largestContour, contours, largestPolyIndex, cv::Scalar(0, 255, 0), 5, 8);
+
+    addDebugImage(largestContour);
+    
+    cv::vector<cv::Point> contourPoints = cv::vector<cv::Point>(contours_poly[largestPolyIndex]);
+    
+    cv::Mat debugContour = debugDrawImage.clone();
+    
+    for (int i = 0; i < 4; i++)
+    {
+        line(debugContour, contourPoints[i], contourPoints[(i + 1) % 4], cv::Scalar(50, 255, 0), 5, CV_AA);
+    }
+    
+    addDebugImage(debugContour, "Goban detection");
+    
+    return contourPoints;
 }
 
 bool GobanDetector::detectPlanarHomography(cv::Mat& image, cv::Point vanishingPoint1, cv::Point vanishingPoint2)
