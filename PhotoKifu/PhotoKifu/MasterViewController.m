@@ -57,21 +57,48 @@
 
 - (void) getPhotoTapped: (id) sender
 {
-    UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
-    
-    if ([UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypeCamera])
+    UIActionSheet *actionSheet = [[UIActionSheet alloc]
+                                  initWithTitle:nil
+                                  delegate:self
+                                  cancelButtonTitle:@"Cancel"
+                                  destructiveButtonTitle:@"Camera"
+                                  otherButtonTitles:@"Photo Library", nil];
+    actionSheet.actionSheetStyle = UIBarStyleBlackTranslucent;
+    [actionSheet showInView: self.view];
+
+    return;
+}
+
+- (void) actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 0)
     {
-        [imagePicker setSourceType: UIImagePickerControllerSourceTypeCamera];
+        NSLog(@"ok Camera");
+        if ([UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypeCamera])
+        {
+            
+            UIImagePickerController * picker = [[UIImagePickerController alloc] init];
+            [picker setSourceType: UIImagePickerControllerSourceTypeCamera];
+            [picker setCameraFlashMode:UIImagePickerControllerCameraFlashModeOff];
+            picker.delegate = self;
+            [self presentViewController: picker animated: YES completion: nil];
+        }
     }
-    else
+
+    if (buttonIndex == 1)
     {
-        [imagePicker setSourceType: UIImagePickerControllerSourceTypePhotoLibrary];
+        NSLog(@"ok Library");
+        
+        UIImagePickerController * picker = [[UIImagePickerController alloc] init];
+        picker.delegate = self;
+        [picker setSourceType: UIImagePickerControllerSourceTypePhotoLibrary];
+        //        picker.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
+        [self presentViewController: picker animated: YES completion: nil];
     }
-    
-    [imagePicker setCameraFlashMode:UIImagePickerControllerCameraFlashModeOff];
-    [imagePicker setDelegate: self];
-    
-    [self presentViewController: imagePicker animated: YES completion: nil];
+        
+    if (!(buttonIndex == [actionSheet cancelButtonIndex]))
+    {
+    }
 }
 
 - (void) imagePickerController: (UIImagePickerController *)picker didFinishPickingMediaWithInfo: (NSDictionary *) info

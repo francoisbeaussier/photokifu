@@ -32,7 +32,9 @@ public:
     cv::vector<std::pair<const cv::Mat, const char *>> getDebugImages();
     
 private:
-    
+
+    cv::Mat createHistogram(int histValues[], int histBuckets, cv::Scalar color, char * histTitle);
+
     void testBlockAverage(cv::Mat warpedImage);
 
     void addDebugImage(const cv::Mat image, const char* description = NULL);
