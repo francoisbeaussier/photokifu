@@ -315,7 +315,6 @@ cv::vector<cv::vector<cv::Point>> GobanDetector::extractGobanState(cv::Mat& imag
     cv::Mat matV = GetHSVChannel(image, HSV_VALUE, BLUR_NO);
     cv::Mat matH = GetHSVChannel(image, HSV_HUE, BLUR_NO);
     cv::Mat matS = GetHSVChannel(image, HSV_SATURATION, BLUR_NO);
-
     
     int warpSize = 1200;
     
@@ -323,15 +322,18 @@ cv::vector<cv::vector<cv::Point>> GobanDetector::extractGobanState(cv::Mat& imag
     
     cv::Mat warpedImage = warpImage(image, transform, warpSize, warpSize, CV_8UC3);
     addDebugImage(warpedImage, "warped Image");
+    
+    
+    //addDebugImage(classifyImage(warpedImage), "classification hist");
 
     cv::Mat warpedMatV = warpImage(matV, transform, warpSize, warpSize, CV_8UC1);
     addDebugImage(warpedMatV, "warped Mat V");
 
-//    cv::Mat warpedMatH = warpImage(matH, transform, warpSize, warpSize, CV_8UC1);
-//    addDebugImage(warpedMatH, "warped Mat H");
+    cv::Mat warpedMatH = warpImage(matH, transform, warpSize, warpSize, CV_8UC1);
+    addDebugImage(warpedMatH, "warped Mat H");
     
-//    cv::Mat warpedMatS = warpImage(matS, transform, warpSize, warpSize, CV_8UC1);
-//    addDebugImage(warpedMatS, "warped Mat S");
+    cv::Mat warpedMatS = warpImage(matS, transform, warpSize, warpSize, CV_8UC1);
+    addDebugImage(warpedMatS, "warped Mat S");
 
     
 /*    cv::Mat normalized;
@@ -390,7 +392,7 @@ cv::vector<cv::vector<cv::Point>> GobanDetector::extractGobanState(cv::Mat& imag
 
     addDebugImage(warpedImage, "warped color");
 
-    testBlockAverage(warpedImage);
+    testBlockAverage(warpedImage, warpedMatV);
     
 //    cv::blur(warpedImage, warpedImage, cv::Size(9, 9));
 //    cv::blur(warpedImage, warpedImage, cv::Size(7, 7));
@@ -665,8 +667,8 @@ cv::Mat GobanDetector::extractStonePosition2(cv::Mat blackStones, cv::Mat whiteS
             float dx = blackStones.cols / 18.0;
             float dy = blackStones.rows / 18.0;
             
-            int x1 = -dx / 2;
-            int y1 = -dy / 2;
+            int x1 = -dx / 3;
+            int y1 = -dy / 3;
             
             int xMin = MAX(0, x1 + dx * i);
             int xMax = MIN(blackStones.cols - 1, x1 + dx * (i + 1) - 1);
@@ -738,8 +740,399 @@ cv::Mat equalizeIntensity(const cv::Mat& inputImage)
     return cv::Mat();
 }
 
-void GobanDetector::testBlockAverage(cv::Mat warpedImage)
+int findClosestValueIndex(double value, double a, double b, double c)
+{
+    int da = abs(a - value);
+    int db = abs(b - value);
+    int dc = abs(c - value);
+
+    if (da < db)
+    {
+        if (da < dc)
+        {
+            return 0;
+        }
+        else
+        {
+            return 2;
+        }
+    }
+    else
+    {
+        if (db < dc)
+        {
+            return 1;
+        }
+        else
+        {
+            return 2;
+        }
+    }
+}
+
+int findVerticalLines(const cv::Mat &image)
+{
+    cv::vector<short> lineWeight(image.cols, 0);
+        
+    for (int x = 0; x < image.rows; x++)
+    {
+        for (int y = 0; y < image.cols; y++)
+        {
+            char pixel = image.at<char>(x, y);
+            
+            if (pixel != 0)
+            {
+                lineWeight[y]++;
+            }
+        }
+    }
+
+    int threshold = image.rows * 0.7;
+    
+    int bestFit = -1;
+    
+    for (int i = 0; i < lineWeight.size(); i++)
+    {
+        short value = lineWeight[i - 1] + lineWeight[i];
+        
+        if (value > threshold && value > bestFit)
+        {
+            bestFit = i;
+        }
+    }
+    
+    return bestFit;
+}
+
+int findHorizontalLines(const cv::Mat &image)
+{
+    cv::vector<short> lineWeight(image.rows, 0);
+    
+    for (int x = 0; x < image.rows; x++)
+    {
+        for (int y = 0; y < image.cols; y++)
+        {
+            char pixel = image.at<char>(x, y);
+            
+            if (pixel != 0)
+            {
+                lineWeight[x]++;
+            }
+        }
+    }
+    
+    int threshold = image.cols * 0.7;
+    
+    int bestFit = -1;
+    
+    for (int i = 1; i < lineWeight.size(); i++)
+    {
+        short value = lineWeight[i - 1] + lineWeight[i];
+        
+        if (value > threshold && value > bestFit)
+        {
+            bestFit = i;
+        }
+    }
+    
+    return bestFit;
+}
+
+int counter = 0;
+
+bool GobanDetector::isEmptyIntersection(const cv::Mat &imageColor, const cv::Mat &imageMono, int x, int y, GobanIntersectionType intersectionType)
 {/*
+    counter++;
+    
+    cv::Mat line1 = imageMono.clone();
+    
+#define USE_HOUGH_PROBABILISTIC
+    
+#ifdef USE_HOUGH_PROBABILISTIC
+    int minSize = MIN(imageMono.cols, imageMono.rows);
+
+    int minPixelsToFormALine = (x == 0 || y == 0 || x == 18 || y == 18) ? minSize * 0.5 : minSize * 0.7;
+    int maxLineGap = minSize * 0.1;
+
+    cv::vector<cv::Vec4i> lines;
+    cv::HoughLinesP(line1, lines, 1, CV_PI / 180, 30, minPixelsToFormALine, maxLineGap);
+#else
+    cv::vector<cv::Vec2f> lines;
+    cv::HoughLines(line1, lines, 1, CV_PI / 180, 20, 0, 0);
+#endif
+    
+    bool debugImage = false;
+    
+    cv::Mat debugConv = imageColor.clone();
+
+    cv::vector<lineData> validLines;
+
+    bool foundHorizontalLines = false;
+    bool foundVerticalLines = false;
+    
+    for (size_t i = 0; i < lines.size(); i++)
+    {
+        float thetaAngle;
+        
+#ifdef USE_HOUGH_PROBABILISTIC
+        cv::Vec4i l = lines[i];
+        
+        lineData ld;
+        
+		ld.pt1.x = l[0];
+		ld.pt1.y = l[1];
+		ld.pt2.x = l[2];
+		ld.pt2.y = l[3];
+        
+        pointsToNormalForm(ld.pt1, ld.pt2, ld.rho, ld.theta);
+        thetaAngle = ld.theta;
+#else
+        int res = 1000;
+        float rho = lines[i][0], theta = lines[i][1];
+        
+        cv::Point pt1, pt2;
+        lineData ld;
+        double a = cos(theta), b = sin(theta);
+        double x0 = a * rho, y0 = b * rho;
+        ld.pt1.x = cvRound(x0 + res * (-b));
+        ld.pt1.y = cvRound(y0 + res * (a));
+        ld.pt2.x = cvRound(x0 - res * (-b));
+        ld.pt2.y = cvRound(y0 - res * (a));
+        
+        thetaAngle = (theta * 180) / CV_PI;
+#endif
+        
+        int angleMargin = 7;
+        
+        int angle = thetaAngle + 0.5;
+        int angleInQuadrant = angle % 90;
+        
+        int delta = 45 - abs(45 - angleInQuadrant);
+        
+        bool validAngle = delta < angleMargin;
+        
+        cv::Scalar color = cv::Scalar(0, 0, 255);
+
+        if (!validAngle)
+        {
+            debugImage = true;
+            printf("discarding line: angle = %f\r\n", thetaAngle);
+            
+            color = cv::Scalar(255, 0, 0);
+        }
+        
+        line(debugConv, ld.pt1, ld.pt2, color, 1, 0);
+        
+        validLines.push_back(ld);
+        
+        if (angle < angleMargin || angle > 180 - angleMargin)
+        {
+            foundVerticalLines = true;
+        }
+        
+        if (angle > 90 - angleMargin && angle < 90 + angleMargin)
+        {
+            foundHorizontalLines = true;
+        }
+    }
+
+    */
+
+
+    
+    int verticalLinesIndex = findVerticalLines(imageMono);
+    int horizontalLinesIndex = findHorizontalLines(imageMono);
+    
+    bool foundVerticalLines = verticalLinesIndex != -1;
+    bool foundHorizontalLines = horizontalLinesIndex != -1;
+    
+    cv::Mat debugConv = imageColor.clone();
+    
+    if (foundVerticalLines)
+    {
+        line(debugConv, cv::Point(verticalLinesIndex, 0), cv::Point(verticalLinesIndex, debugConv.rows), cv::Scalar(255, 0, 255), 1, 0);
+    }
+
+    if (foundHorizontalLines)
+    {
+        line(debugConv, cv::Point(0, horizontalLinesIndex), cv::Point(debugConv.cols, horizontalLinesIndex), cv::Scalar(255, 0, 0), 1, 0);
+    }   
+    
+    // TODO: if too many lines have been found it could be suspicious, how can we handle that?
+    
+    bool isEmptyIntersection = true;
+    
+    switch (intersectionType)
+    {
+        case GobanIntersectionTypeMiddle:
+            isEmptyIntersection = foundHorizontalLines && foundVerticalLines;
+            break;
+            
+        case GobanIntersectionTypeTop:
+            isEmptyIntersection = foundHorizontalLines || foundVerticalLines;
+            break;
+            
+        case GobanIntersectionTypeRight:
+            isEmptyIntersection = foundHorizontalLines || foundVerticalLines;
+            break;
+            
+        case GobanIntersectionTypeBottom:
+            isEmptyIntersection = foundHorizontalLines || foundVerticalLines;
+            break;
+            
+        case GobanIntersectionTypeLeft:
+            isEmptyIntersection = foundHorizontalLines || foundVerticalLines;
+            break;
+            
+        case GobanIntersectionTypeCorner:
+            isEmptyIntersection = foundHorizontalLines || foundVerticalLines;
+            break;
+
+        default:
+            printf("Error: unknown GobanIntersectionType: %i", intersectionType);
+            
+        return false;
+    }
+    
+    bool debugImage = false;;
+    
+    if (foundVerticalLines || foundVerticalLines)
+    {
+       debugImage = true;
+    }
+    
+    if (debugImage)
+    {
+        // Bug: remove when finished debugging
+        char *buffer = new char[255];
+        
+        sprintf(buffer, "Position (%i, %i) V=%i H=%i", x, y, foundVerticalLines, foundHorizontalLines);
+        
+        //addDebugImage(imageMono, buffer);
+        //addDebugImage(debugConv);
+//        addDebugImage(line1, buffer);
+    }
+    
+    return isEmptyIntersection;
+}
+
+
+GobanIntersectionType GetGobanIntersectionType(int width, int height, int x , int y)
+{
+    bool xMin = x == 0;
+    bool xMax = x == width;
+    bool yMin = y == 0;
+    bool yMax = y == height;
+    
+    if (xMin)
+    {
+        if (yMin || yMax)
+            return GobanIntersectionTypeCorner;
+        return GobanIntersectionTypeLeft;
+    }
+
+    if (xMax)
+    {
+        if (yMin || yMax)
+            return GobanIntersectionTypeCorner;
+        return GobanIntersectionTypeRight;
+    }
+    
+    if (yMin)
+        return GobanIntersectionTypeTop;
+    if (yMax)
+        return GobanIntersectionTypeBottom;
+    
+    return GobanIntersectionTypeMiddle;
+    
+// x==00  x==18  y==00  y==19  result
+// -----  -----  -----  -----  ------
+//   0      0      0      0    middle
+
+//   0      0      0      1    bottom
+//   0      0      1      0    top
+//   0      1      0      0    right
+//   1      0      0      0    left
+
+//   0      1      0      1    corner
+//   0      1      1      0    corner
+//   1      0      0      1    corner
+//   1      0      1      0    corner  
+
+}
+
+cv::Mat GobanDetector::classifyImage(cv::Mat image, cv::Mat imageMono)
+{
+    int width = 1200;
+    int height = 1200;
+    
+    assert(image.cols == width);
+    assert(image.rows == height);
+    
+    int histBuckets = 256;
+    int hist[histBuckets];
+
+    memset(&hist, 0, sizeof(int) * histBuckets);
+
+    float dx = image.cols / 18.0;
+    float dy = image.rows / 18.0;
+    
+    float ratio = 3.0f;
+    
+    int x1 = dx / ratio;
+    int y1 = dy / ratio;
+    
+    // int pixelPerIntersection = x1 * y1;
+    // unsigned char gridAverages[19 * 19 * pixelPerIntersection];
+
+    cv::Mat goban(19, 19, CV_8UC1, cv::Scalar(0));
+    
+    cv::Mat result = cv::Mat(image.cols, image.rows, CV_8UC1, cv::Scalar(255));
+
+    for (int i = 0; i < 19; i++)
+    {
+        for (int j = 0; j < 19; j++)
+        {
+            int xMin = MAX(0, dx * i - x1);
+            int xMax = MIN(image.cols - 1, dx * i - 1 + x1);
+            
+            int yMin = MAX(0, dy * j - y1);
+            int yMax = MIN(image.rows - 1, dy * j - 1 + y1);
+            
+            cv::Mat block = image.rowRange(xMin, xMax).colRange(yMin, yMax);
+            cv::Mat blockMono = imageMono.rowRange(xMin, xMax).colRange(yMin, yMax);
+
+            GobanIntersectionType intersectionType = GetGobanIntersectionType(18, 18, i, j);
+            
+            bool containsStone = !isEmptyIntersection(block, blockMono, i, j, intersectionType);
+            
+            goban.at<char>(i, j) = containsStone ? 2 : 0;
+            
+            if (containsStone)
+            {
+                cv::Scalar mean = cv::mean(block);
+                
+                //0.2126 * R + 0.7152 * G + 0.0722 * B
+                
+                int meanNormalized = (0.0722 * mean[0] + 0.7152 * mean[1] + 0.2126 * mean[2]);
+                
+                hist[meanNormalized]++;
+            }
+        }
+    }
+
+    VisualizeGoban(goban, image);
+    
+    cv::Mat histogram = createHistogram(hist, histBuckets, cv::Scalar(0, 0, 0), "Detected stones histogram");
+    
+    return histogram;
+}
+
+void GobanDetector::testBlockAverage(cv::Mat warpedImage, cv::Mat warpedMono)
+{
+//    return;
+    
+    /*
     addDebugImage(warpedImage, "Before equalizeHist");
     
     warpedImage = equalizeIntensity(warpedImage); // Perform histogram equalization
@@ -747,21 +1140,26 @@ void GobanDetector::testBlockAverage(cv::Mat warpedImage)
     addDebugImage(warpedImage, "After equalizeHist");
     
     */
+
+    cv::Mat warpedCanny = detectEdgesCanny(warpedMono, 50);
+    
+    addDebugImage(warpedCanny, "Warped Canny");
+    
     int histBuckets = 256;
     int hist[histBuckets];
     int histBlue[histBuckets];
     int histGreen[histBuckets];
     int histRed[histBuckets];
     
-    int gridAverages[19][19];
+    int gridAverages[19 * 19];
     
     memset(&hist, 0, sizeof(int) * histBuckets);
     memset(&histBlue, 0, sizeof(int) * histBuckets);
     memset(&histGreen, 0, sizeof(int) * histBuckets);
     memset(&histRed, 0, sizeof(int) * histBuckets);
-    
-    cv::Mat result = cv::Mat(warpedImage.cols, warpedImage.rows, CV_8UC3);
         
+    cv::Mat result = cv::Mat(warpedImage.cols, warpedImage.rows, CV_8UC3);
+    
     for (int i = 0; i < 19; i++)
     {
         for (int j = 0; j < 19; j++)
@@ -779,12 +1177,14 @@ void GobanDetector::testBlockAverage(cv::Mat warpedImage)
             int yMax = MIN(warpedImage.rows - 1, dy * j - 1 + y1);
             
             cv::Mat block = warpedImage.rowRange(xMin, xMax).colRange(yMin, yMax);
-            
+
             cv::Scalar mean = cv::mean(block);
             
-            int meanNormalized = (mean[0] + mean[1] + mean[2]) / 3;
+            //0.2126 * R + 0.7152 * G + 0.0722 * B
             
-            gridAverages[i][j] = meanNormalized;
+            int meanNormalized = (0.0722 * mean[0] + 0.7152 * mean[1] + 0.2126 * mean[2]);
+            
+            gridAverages[i + j * 19] = meanNormalized;
             hist[meanNormalized]++;
             
             histBlue[(int) mean[0]]++;
@@ -794,94 +1194,175 @@ void GobanDetector::testBlockAverage(cv::Mat warpedImage)
             cv::Mat targetBlock = result.rowRange(xMin, xMax).colRange(yMin, yMax);
 
             targetBlock.setTo(mean);
-            
-            /*
-            if (mean[0] > 50)
-            {
-                goban.at<uchar>(j, i) = 0;
-            }
-            else
-            {
-                block = whiteStones.rowRange(xMin, xMax).colRange(yMin, yMax);
-                
-                mean = cv::mean(block);
-                
-                if (mean[0] > 50)
-                {
-                    goban.at<uchar>(j, i) = 255;
-                }
-            }
-            */
-            
+
             // debug
-            rectangle(warpedImage, cv::Point(xMin, yMin), cv::Point(xMax, yMax), cv::Scalar(100));
+            //rectangle(warpedImage, cv::Point(xMin, yMin), cv::Point(xMax, yMax), cv::Scalar(100));
             //rectangle(warpedImage, cv::Point(xMin, yMin), cv::Point(xMax, yMax), cv::Scalar(100));
              
         }
     }
     
     addDebugImage(warpedImage, "average block segmentation");
-    addDebugImage(result, "average block result");
+//    addDebugImage(result, "average block result");
     
-    
+
     cv::Mat histogram = createHistogram(hist, histBuckets, cv::Scalar(0, 0, 0), "Histogram");
     
     
-    // K-Means
+    // Gaussion mixture model, average pixel color
     cv::Mat samples(19 * 19, 1, CV_32FC1);
     
     for (int x = 0; x < 19; x++)
         for (int y = 0; y < 19; y++)
             for (int c = 0; c < 1; c++)
-                samples.at<float>(y + x * 19, c) = gridAverages[x][y];
+                samples.at<float>(y + x * 19, c) = gridAverages[x + y * 19];
     
-    cv::EM model = cv::EM(3, cv::EM::COV_MAT_SPHERICAL);
+    cv::vector<double> histMeans = findClusters(samples, 3);
     
-    if (!model.train(samples))
+    if (histMeans.size() > 0)
     {
-        printf("Error while training samples using EM");
-    }
-    
-    const cv::Mat& means = model.get<cv::Mat>("means");
-    double mean1 = means.at<double>(0, 0);
-    double mean2 = means.at<double>(1, 0);
-    double mean3 = means.at<double>(2, 0);
-    
-    printf("mean1 = %f, mean2 = %f, mean3 = %f\r\n", mean1, mean2, mean3);
-    
-    cv::line(histogram, cv::Point(mean1, 0), cv::Point(mean1, histogram.rows), cv::Scalar(255, 0, 0));
-    cv::line(histogram, cv::Point(mean2, 0), cv::Point(mean2, histogram.rows), cv::Scalar(255, 0, 0));
-    cv::line(histogram, cv::Point(mean3, 0), cv::Point(mean3, histogram.rows), cv::Scalar(255, 0, 0));
-    
-    addDebugImage(histogram, "Hist with Means");
-
-    int clusterCount = 3;
-    cv::Mat labels;
-    int attempts = 10;
-    cv::Mat centers;
-    cv::kmeans(samples, clusterCount, labels, cv::TermCriteria(CV_TERMCRIT_ITER|CV_TERMCRIT_EPS, 10000, 0.0001), attempts, cv::KMEANS_RANDOM_CENTERS, centers);
-
-    
-    int kmeanHist[histBuckets];
-    memset(&kmeanHist, 0, sizeof(int) * histBuckets);
-    
-    for (int x = 0; x < 19; x++)
-    {
-        for (int y = 0; y < 19; y++)
-        {
-            int cluster_idx = labels.at<int>(y + x * 19, 0);
-            
-            int avg = gridAverages[x][y];
-            
-            kmeanHist[avg] = cluster_idx + 1;
-        }
-    }
+        double mean1 = histMeans[0];
+        double mean2 = histMeans[1];
+        double mean3 = histMeans[2];
         
-    createHistogram(kmeanHist, histBuckets, cv::Scalar(0, 0, 0), "K-Mean");
+        printf("mean1 = %f, mean2 = %f, mean3 = %f\r\n", mean1, mean2, mean3);
+        
+        cv::line(histogram, cv::Point(mean1, 0), cv::Point(mean1, histogram.rows), cv::Scalar(255, 0, 0));
+        cv::line(histogram, cv::Point(mean2, 0), cv::Point(mean2, histogram.rows), cv::Scalar(255, 0, 0));
+        cv::line(histogram, cv::Point(mean3, 0), cv::Point(mean3, histogram.rows), cv::Scalar(255, 0, 0));
+        
+        addDebugImage(histogram, "Hist with Means");
+        
+        
+        int w = 30;
+        cv::Mat clusterVisualisation = cv::Mat(19 * w, 19 * w, CV_8UC1);
+        
+        for (int x = 0; x < 19; x++)
+        {
+            for (int y = 0; y < 19; y++)
+            {
+                int xMin = x * w;
+                int yMin = y * w;
+                
+                int xMax = (x + 1) * w - 1;
+                int yMax = (y + 1) * w - 1;
+                
+                cv::Mat block = clusterVisualisation.rowRange(xMin, xMax).colRange(yMin, yMax);
+                
+                int color = gridAverages[x + 19 * y];
+                
+                int clusterIndex = findClosestValueIndex(color, mean1, mean2, mean3);
+                
+                if (clusterIndex == 0)
+                {
+                    block.setTo(cv::Scalar(0));
+                }
+                if (clusterIndex == 1)
+                {
+                    block.setTo(cv::Scalar(128));
+                }
+                if (clusterIndex == 2)
+                {
+                    block.setTo(cv::Scalar(255));
+                }
+            }
+        }
+        
+        addDebugImage(clusterVisualisation, "Cluster Visualisation");
+    }
     
-    createHistogram(histRed, histBuckets, cv::Scalar(255, 0, 0), "Histogram Red");
-    createHistogram(histGreen, histBuckets, cv::Scalar(0, 255, 0), "Histogram Green");
-    createHistogram(histBlue, histBuckets, cv::Scalar(0, 0, 255), "Histogram Blue");
+    classifyImage(warpedImage, warpedCanny);
+
+
+    /*
+    // Gaussion mixture model, all pixels
+    cv::Mat histogram2 = createHistogram(hist, histBuckets, cv::Scalar(0, 0, 0), "Histogram2");
+
+    addDebugImage(warpedImage, "test");
+    
+    cv::Mat samples2(warpedImage.rows
+                     , warpedImage.cols
+                     , 3, CV_32FC1);*/
+    
+    /*
+    for (int x = 0; x < warpedImage.rows; x++)
+        for (int y = 0; y < warpedImage.cols; y++)
+        {
+            cv::Vec3b pixel = warpedImage.at<cv::Vec3b>(x, y);
+
+            cv::Vec3f pixelf = cv::Vec3f(pixel[0], pixel[1], pixel[2]);
+            
+            //for (int c = 0; c < 3; c++)
+            {
+                samples2.at<cv::Vec3f>(y + x * warpedImage.cols, 0) = pixelf;
+            }
+        }
+    */
+    
+    /*
+    cv::vector<double> histMeans2 = findClusters(samples2, 3);
+    
+    if (histMeans2.size() > 0)
+    {
+        double mean1 = histMeans2[0];
+        double mean2 = histMeans2[1];
+        double mean3 = histMeans2[2];
+        
+        printf("HD: mean1 = %f, mean2 = %f, mean3 = %f\r\n", mean1, mean2, mean3);
+        
+        cv::line(histogram2, cv::Point(mean1, 0), cv::Point(mean1, histogram2.rows), cv::Scalar(255, 0, 0));
+        cv::line(histogram2, cv::Point(mean2, 0), cv::Point(mean2, histogram2.rows), cv::Scalar(255, 0, 0));
+        cv::line(histogram2, cv::Point(mean3, 0), cv::Point(mean3, histogram2.rows), cv::Scalar(255, 0, 0));
+        
+        addDebugImage(histogram, "Hist with Means (HD)");
+        
+        
+        int w = 30;
+        cv::Mat clusterVisualisation = cv::Mat(warpedImage.rows, warpedImage.cols, CV_8UC1);
+        
+        for (int x = 0; x < warpedImage.cols; x++)
+        {
+            for (int y = 0; y < warpedImage.rows; y++)
+            {
+                int xMin = x * w;
+                int yMin = y * w;
+                
+                int xMax = (x + 1) * w - 1;
+                int yMax = (y + 1) * w - 1;
+                
+                cv::Mat block = clusterVisualisation.rowRange(xMin, xMax).colRange(yMin, yMax);
+                
+                cv::Vec3b color = warpedImage.at<cv::Vec3b>(x, y);
+                
+                int clusterIndex = findClosestValueIndex(color, mean1, mean2, mean3);
+                
+                if (clusterIndex == 0)
+                {
+                    block.setTo(cv::Scalar(0));
+                }
+                if (clusterIndex == 1)
+                {
+                    block.setTo(cv::Scalar(128));
+                }
+                if (clusterIndex == 2)
+                {
+                    block.setTo(cv::Scalar(255));
+                }
+            }
+        }
+        
+        addDebugImage(clusterVisualisation, "Cluster Visualisation");
+         
+    }
+    */
+    
+    // K-Means
+    
+   // findKMeans(samples, gridAverages, 3);
+    
+//    createHistogram(histRed, histBuckets, cv::Scalar(255, 0, 0), "Histogram Red");
+//    createHistogram(histGreen, histBuckets, cv::Scalar(0, 255, 0), "Histogram Green");
+//    createHistogram(histBlue, histBuckets, cv::Scalar(0, 0, 255), "Histogram Blue");
     
     
     // need to create a point system.
@@ -893,7 +1374,115 @@ void GobanDetector::testBlockAverage(cv::Mat warpedImage)
     //    goban.at<uchar>(1, 1) = 255;
 }
 
-cv::Mat GobanDetector::createHistogram(int histValues[], int histBuckets, cv::Scalar color, char * histTitle)
+cv::Mat GobanDetector::VisualizeGoban(const cv::Mat &goban, const cv::Mat &bg)
+{
+    float w = bg.cols / 18.0f;
+    
+    //    cv::Mat clusterVisualisation = cv::Mat(goban.rows * w, goban.cols * w, CV_8UC1);
+    cv::Mat clusterVisualisation = bg.clone();
+    cv::Mat overlay;
+    
+    clusterVisualisation.copyTo(overlay);
+    
+    for (int x = 0; x < goban.cols; x++)
+    {
+        for (int y = 0; y < goban.rows; y++)
+        {
+            int x1 = w / 2;
+            int y1 = w / 2;
+            
+            int xMin = MAX(0, w * x - x1);
+            int xMax = MIN(clusterVisualisation.cols - 1, w * x - 1 + x1);
+            
+            int yMin = MAX(0, w * y - y1);
+            int yMax = MIN(clusterVisualisation.rows - 1, w * y - 1 + y1);
+
+            if (x == 18)
+            {
+                int ii = 1;
+                ii++;
+            }
+            
+            cv::line(overlay, cv::Point(w * x, w * y), cv::Point(w * x, w * y), cv::Scalar(0, 0, 255), 3);
+
+            cv::Mat block = overlay.rowRange(xMin, xMax).colRange(yMin, yMax);
+            
+            char clusterIndex = goban.at<char>(x, y);
+            
+            if (clusterIndex == 0)
+            {
+//                block.setTo(cv::Scalar(0));
+            }
+            if (clusterIndex == 1)
+            {
+                block.setTo(cv::Scalar(128, 0, 0));
+            }
+            if (clusterIndex == 2)
+            {
+                block.setTo(cv::Scalar(255, 0, 0));
+            }
+        }
+    }
+    
+    double opacity = 0.4;
+    cv::addWeighted(overlay, opacity, clusterVisualisation, 1 - opacity, 0, clusterVisualisation);
+    
+    addDebugImage(clusterVisualisation, "Cluster Visualisation");
+
+    return clusterVisualisation;
+}
+
+void GobanDetector::findKMeans(const cv::Mat& data, int gridAverages[], int clusterCount)
+{
+    cv::Mat labels;
+    int attempts = 10;
+    cv::Mat centers;
+    cv::kmeans(data, clusterCount, labels, cv::TermCriteria(CV_TERMCRIT_ITER|CV_TERMCRIT_EPS, 10000, 0.0001), attempts, cv::KMEANS_RANDOM_CENTERS, centers);
+    
+    
+    int kmeanHist[256];
+    memset(&kmeanHist, 0, sizeof(int) * 256);
+    
+    for (int x = 0; x < 19; x++)
+    {
+        for (int y = 0; y < 19; y++)
+        {
+            int cluster_idx = labels.at<int>(y + x * 19, 0);
+            
+            int avg = gridAverages[x + y * 19];
+            
+            kmeanHist[avg] = cluster_idx + 1;
+        }
+    }
+    
+    createHistogram(kmeanHist, 256, cv::Scalar(0, 0, 0), "K-Mean");
+}
+
+cv::vector<double> GobanDetector::findClusters(const cv::Mat& data, int clusterCount)
+{
+    cv::vector<double> clustersMeans;
+    
+    cv::EM model = cv::EM(clusterCount, cv::EM::COV_MAT_SPHERICAL);
+    
+    if (!model.train(data))
+    {
+        printf("Error while training samples using EM");
+    }
+    
+    const cv::Mat& means = model.get<cv::Mat>("means");
+    
+    double mean1 = means.at<double>(0, 0);
+    double mean2 = means.at<double>(1, 0);
+    double mean3 = means.at<double>(2, 0);
+    
+    clustersMeans.push_back(mean1);
+    clustersMeans.push_back(mean2);
+    clustersMeans.push_back(mean3);
+    
+    return clustersMeans;
+}
+
+cv::Mat GobanDetector::createHistogram(int histValues[], int histBuckets, cv::Scalar color, const char *histTitle)
 {
     cv::Mat histogram = cv::Mat(120, histBuckets, CV_8UC3, cv::Scalar(180, 180, 180));
     
@@ -1336,7 +1925,7 @@ bool GobanDetector::detectGobanLines(cv::Mat& image, cv::vector<cv::Vec4i> goban
     cv::Mat line1 = image.clone();
 
     cv::Mat debugConv = cv::Mat(line1.size(), CV_8UC3, cv::Scalar(180, 180, 180));
-    cv::Mat debugConv3 = sourceImage; // cv::Mat(line1.size(), CV_8UC3, cv::Scalar(180, 180, 180));
+    cv::Mat debugConv3 = sourceImage;
     
     int minPixelsToFormALine = MAX(10, image.cols / 25);
     int maxLineGap = MIN(5, image.cols / 100);

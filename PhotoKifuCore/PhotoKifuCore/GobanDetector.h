@@ -18,6 +18,16 @@
 #define BLUR_NO         0
 #define BLUR_YES        1
 
+typedef enum GobanIntersectionType
+{
+    GobanIntersectionTypeCorner,
+    GobanIntersectionTypeTop,
+    GobanIntersectionTypeRight,
+    GobanIntersectionTypeBottom,
+    GobanIntersectionTypeLeft,
+    GobanIntersectionTypeMiddle
+} GobanIntersectionType;
+
 class GobanDetector
 {
 
@@ -32,10 +42,18 @@ public:
     cv::vector<std::pair<const cv::Mat, const char *>> getDebugImages();
     
 private:
+    
+    cv::Mat VisualizeGoban(const cv::Mat &goban, const cv::Mat &bg);
 
-    cv::Mat createHistogram(int histValues[], int histBuckets, cv::Scalar color, char * histTitle);
+    bool isEmptyIntersection(const cv::Mat &imageColor, const cv::Mat &imageMono, int x, int y, GobanIntersectionType intersectionType);
+    
+    cv::Mat classifyImage(cv::Mat image, cv::Mat imageMone);
+    cv::vector<double> findClusters(const cv::Mat& data, int clusterCount);
+    void findKMeans(const cv::Mat& data, int gridAverages[], int clusterCount);
 
-    void testBlockAverage(cv::Mat warpedImage);
+    cv::Mat createHistogram(int histValues[], int histBuckets, cv::Scalar color, const char *histTitle);
+
+    void testBlockAverage(cv::Mat warpedImage, cv::Mat warpedMono);
 
     void addDebugImage(const cv::Mat image, const char* description = NULL);
 
