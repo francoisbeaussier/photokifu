@@ -44,16 +44,17 @@ public:
 private:
     
     cv::Mat VisualizeGoban(const cv::Mat &goban, const cv::Mat &bg);
+    cv::Mat VisualizeGoban(const cv::vector<cv::vector<cv::Point>> stones, const cv::Mat &bg);
 
     bool isEmptyIntersection(const cv::Mat &imageColor, const cv::Mat &imageMono, int x, int y, GobanIntersectionType intersectionType);
     
-    cv::Mat classifyImage(cv::Mat image, cv::Mat imageMone);
+    cv::vector<cv::vector<cv::Point>> classifyImage(cv::Mat image, cv::Mat imageMono, cv::Mat imageCanny);
     cv::vector<double> findClusters(const cv::Mat& data, int clusterCount);
     void findKMeans(const cv::Mat& data, int gridAverages[], int clusterCount);
 
     cv::Mat createHistogram(int histValues[], int histBuckets, cv::Scalar color, const char *histTitle);
 
-    void testBlockAverage(cv::Mat warpedImage, cv::Mat warpedMono);
+    cv::vector<cv::vector<cv::Point>> testBlockAverage(cv::Mat warpedImage, cv::Mat warpedMono);
 
     void addDebugImage(const cv::Mat image, const char* description = NULL);
 
