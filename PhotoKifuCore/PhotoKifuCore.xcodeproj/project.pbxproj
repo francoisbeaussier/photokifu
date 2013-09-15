@@ -11,8 +11,6 @@
 		B20CB853171DB100005E16C8 /* photo_6.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B20CB851171DB100005E16C8 /* photo_6.jpg */; };
 		B23706DA173BD7FB002F672D /* lineData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B23706D8173BD7FB002F672D /* lineData.cpp */; };
 		B23706DB173BD7FB002F672D /* lineData.h in Headers */ = {isa = PBXBuildFile; fileRef = B23706D9173BD7FB002F672D /* lineData.h */; };
-		B23C277B1769FD09001837B4 /* MinMaxFinder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B23C27791769FD09001837B4 /* MinMaxFinder.cpp */; };
-		B23C277C1769FD09001837B4 /* MinMaxFinder.h in Headers */ = {isa = PBXBuildFile; fileRef = B23C277A1769FD09001837B4 /* MinMaxFinder.h */; };
 		B24C1D021757D4E500C462B3 /* geometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B24C1D001757D4E500C462B3 /* geometry.cpp */; };
 		B24C1D031757D4E500C462B3 /* geometry.h in Headers */ = {isa = PBXBuildFile; fileRef = B24C1D011757D4E500C462B3 /* geometry.h */; };
 		B24C1D061757D7FD00C462B3 /* GeometryTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B24C1D041757D7FD00C462B3 /* GeometryTests.mm */; };
@@ -84,8 +82,6 @@
 		B20CB851171DB100005E16C8 /* photo_6.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = photo_6.jpg; sourceTree = "<group>"; };
 		B23706D8173BD7FB002F672D /* lineData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lineData.cpp; sourceTree = "<group>"; };
 		B23706D9173BD7FB002F672D /* lineData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lineData.h; sourceTree = "<group>"; };
-		B23C27791769FD09001837B4 /* MinMaxFinder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MinMaxFinder.cpp; sourceTree = "<group>"; };
-		B23C277A1769FD09001837B4 /* MinMaxFinder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MinMaxFinder.h; sourceTree = "<group>"; };
 		B24C1D001757D4E500C462B3 /* geometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = geometry.cpp; sourceTree = "<group>"; };
 		B24C1D011757D4E500C462B3 /* geometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = geometry.h; sourceTree = "<group>"; };
 		B24C1D041757D7FD00C462B3 /* GeometryTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GeometryTests.mm; sourceTree = "<group>"; };
@@ -121,6 +117,7 @@
 		B2A717ED1717102B00198677 /* photo_4.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = photo_4.jpg; sourceTree = "<group>"; };
 		B2A8781F1770AC08002059D6 /* PerspectiveGrid.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PerspectiveGrid.mm; sourceTree = "<group>"; };
 		B2A878201770AC08002059D6 /* PerspectiveGrid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PerspectiveGrid.h; sourceTree = "<group>"; };
+		B2CCD8A317E52F6400592650 /* code samples.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "code samples.txt"; sourceTree = "<group>"; };
 		B2D6624217948C62001C6436 /* TestImageData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestImageData.h; sourceTree = "<group>"; };
 		B2D6624317948C62001C6436 /* TestImageData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestImageData.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -216,10 +213,9 @@
 				B23706D8173BD7FB002F672D /* lineData.cpp */,
 				B24C1D011757D4E500C462B3 /* geometry.h */,
 				B24C1D001757D4E500C462B3 /* geometry.cpp */,
-				B23C277A1769FD09001837B4 /* MinMaxFinder.h */,
-				B23C27791769FD09001837B4 /* MinMaxFinder.cpp */,
 				B2A878201770AC08002059D6 /* PerspectiveGrid.h */,
 				B2A8781F1770AC08002059D6 /* PerspectiveGrid.mm */,
+				B2CCD8A317E52F6400592650 /* code samples.txt */,
 			);
 			path = PhotoKifuCore;
 			sourceTree = "<group>";
@@ -274,7 +270,6 @@
 				B23706DB173BD7FB002F672D /* lineData.h in Headers */,
 				B27A15F017C796EB003AA083 /* PhotoKifuCore.h in Headers */,
 				B24C1D031757D4E500C462B3 /* geometry.h in Headers */,
-				B23C277C1769FD09001837B4 /* MinMaxFinder.h in Headers */,
 				B2A878221770AC08002059D6 /* PerspectiveGrid.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -390,7 +385,6 @@
 				B2A717D51714713E00198677 /* GobanDetector.mm in Sources */,
 				B23706DA173BD7FB002F672D /* lineData.cpp in Sources */,
 				B24C1D021757D4E500C462B3 /* geometry.cpp in Sources */,
-				B23C277B1769FD09001837B4 /* MinMaxFinder.cpp in Sources */,
 				B2A878211770AC08002059D6 /* PerspectiveGrid.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

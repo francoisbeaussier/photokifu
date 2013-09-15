@@ -99,6 +99,9 @@
                        [[TestImageData alloc] initWithImage: [self loadImage:@"photo_1.jpg"] andCoordinates:CGPointMake(880, 477) :CGPointMake(2549, 526) :CGPointMake(2594, 2111) :CGPointMake(793, 2094)],
                        [[TestImageData alloc] initWithImage: [self loadImage:@"photo_2.jpg"] andCoordinates:CGPointMake(864, 1022) :CGPointMake(1740, 640) :CGPointMake(2512, 1288) :CGPointMake(1562, 1898)],
                        [[TestImageData alloc] initWithImage: [self loadImage:@"photo_3.jpg"] andCoordinates:CGPointMake(730, 788) :CGPointMake(1846, 810) :CGPointMake(1830, 1886) :CGPointMake(736, 1892)],
+                       [[TestImageData alloc] initWithImage: [self loadImage:@"photo_4.jpg"] andCoordinates:CGPointMake(596, 378) :CGPointMake(1820, 340) :CGPointMake(1848, 1570) :CGPointMake(632, 1584)],
+                       [[TestImageData alloc] initWithImage: [self loadImage:@"photo_5.jpg"] andCoordinates:CGPointMake(1002, 438) :CGPointMake(1840, 628) :CGPointMake(1468, 1404) :CGPointMake(472, 1078)],
+                       [[TestImageData alloc] initWithImage: [self loadImage:@"photo_6.jpg"] andCoordinates:CGPointMake(763, 347) :CGPointMake(2635, 315) :CGPointMake(2627, 2086) :CGPointMake(763, 2048)],
                        [[TestImageData alloc] initWithImage: [self loadImage:@"photo_7.jpg"] andCoordinates:CGPointMake(484, 1948) :CGPointMake(1704, 1924) :CGPointMake(2108, 2984) :CGPointMake(92, 3056)],
                        nil];
     
@@ -234,8 +237,8 @@
 - (void) outputTestResult:(cv::vector<cv::vector<std::pair<const cv::Mat, const char *>>>)debugImages atPath:(NSString *)outputPath
 {
     int htmlImageDisplayMargin = 5;
-    int htmlImageDisplayWidth = 640;
-    int htmlImageDisplayHeight = 480;
+    int htmlImageDisplayWidth = 320;
+    int htmlImageDisplayHeight = 240;
     int pageBodyWidth = debugImages.size() * (htmlImageDisplayWidth + htmlImageDisplayMargin * 2);
     
     NSMutableString *html = [[NSMutableString alloc] initWithFormat: @"<html><body style=\"width: %ipx\">\n", pageBodyWidth];
