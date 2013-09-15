@@ -49,16 +49,10 @@ private:
     bool isEmptyIntersection(const cv::Mat &imageColor, const cv::Mat &imageMono, int x, int y, GobanIntersectionType intersectionType);
     
     cv::vector<cv::vector<cv::Point>> classifyImage(cv::Mat image, cv::Mat imageMono, cv::Mat imageCanny);
-    cv::vector<double> findClusters(const cv::Mat& data, int clusterCount);
-    void findKMeans(const cv::Mat& data, int gridAverages[], int clusterCount);
-
-    cv::Mat createHistogram(int histValues[], int histBuckets, cv::Scalar color, const char *histTitle);
 
     cv::vector<cv::vector<cv::Point>> testBlockAverage(cv::Mat warpedImage, cv::Mat warpedMono);
 
     void addDebugImage(const cv::Mat image, const char* description = NULL);
-
-    std::vector<cv::Point> detectGobanCorners(cv::Mat &image, std::vector<std::vector<cv::Point>> lineSegmentsClusters1, std::vector<std::vector<cv::Point>> lineSegmentsClusters2);
 
     cv::vector<cv::Point> detectGoban(cv::Mat& image);
 
@@ -68,8 +62,6 @@ private:
     bool detectGobanLines(cv::Mat& image, cv::vector<cv::Vec4i> gobanLines, cv::Mat& sourceImage);
 
     cv::Mat GetHSVChannel(cv::Mat &image, int channel, bool preBlur);
-
-    void surfDetection(cv::Mat& image);
 
     cv::Mat getWarpTransform(cv::vector<cv::Point> poly);
     cv::Mat getWarpTransform2(cv::vector<cv::Point> poly, int dstWidth);
@@ -84,31 +76,8 @@ private:
     cv::Mat extractStonePosition(cv::Mat blackStones, cv::Mat whiteStones);
     cv::Mat extractStonePosition2(cv::Mat blackStones, cv::Mat whiteStones);
     cv::vector<cv::vector<cv::Point>> extractStones(cv::Mat& goban);
-
-    void customBlackAndWhite(cv::Mat& image);
-
     
-    std::vector<cv::Point> getIntersections(std::vector<std::vector<cv::Point>> lines1, std::vector<std::vector<cv::Point>> lines2);
-    std::vector<cv::Point> getIntersections(int minLineLength, int minDistanceBetweenLines, std::vector<std::vector<std::vector<cv::Point>>> lineSegmentsClusters);
-    std::vector<cv::Point> getLargestIntersections(int minLineLength, std::vector<std::vector<std::vector<cv::Point>>> lineSegmentsClusters);
-    
-    std::vector<std::vector<cv::Point>> selectLines(int minLineLength, int minDistanceBetweenLines, std::vector<std::vector<cv::Point>> lineSegments);
-//    std::vector<std::vector<cv::Point>> selectExtremeLines(int minLineLength, std::vector<std::vector<cv::Point>> lineSegments);
-
-    bool detectPlanarHomography(cv::Mat& image, cv::Point vanishingPoint1, cv::Point vanishingPoint2);
-
-    cv::Point linePassingByPoint(cv::Point a, cv::Point b, cv::Point passingBy);
-//    double distanceBetweenLineAndPoint(cv::Point a, cv::Point b, cv::Point c);
-    cv::Point closestLinePassingByPoint(cv::vector<cv::Point> l1, cv::vector<cv::Point> l2, cv::Point passingBy);
-
     cv::Mat detectEdgesCanny(cv::Mat& image, int threshold);
-    cv::Mat detectEdgesLaplacian(cv::Mat& image);
-
-    void detectHarrisCorners(cv::Mat& src);
-
-    void testLines();
-
-    bool intersectionWithEdge(cv::vector<cv::Point> a, cv::vector<cv::Point> b, cv::vector<cv::Point> a2, cv::vector<cv::Point> b2, cv::Rect edges, std::vector<cv::Point> &corners);
     
     cv::Mat _greyMat;
     cv::Mat _warpedMat;

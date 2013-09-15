@@ -7,7 +7,6 @@
 //
 
 #include "geometry.h"
-#include "MinMaxFinder.h"
 
 double angle(const cv::Point &pt1, const cv::Point &pt2, const cv::Point &pt0)
 {
@@ -317,17 +316,6 @@ std::vector<std::vector<cv::Point>> selectExtremeLines(int minLineLength, const 
     
     return selectedLines;
 }
- 
-std::vector<cv::Point> findMinMaxPoints(const std::vector<std::vector<cv::Point>> &linesA, const std::vector<std::vector<cv::Point>> &linesB)
-{
-    MinMaxFinder<int> mmf;
-
-    mmf.CheckLines(linesA);
-    mmf.CheckLines(linesB);
-    
-    return mmf.getMinMax();
-}
-
 
 // Helper
 template <class T>
