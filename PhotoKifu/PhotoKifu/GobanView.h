@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface GobanView : UIView
+@interface GobanView : UIScrollView
 {
     int _gobanSize;
     float _gridCellWidth;
@@ -17,7 +17,7 @@
 #ifdef __cplusplus
     cv::vector<cv::vector<cv::Point>> _stones;
 #endif
-
+    UIImage * _warpedImage;
 }
 
 #ifdef __cplusplus
@@ -25,4 +25,10 @@
 #endif
 
 
+- (void) setWarpedImage: (UIImage *) image;
+
+- (CGPoint) coordinateFromPoint: (CGPoint) point;
+
+@property (assign, atomic) bool WarpedImageIsVisible;
+@property (assign, atomic) int WarpedImageRotationAngle;
 @end

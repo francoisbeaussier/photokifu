@@ -52,7 +52,9 @@
 		B2A878211770AC08002059D6 /* PerspectiveGrid.mm in Sources */ = {isa = PBXBuildFile; fileRef = B2A8781F1770AC08002059D6 /* PerspectiveGrid.mm */; };
 		B2A878221770AC08002059D6 /* PerspectiveGrid.h in Headers */ = {isa = PBXBuildFile; fileRef = B2A878201770AC08002059D6 /* PerspectiveGrid.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B2A878231770B966002059D6 /* PerspectiveGrid.mm in Sources */ = {isa = PBXBuildFile; fileRef = B2A8781F1770AC08002059D6 /* PerspectiveGrid.mm */; };
+		B2B2F9991866B24D000CA134 /* GobanDetectorResult.h in Headers */ = {isa = PBXBuildFile; fileRef = B2B2F9971866B24C000CA134 /* GobanDetectorResult.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B2D6624417948C62001C6436 /* TestImageData.m in Sources */ = {isa = PBXBuildFile; fileRef = B2D6624317948C62001C6436 /* TestImageData.m */; };
+		B2F0AD191866BA93007B5404 /* GobanDetectorResult.mm in Sources */ = {isa = PBXBuildFile; fileRef = B2B2F9961866B24C000CA134 /* GobanDetectorResult.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -117,6 +119,8 @@
 		B2A717ED1717102B00198677 /* photo_4.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = photo_4.jpg; sourceTree = "<group>"; };
 		B2A8781F1770AC08002059D6 /* PerspectiveGrid.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PerspectiveGrid.mm; sourceTree = "<group>"; };
 		B2A878201770AC08002059D6 /* PerspectiveGrid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PerspectiveGrid.h; sourceTree = "<group>"; };
+		B2B2F9961866B24C000CA134 /* GobanDetectorResult.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GobanDetectorResult.mm; sourceTree = "<group>"; };
+		B2B2F9971866B24C000CA134 /* GobanDetectorResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GobanDetectorResult.h; sourceTree = "<group>"; };
 		B2CCD8A317E52F6400592650 /* code samples.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "code samples.txt"; sourceTree = "<group>"; };
 		B2D6624217948C62001C6436 /* TestImageData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestImageData.h; sourceTree = "<group>"; };
 		B2D6624317948C62001C6436 /* TestImageData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestImageData.m; sourceTree = "<group>"; };
@@ -216,6 +220,8 @@
 				B2A878201770AC08002059D6 /* PerspectiveGrid.h */,
 				B2A8781F1770AC08002059D6 /* PerspectiveGrid.mm */,
 				B2CCD8A317E52F6400592650 /* code samples.txt */,
+				B2B2F9971866B24C000CA134 /* GobanDetectorResult.h */,
+				B2B2F9961866B24C000CA134 /* GobanDetectorResult.mm */,
 			);
 			path = PhotoKifuCore;
 			sourceTree = "<group>";
@@ -268,6 +274,7 @@
 			files = (
 				B2A717F01719C9CE00198677 /* GobanDetector.h in Headers */,
 				B23706DB173BD7FB002F672D /* lineData.h in Headers */,
+				B2B2F9991866B24D000CA134 /* GobanDetectorResult.h in Headers */,
 				B27A15F017C796EB003AA083 /* PhotoKifuCore.h in Headers */,
 				B24C1D031757D4E500C462B3 /* geometry.h in Headers */,
 				B2A878221770AC08002059D6 /* PerspectiveGrid.h in Headers */,
@@ -381,6 +388,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B2F0AD191866BA93007B5404 /* GobanDetectorResult.mm in Sources */,
 				B2848E15171462FD00E0F0BB /* PhotoKifuCore.mm in Sources */,
 				B2A717D51714713E00198677 /* GobanDetector.mm in Sources */,
 				B23706DA173BD7FB002F672D /* lineData.cpp in Sources */,

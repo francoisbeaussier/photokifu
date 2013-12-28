@@ -65,15 +65,19 @@ cv::Mat GobanDetector::detectEdgesCanny(cv::Mat& image, int threshold)
 }
 
 
-cv::vector<cv::vector<cv::Point>> GobanDetector::extractGobanState(UIImage* image, cv::vector<cv::Point> contourPoints)
+GobanDetectorResult GobanDetector::extractGobanState(UIImage* image, cv::vector<cv::Point> contourPoints)
 {
     cv::Mat img = [PhotoKifuCore cvMatFromUIImage: image];
 
-    return extractGobanState(img, contourPoints);
+    GobanDetectorResult result = extractGobanState(img, contourPoints);
+
+    return result;
 }
 
-cv::vector<cv::vector<cv::Point>> GobanDetector::extractGobanState(cv::Mat& image, cv::vector<cv::Point> contourPoints)
+GobanDetectorResult GobanDetector::extractGobanState(cv::Mat& image, cv::vector<cv::Point> contourPoints)
 {
+    GobanDetectorResult result;
+    
     cv::Mat debugContour = image.clone();
     
     for (int i = 0; i < 4; i++)
@@ -90,11 +94,16 @@ cv::vector<cv::vector<cv::Point>> GobanDetector::extractGobanState(cv::Mat& imag
     cv::Mat transform = getWarpTransform2(contourPoints, warpSize);
     
     cv::Mat warpedImage = warpImage(image, transform, warpSize, warpSize, CV_8UC3);
+    
+    result.warpedImage = [PhotoKifuCore UIImageFromCVMat: warpedImage];
+    
     cv::Mat warpedMatV = warpImage(matV, transform, warpSize, warpSize, CV_8UC1);
     
     cv::vector<cv::vector<cv::Point>> stones = testBlockAverage(warpedImage, warpedMatV);
 
-    return stones;
+    result.Stones = stones;
+    
+    return result;
 }
 
 cv::Mat GobanDetector::GetHSVChannel(cv::Mat &image, int channel, bool preBlur)

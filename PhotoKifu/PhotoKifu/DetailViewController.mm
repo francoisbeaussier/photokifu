@@ -10,6 +10,7 @@
 #import <PhotoKifuCore/GobanDetector.h>
 #import <PhotoKifuCore/PerspectiveGrid.h>
 #import <PhotoKifuCore/PhotoKifuCore.h>
+#import <PhotoKifuCore/GobanDetectorResult.h>
 
 #import "DetailViewController.h"
 #import "GobanScanData.h"
@@ -95,6 +96,10 @@
     
     // used to know where the UI layout has changed the position / size of the scrollView
     _scrollViewFrame = CGRectMake(0, 0, 0, 0);
+    
+    //self.goButton.layer.cornerRadius = 9;
+    //self.goButton.layer.borderWidth = 1;
+    //self.goButton.layer.borderColor = [UIColor blackColor].CGColor;
     
     [self configureView];
     
@@ -216,6 +221,10 @@ CGRect _scrollViewFrame;
     [self setGridSize: nextGridSize];
 }
 
+- (IBAction)UIToolBarItemScan:(id)sender {
+    [self showPreview];
+}
+
 - (void) setGridSize: (int) gridSize
 {
     self.gridSizeButton.tag = gridSize;
@@ -224,7 +233,7 @@ CGRect _scrollViewFrame;
     self.polygonView.gridSize = gridSize;
 }
 
-- (IBAction) goButtonPressed: (id) sender
+- (void) showPreview
 {
     NSMutableArray *corners = self.polygonView.corners;
     
@@ -239,7 +248,10 @@ CGRect _scrollViewFrame;
         points.push_back(cv::Point(cornerPoint.x, cornerPoint.y));
     }
     
-    _stones = gd.extractGobanState(self.imageView.image, points);
+    GobanDetectorResult result = gd.extractGobanState(self.imageView.image, points);
+    
+    _stones = result.Stones;
+    _warpedImage = result.warpedImage;
     
     [self performSegueWithIdentifier: @"ShowPreview" sender: self];
 }
@@ -310,7 +322,7 @@ CGRect _scrollViewFrame;
         // Get destination view
         PreviewViewController *preview = [segue destinationViewController];
         
-        [preview setStones: _stones];
+        [preview setStones: _stones andWarpedImage: _warpedImage];
     }
 }
 

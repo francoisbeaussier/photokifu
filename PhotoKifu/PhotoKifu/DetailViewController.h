@@ -20,6 +20,7 @@
     cv::vector<cv::vector<cv::Point>> _stones;
 #endif
     
+    UIImage *_warpedImage;
     MagnifierView *loop;
 }
 
@@ -30,8 +31,8 @@
 
 @property (strong, nonatomic) UIDynamicPolygonView *polygonView;
 
-- (IBAction) goButtonPressed: (id) sender;
-
 - (IBAction) gridSizeButtonPressed: (id) sender;
+
+- (IBAction)UIToolBarItemScan:(id)sender;
 
 @end
