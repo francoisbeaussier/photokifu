@@ -101,8 +101,16 @@
     //self.goButton.layer.borderWidth = 1;
     //self.goButton.layer.borderColor = [UIColor blackColor].CGColor;
     
+    [self.UIToolBarItemScan setEnabled: NO];
+    
     [self configureView];
     
+    // disable back navigation swipe, this conflicts with the movement of the grid corners
+    if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
+        self.navigationController.interactivePopGestureRecognizer.enabled = NO;
+    }
+    
+    _cornerPositionHasChanged = true;
 }
 
 CGRect _scrollViewFrame;
@@ -128,13 +136,17 @@ CGRect _scrollViewFrame;
         self.scrollView.maximumZoomScale = 0.5f;
         self.scrollView.zoomScale = minScale;
         
-        
-        
         UIActivityIndicatorView *activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle: UIActivityIndicatorViewStyleWhiteLarge];
-        [self.scrollView addSubview: activityView];
+        
+        int size = MIN(self.scrollView.frame.size.width / 3, self.scrollView.frame.size.height / 3);
+        [activityView setFrame:CGRectMake(0, 0, size, size)];
+        
+        [activityView.layer setBackgroundColor:[[UIColor colorWithWhite: 0.0 alpha:0.60] CGColor]];
+        activityView.layer.cornerRadius = 5;
         
         activityView.center = CGPointMake(self.scrollView.frame.size.width / 2, self.scrollView.frame.size.height / 2);
         
+        [self.scrollView addSubview: activityView];
         [activityView startAnimating];
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -147,6 +159,9 @@ CGRect _scrollViewFrame;
                 
                 self.polygonView = [[UIDynamicPolygonView alloc] initWithImageView: self.imageView andScrollView: self.scrollView andCorners: corners];
                 self.polygonView.backgroundColor = [UIColor clearColor];
+                
+                self.polygonView.HasCornerPostionChanged = _cornerPositionHasChanged;
+                
                 [self.scrollView addSubview: self.polygonView];
                 [self.polygonView viewWillAppear:NO];
                 
@@ -155,10 +170,9 @@ CGRect _scrollViewFrame;
                 
                 [activityView stopAnimating];
                 
-                //            [activityView removeFromSuperview];
+                [self.UIToolBarItemScan setEnabled: YES];
             });
         });
-
         
         // 6
         [self centerScrollViewContents];
@@ -222,6 +236,9 @@ CGRect _scrollViewFrame;
 }
 
 - (IBAction)UIToolBarItemScan:(id)sender {
+    
+    [self.UIToolBarItemScan setEnabled: NO];
+    
     [self showPreview];
 }
 
@@ -235,25 +252,59 @@ CGRect _scrollViewFrame;
 
 - (void) showPreview
 {
-    NSMutableArray *corners = self.polygonView.corners;
+    UIActivityIndicatorView *activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle: UIActivityIndicatorViewStyleWhiteLarge];
+    [self.scrollView addSubview: activityView];
     
-    GobanDetector gd(false);
+    int size = MIN(self.scrollView.frame.size.width / 3, self.scrollView.frame.size.height / 3);
+    [activityView setFrame:CGRectMake(0, 0, size, size)];
     
-    cv::vector<cv::Point> points;
-    
-    for (int i = 0; i < corners.count; i++)
-    {
-        CGPoint cornerPoint = [corners[i] CGPointValue];
+    [activityView.layer setBackgroundColor:[[UIColor colorWithWhite: 0.0 alpha:0.60] CGColor]];
+    activityView.layer.cornerRadius = 5;
 
-        points.push_back(cv::Point(cornerPoint.x, cornerPoint.y));
-    }
+    activityView.center = CGPointMake(self.scrollView.frame.size.width / 2, self.scrollView.frame.size.height / 2);
     
-    GobanDetectorResult result = gd.extractGobanState(self.imageView.image, points);
+    [activityView startAnimating];
     
-    _stones = result.Stones;
-    _warpedImage = result.warpedImage;
-    
-    [self performSegueWithIdentifier: @"ShowPreview" sender: self];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        
+        //GobanDetector gd(false);
+        //cv::vector<cv::Point> corners = gd.detectGoban(self.detailItem.fullImage);
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            // hide loading activity and refresh view with loaded data
+
+            if (self.polygonView.HasCornerPostionChanged)
+            {
+                NSMutableArray *corners = self.polygonView.corners;
+                
+                GobanDetector gd(false);
+                
+                cv::vector<cv::Point> points;
+                
+                for (int i = 0; i < corners.count; i++)
+                {
+                    CGPoint cornerPoint = [corners[i] CGPointValue];
+                    
+                    points.push_back(cv::Point(cornerPoint.x, cornerPoint.y));
+                }
+                
+                GobanDetectorResult result = gd.extractGobanState(self.imageView.image, points);
+                
+                _stones = result.Stones;
+                _warpedImage = result.warpedImage;
+                
+                self.polygonView.HasCornerPostionChanged = false;
+            }
+            
+            _cornerPositionHasChanged = false;
+            
+            [activityView stopAnimating];
+            
+            [self performSegueWithIdentifier: @"ShowPreview" sender: self];
+        
+            [self.UIToolBarItemScan setEnabled: YES];
+        });
+    });
 }
 
 - (void) scrollViewDoubleTapped: (UITapGestureRecognizer*) recognizer
