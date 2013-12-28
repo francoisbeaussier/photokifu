@@ -50,6 +50,8 @@
                 [button setCenter: CGPointMake(defaultPositions[i * 2], defaultPositions[i * 2 + 1])];
             }
             
+            self.HasCornerPostionChanged = false;
+            
             [button setImage: targetImage forState: UIControlStateNormal];
             [button setTag: i];
             
@@ -82,6 +84,40 @@
 
 float deltaTouchX, deltaTouchY;
 
+- (void) setMagnifyingClassCenterAtX: (int) x andY: (int) y
+{
+    CGRect bounds = self.scrollView.bounds;
+    CGRect frame = self.scrollView.frame;
+    
+    if (y - bounds.origin.y > 66)
+    {
+        loop.center = CGPointMake(x, y - 66);
+    }
+    else if (x - bounds.origin.x > 66)
+    {
+        loop.center = CGPointMake(x - 66, y);
+    }
+    else
+    {
+        loop.center = CGPointMake(x + 66, y);
+    }
+}
+
+//- (CGPoint) boundLocationAtX: (int) x andY: (int) y withFrame:(CGRect) frame
+//{
+//    if (x < frame.origin.x)
+//        x = frame.origin.x;
+//    else if (x > frame.origin.x + frame.size.width)
+//        x = frame.origin.x + frame.size.width;
+//
+//    if (y < frame.origin.y)
+//        y = frame.origin.y;
+//    else if (y > frame.origin.y + frame.size.height)
+//        y = frame.origin.y + frame.size.height;
+//
+//    return CGPointMake(x, y);
+//}
+
 - (void) handleMagnifier: (UILongPressGestureRecognizer*) recognizer
 {
     CGPoint location = [recognizer locationInView: self];
@@ -103,8 +139,9 @@ float deltaTouchX, deltaTouchY;
             
             CGPoint imageViewLocation = [self convertPoint: location toView: self.imageView];
             loop.touchPoint = imageViewLocation;
-//            loop.frame.origin = CGPointMake(location.x, location.y - 150);
-            loop.center = CGPointMake(location.x, location.y - 66);
+
+            [self setMagnifyingClassCenterAtX: location.x andY: location.y];
+            
             [self addSubview: loop];
             [loop setNeedsDisplay];
         }
@@ -113,18 +150,24 @@ float deltaTouchX, deltaTouchY;
         case UIGestureRecognizerStateChanged:
         {
             // offset the touchlocation to be consistent with the button's center
-            location = CGPointMake(location.x - deltaTouchX, location.y - deltaTouchY);
+            //location = CGPointMake(location.x - deltaTouchX, location.y - deltaTouchY);
+            
+            //location = [self boundLocationAtX: location.x - deltaTouchX andY:location.y - deltaTouchY withFrame: self.scrollView.frame];
             
             //NSLog(@"handleLongPress: StateChanged (loc = %i, %i)", (int) location.x, (int) location.y);
             CGPoint imageViewLocation = [self convertPoint: location toView: self.imageView];
             loop.touchPoint = imageViewLocation;
-            loop.center = CGPointMake(location.x, location.y - 66);
+            
+            [self setMagnifyingClassCenterAtX: location.x andY: location.y];
+           
             [loop setNeedsDisplay];
 
             button.center = location;
 
 //            CGPoint imageViewLocation = [self convertPoint: location toView: self.imageView];
             self.corners[button.tag] = [NSValue valueWithCGPoint: imageViewLocation];
+            
+            self.HasCornerPostionChanged = true;
             
             [self updateGrid];
         }

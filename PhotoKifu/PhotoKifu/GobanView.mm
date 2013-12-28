@@ -26,11 +26,12 @@
 
 -(void) configure
 {
-    int width = 1000 - 12;
+    int padding = 30;
+    int width = 1000 - padding * 2;
     
     _gobanSize = 19;
     _gridCellWidth = (width / 18);
-    _gridLeftPadding = 6 + (width - _gridCellWidth * 18) / 2;
+    _gridLeftPadding = padding + (width - _gridCellWidth * 18) / 2;
 }
 
 - (void) setStones: (cv::vector<cv::vector<cv::Point>>) stones

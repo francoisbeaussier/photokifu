@@ -190,7 +190,7 @@
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="0.29999999999999999" maximumZoomScale="0.80000000000000004" translatesAutoresizingMaskIntoConstraints="NO" id="cBo-Ua-CpZ">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" minimumZoomScale="0.29999999999999999" maximumZoomScale="0.80000000000000004" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cBo-Ua-CpZ">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="372"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <connections>
@@ -224,6 +224,7 @@
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" title="Detail" id="26"/>
                     <connections>
+                        <outlet property="UIToolBarItemScan" destination="blE-yg-KUC" id="MJe-ff-L2a"/>
                         <outlet property="scrollView" destination="cBo-Ua-CpZ" id="cuv-t7-6Ch"/>
                         <segue destination="3VB-45-LYG" kind="push" identifier="ShowPreview" id="5OR-yw-Rrg"/>
                     </connections>

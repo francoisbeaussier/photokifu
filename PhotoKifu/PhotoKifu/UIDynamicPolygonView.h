@@ -15,6 +15,7 @@
     int gridSize;
 }
 
+@property (assign, nonatomic) bool HasCornerPostionChanged;
 @property (strong, nonatomic) NSMutableArray *buttons;
 @property (strong, nonatomic) NSMutableArray *corners;
 

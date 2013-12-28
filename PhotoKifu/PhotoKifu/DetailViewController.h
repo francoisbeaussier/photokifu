@@ -22,6 +22,8 @@
     
     UIImage *_warpedImage;
     MagnifierView *loop;
+    
+    bool _cornerPositionHasChanged;
 }
 
 @property (strong, nonatomic) GobanScanData *detailItem;
@@ -33,6 +35,7 @@
 
 - (IBAction) gridSizeButtonPressed: (id) sender;
 
-- (IBAction)UIToolBarItemScan:(id)sender;
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *UIToolBarItemScan;
+- (IBAction) UIToolBarItemScan:(id)sender;
 
 @end
