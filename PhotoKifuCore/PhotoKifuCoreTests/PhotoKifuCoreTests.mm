@@ -242,6 +242,15 @@
     int pageBodyWidth = debugImages.size() * (htmlImageDisplayWidth + htmlImageDisplayMargin * 2);
     
     NSMutableString *html = [[NSMutableString alloc] initWithFormat: @"<html><body style=\"width: %ipx\">\n", pageBodyWidth];
+
+//    a b c d e
+//    1 2 3 4 5
+    
+//    a 1
+//    b 2
+//    c 3
+//    d 4
+//    e 5
     
     int imageId = 0;
     int columnId = 0;

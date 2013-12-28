@@ -10,6 +10,7 @@
 #define __PhotoKifu__GobanDetector__
 
 #include <UIKit/UIKit.h>
+#include "GobanDetectorResult.h"
 
 #define HSV_HUE         0
 #define HSV_SATURATION  1
@@ -37,7 +38,7 @@ public:
     
     cv::vector<cv::Point> detectGoban(UIImage* image);
 
-    cv::vector<cv::vector<cv::Point>> extractGobanState(UIImage* image, cv::vector<cv::Point> contourPoints);
+    GobanDetectorResult  extractGobanState(UIImage* image, cv::vector<cv::Point> contourPoints);
     
     cv::vector<std::pair<const cv::Mat, const char *>> getDebugImages();
     
@@ -56,7 +57,7 @@ private:
 
     cv::vector<cv::Point> detectGoban(cv::Mat& image);
 
-    cv::vector<cv::vector<cv::Point>> extractGobanState(cv::Mat& image, cv::vector<cv::Point> contourPoints);
+    GobanDetectorResult extractGobanState(cv::Mat& image, cv::vector<cv::Point> contourPoints);
 
     cv::vector<cv::Point> detectBoard(cv::Mat& imageYuv, cv::Mat& debugDrawImage);
     bool detectGobanLines(cv::Mat& image, cv::vector<cv::Vec4i> gobanLines, cv::Mat& sourceImage);

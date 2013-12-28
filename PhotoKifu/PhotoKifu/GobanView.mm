@@ -15,17 +15,22 @@
     self = [super initWithFrame:frame];
     if (self)
     {
-       // [self configure];
+        [self configure];
+        
+        self.WarpedImageRotationAngle = 0;
+        self.userInteractionEnabled = true;
+        
     }
     return self;
 }
 
 -(void) configure
 {
-    _gobanSize = 19;
-    _gridCellWidth = 17;
-    _gridLeftPadding = 7;
+    int width = 1000 - 12;
     
+    _gobanSize = 19;
+    _gridCellWidth = (width / 18);
+    _gridLeftPadding = 6 + (width - _gridCellWidth * 18) / 2;
 }
 
 - (void) setStones: (cv::vector<cv::vector<cv::Point>>) stones
@@ -33,13 +38,39 @@
     _stones = stones;
 }
 
+- (CGPoint) coordinateFromPoint: (CGPoint) point
+{
+    int x = (point.x - _gridLeftPadding + _gridCellWidth / 2) / _gridCellWidth;
+    int y = (point.y - _gridLeftPadding + _gridCellWidth / 2) / _gridCellWidth;
+    
+    return CGPointMake(x, y);
+}
+
+#define radians(degrees) ((degrees) * M_PI/180)
+
 - (void) drawRect:(CGRect)rect
 {
     [self configure];
     
+   
     CGContextRef context = UIGraphicsGetCurrentContext();
+
+    if (self.WarpedImageIsVisible)
+    {
+        CGRect grid = CGRectMake(rect.origin.x + _gridLeftPadding, rect.origin.y + _gridLeftPadding, rect.size.width - _gridLeftPadding * 2, rect.size.height - _gridLeftPadding * 2);
+        
+        CGContextSaveGState(context);
+        
+        CGContextTranslateCTM( context, 0.5f * rect.size.width, 0.5f * rect.size.height ) ;
+        CGContextRotateCTM( context, radians( -90 + self.WarpedImageRotationAngle) ) ;
+        CGContextTranslateCTM( context, -0.5f * rect.size.width, -0.5f * rect.size.height ) ;
+        
+        [ _warpedImage drawInRect:grid];
+        
+        CGContextRestoreGState(context);
+    }
     
-    CGContextSetLineWidth(context, 1.0);
+    CGContextSetLineWidth(context, 3.0);
     
     CGContextSetStrokeColorWithColor(context, [UIColor blackColor].CGColor);
 
@@ -61,16 +92,18 @@
     }
     
     CGContextStrokePath(context);
-
+    
     if (_stones.size() == 0)
     {
         return;
     }
     
+    //CGContextSetLineWidth(context, 3.0);
+    
     cv::vector<cv::Point> blackStones = _stones[0];
     
     CGContextSetFillColorWithColor(context, [UIColor blackColor].CGColor);
-    CGContextSetStrokeColorWithColor(context, [UIColor blackColor].CGColor);
+    CGContextSetStrokeColorWithColor(context, [UIColor grayColor].CGColor);
 
     for (int i = 0; i < blackStones.size(); i++)
     {
@@ -79,9 +112,26 @@
         float diameter = (_gridCellWidth - 2);
         float radius = diameter / 2;
         
-        CGRect circle = CGRectMake(_gridLeftPadding + point.x * _gridCellWidth - radius, _gridLeftPadding + point.y * _gridCellWidth - radius, diameter, diameter);
+        if (self.WarpedImageIsVisible)
+        {
+            float innerDiameter = diameter * 0.8f;
+            float innerRadius = innerDiameter / 2;
         
-        CGContextFillEllipseInRect(context, circle);
+            CGRect circle = CGRectMake(_gridLeftPadding + point.x * _gridCellWidth - radius, _gridLeftPadding + point.y * _gridCellWidth - radius, diameter, diameter);
+            CGRect innerCircle = CGRectMake(_gridLeftPadding + point.x * _gridCellWidth - innerRadius, _gridLeftPadding + point.y * _gridCellWidth - innerRadius, innerDiameter, innerDiameter);
+        
+            CGContextAddEllipseInRect(context, circle);
+            CGContextAddEllipseInRect(context, innerCircle);
+            
+            CGContextEOFillPath(context);
+            CGContextStrokeEllipseInRect(context, innerCircle);
+        }
+        else
+        {
+            CGRect circle = CGRectMake(_gridLeftPadding + point.x * _gridCellWidth - radius, _gridLeftPadding + point.y * _gridCellWidth - radius, diameter, diameter);
+            
+            CGContextFillEllipseInRect(context, circle);
+        }
     }
     
     CGContextStrokePath(context);
@@ -95,11 +145,32 @@
     {
         cv::Point point = whiteStones[i];
         
-        int radius = _gridCellWidth * 0.9;
-        CGRect circle = CGRectMake(_gridLeftPadding + point.x * _gridCellWidth - radius / 2, _gridLeftPadding + point.y * _gridCellWidth - radius / 2, radius, radius);
+        float diameter = (_gridCellWidth - 2);
+        float radius = diameter / 2;
         
-        CGContextFillEllipseInRect(context, circle);
-        CGContextStrokeEllipseInRect(context, circle);
+        if (self.WarpedImageIsVisible)
+        {
+            float innerDiameter = diameter * 0.8f;
+            float innerRadius = innerDiameter / 2;
+            
+            CGRect circle = CGRectMake(_gridLeftPadding + point.x * _gridCellWidth - radius, _gridLeftPadding + point.y * _gridCellWidth - radius, diameter, diameter);
+            CGRect innerCircle = CGRectMake(_gridLeftPadding + point.x * _gridCellWidth - innerRadius, _gridLeftPadding + point.y * _gridCellWidth - innerRadius, innerDiameter, innerDiameter);
+            
+            CGContextAddEllipseInRect(context, circle);
+            CGContextAddEllipseInRect(context, innerCircle);
+            
+            CGContextEOFillPath(context);
+            CGContextStrokeEllipseInRect(context, innerCircle);
+        }
+        else
+        {
+            float radius = diameter / 2;
+            
+            CGRect circle = CGRectMake(_gridLeftPadding + point.x * _gridCellWidth - radius, _gridLeftPadding + point.y * _gridCellWidth - radius, diameter, diameter);
+            
+            CGContextFillEllipseInRect(context, circle);
+            CGContextStrokeEllipseInRect(context, circle);
+        }
     }
     
     CGContextDrawPath(context, kCGPathFillStroke);
@@ -110,6 +181,11 @@
 {
     CGContextMoveToPoint(context, x1, y1);
     CGContextAddLineToPoint(context, x2, y2);
+}
+
+- (void) setWarpedImage: (UIImage *) image
+{
+    _warpedImage = image;
 }
 
 @end

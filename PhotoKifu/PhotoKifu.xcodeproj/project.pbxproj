@@ -31,6 +31,7 @@
 		B2A878171770A4A7002059D6 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2A878161770A4A7002059D6 /* CoreVideo.framework */; };
 		B2A878191770A4AD002059D6 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2A878181770A4AD002059D6 /* CoreMedia.framework */; };
 		B2A8781B1770A4B6002059D6 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2A8781A1770A4B6002059D6 /* QuartzCore.framework */; };
+		B2B2F99C1866B9E6000CA134 /* libPhotoKifuCore.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B2B2F99B1866B9E6000CA134 /* libPhotoKifuCore.a */; };
 		B2B7370417C728E100283DFE /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2B7370317C728E100283DFE /* opencv2.framework */; };
 		B2B7370517C72AB500283DFE /* GobanScanData.m in Sources */ = {isa = PBXBuildFile; fileRef = B23C27EA176A1839001837B4 /* GobanScanData.m */; };
 		B2B7370617C72AB500283DFE /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B23C27D1176A16FD001837B4 /* AppDelegate.m */; };
@@ -42,8 +43,15 @@
 		B2B7370D17C72AB500283DFE /* GobanView.mm in Sources */ = {isa = PBXBuildFile; fileRef = B2D6623B178F2F19001C6436 /* GobanView.mm */; };
 		B2B7370E17C72AB500283DFE /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B23C27CD176A16FD001837B4 /* main.m */; };
 		B2B7370F17C72AB500283DFE /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = B2D6624017944E8B001C6436 /* Utils.m */; };
-		B2B7371317C72B2000283DFE /* libPhotoKifuCore.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B2B7371217C72B2000283DFE /* libPhotoKifuCore.a */; };
 		B2D6623E17909ADD001C6436 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2D6623D17909ADD001C6436 /* MessageUI.framework */; };
+		B2F0AD1E1866F3BD007B5404 /* OptionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B2F0AD1D1866F3BD007B5404 /* OptionsViewController.m */; };
+		B2F676BD186912F000DDE56D /* arrow-down@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B2F676B7186912F000DDE56D /* arrow-down@2x.png */; };
+		B2F676BE186912F000DDE56D /* envelope@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B2F676B8186912F000DDE56D /* envelope@2x.png */; };
+		B2F676BF186912F000DDE56D /* options@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B2F676B9186912F000DDE56D /* options@2x.png */; };
+		B2F676C0186912F000DDE56D /* action@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B2F676BA186912F000DDE56D /* action@2x.png */; };
+		B2F676C1186912F000DDE56D /* refresh@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B2F676BB186912F000DDE56D /* refresh@2x.png */; };
+		B2F676C2186912F000DDE56D /* tick@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B2F676BC186912F000DDE56D /* tick@2x.png */; };
+		B2F676C41869580500DDE56D /* outgoing@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B2F676C31869580500DDE56D /* outgoing@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -88,6 +96,7 @@
 		B2A878181770A4AD002059D6 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		B2A8781A1770A4B6002059D6 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		B2A8781D1770A4CF002059D6 /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = opencv2.framework; sourceTree = "<group>"; };
+		B2B2F99B1866B9E6000CA134 /* libPhotoKifuCore.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPhotoKifuCore.a; path = "../../../../Library/Developer/Xcode/DerivedData/PhotoKifu-dwvbbkqucvmxhrgrnuudkmdejtgo/Build/Products/Debug-iphoneos/libPhotoKifuCore.a"; sourceTree = "<group>"; };
 		B2B7370317C728E100283DFE /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = opencv2.framework; path = "../xcode frameworks/opencv2.framework"; sourceTree = "<group>"; };
 		B2B7371217C72B2000283DFE /* libPhotoKifuCore.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPhotoKifuCore.a; path = "../PhotoKifuCore/build/Release-iphoneos/libPhotoKifuCore.a"; sourceTree = "<group>"; };
 		B2D66237178F2AE8001C6436 /* PreviewViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreviewViewController.h; sourceTree = "<group>"; };
@@ -97,6 +106,15 @@
 		B2D6623D17909ADD001C6436 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		B2D6623F17944E8B001C6436 /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
 		B2D6624017944E8B001C6436 /* Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utils.m; sourceTree = "<group>"; };
+		B2F0AD1C1866F3BD007B5404 /* OptionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OptionsViewController.h; sourceTree = "<group>"; };
+		B2F0AD1D1866F3BD007B5404 /* OptionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OptionsViewController.m; sourceTree = "<group>"; };
+		B2F676B7186912F000DDE56D /* arrow-down@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow-down@2x.png"; sourceTree = "<group>"; };
+		B2F676B8186912F000DDE56D /* envelope@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "envelope@2x.png"; sourceTree = "<group>"; };
+		B2F676B9186912F000DDE56D /* options@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "options@2x.png"; sourceTree = "<group>"; };
+		B2F676BA186912F000DDE56D /* action@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "action@2x.png"; sourceTree = "<group>"; };
+		B2F676BB186912F000DDE56D /* refresh@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "refresh@2x.png"; sourceTree = "<group>"; };
+		B2F676BC186912F000DDE56D /* tick@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tick@2x.png"; sourceTree = "<group>"; };
+		B2F676C31869580500DDE56D /* outgoing@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "outgoing@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,7 +122,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B2B7371317C72B2000283DFE /* libPhotoKifuCore.a in Frameworks */,
+				B2B2F99C1866B9E6000CA134 /* libPhotoKifuCore.a in Frameworks */,
 				B2B7370417C728E100283DFE /* opencv2.framework in Frameworks */,
 				B2D6623E17909ADD001C6436 /* MessageUI.framework in Frameworks */,
 				B2A8781B1770A4B6002059D6 /* QuartzCore.framework in Frameworks */,
@@ -143,6 +161,7 @@
 		B23C27C0176A16FD001837B4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B2B2F99B1866B9E6000CA134 /* libPhotoKifuCore.a */,
 				B2A8781A1770A4B6002059D6 /* QuartzCore.framework */,
 				B2A878181770A4AD002059D6 /* CoreMedia.framework */,
 				B2A878161770A4A7002059D6 /* CoreVideo.framework */,
@@ -203,6 +222,8 @@
 				B2D66238178F2AE8001C6436 /* PreviewViewController.mm */,
 				B2D6623A178F2F19001C6436 /* GobanView.h */,
 				B2D6623B178F2F19001C6436 /* GobanView.mm */,
+				B2F0AD1C1866F3BD007B5404 /* OptionsViewController.h */,
+				B2F0AD1D1866F3BD007B5404 /* OptionsViewController.m */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -233,6 +254,13 @@
 		B2A8780B176F8CF5002059D6 /* Art */ = {
 			isa = PBXGroup;
 			children = (
+				B2F676C31869580500DDE56D /* outgoing@2x.png */,
+				B2F676B7186912F000DDE56D /* arrow-down@2x.png */,
+				B2F676B8186912F000DDE56D /* envelope@2x.png */,
+				B2F676B9186912F000DDE56D /* options@2x.png */,
+				B2F676BA186912F000DDE56D /* action@2x.png */,
+				B2F676BB186912F000DDE56D /* refresh@2x.png */,
+				B2F676BC186912F000DDE56D /* tick@2x.png */,
 				B24F0B8F1773184400769CF3 /* magnify-mask@2x.png */,
 				B24F0B901773184400769CF3 /* magnify@2x.png */,
 				B2A8780C176F8CF5002059D6 /* target.png */,
@@ -303,12 +331,19 @@
 			files = (
 				B23C27CC176A16FD001837B4 /* InfoPlist.strings in Resources */,
 				B23C27D4176A16FD001837B4 /* Default.png in Resources */,
+				B2F676C2186912F000DDE56D /* tick@2x.png in Resources */,
+				B2F676C0186912F000DDE56D /* action@2x.png in Resources */,
 				B23C27D6176A16FD001837B4 /* Default@2x.png in Resources */,
+				B2F676BE186912F000DDE56D /* envelope@2x.png in Resources */,
 				B23C27D8176A16FD001837B4 /* Default-568h@2x.png in Resources */,
+				B2F676BD186912F000DDE56D /* arrow-down@2x.png in Resources */,
 				B23C27DB176A16FD001837B4 /* MainStoryboard.storyboard in Resources */,
+				B2F676BF186912F000DDE56D /* options@2x.png in Resources */,
 				B23C27F4176A1C6F001837B4 /* photo_5.jpg in Resources */,
+				B2F676C1186912F000DDE56D /* refresh@2x.png in Resources */,
 				B23C27F5176A1C6F001837B4 /* photo_6.jpg in Resources */,
 				B23C27F6176A1C6F001837B4 /* photo_3.jpg in Resources */,
+				B2F676C41869580500DDE56D /* outgoing@2x.png in Resources */,
 				B23C27F7176A1C6F001837B4 /* photo_2.jpg in Resources */,
 				B23C27F8176A1C6F001837B4 /* photo_1.jpg in Resources */,
 				B23C27F9176A1C6F001837B4 /* photo_4.jpg in Resources */,
@@ -337,6 +372,7 @@
 				B2B7370D17C72AB500283DFE /* GobanView.mm in Sources */,
 				B2B7370E17C72AB500283DFE /* main.m in Sources */,
 				B2B7370F17C72AB500283DFE /* Utils.m in Sources */,
+				B2F0AD1E1866F3BD007B5404 /* OptionsViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -430,7 +466,10 @@
 				GCC_PREFIX_HEADER = "PhotoKifu/PhotoKifu-Prefix.pch";
 				HEADER_SEARCH_PATHS = "$(PROJECT_TEMP_DIR)/../UninstalledProducts/include/**";
 				INFOPLIST_FILE = "PhotoKifu/PhotoKifu-Info.plist";
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/PhotoKifu-dwvbbkqucvmxhrgrnuudkmdejtgo/Build/Products/Debug-iphoneos",
+				);
 				PRODUCT_NAME = PhotoKifu;
 				USER_HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)/**";
 				WRAPPER_EXTENSION = app;
@@ -449,7 +488,10 @@
 				GCC_PREFIX_HEADER = "PhotoKifu/PhotoKifu-Prefix.pch";
 				HEADER_SEARCH_PATHS = "$(PROJECT_TEMP_DIR)/../UninstalledProducts/include/**";
 				INFOPLIST_FILE = "PhotoKifu/PhotoKifu-Info.plist";
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/PhotoKifu-dwvbbkqucvmxhrgrnuudkmdejtgo/Build/Products/Debug-iphoneos",
+				);
 				PRODUCT_NAME = PhotoKifu;
 				USER_HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)/**";
 				WRAPPER_EXTENSION = app;
