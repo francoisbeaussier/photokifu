@@ -63,7 +63,7 @@
     
     self.title = @"Kifu";
         
-    UIImage *image = self.detailItem.fullImage;
+    UIImage *image = [UIImage imageWithData: self.detailItem.details.photo];
 
     // 1
     self.imageView = [[UIImageView alloc] initWithImage: image];
@@ -150,17 +150,30 @@ CGRect _scrollViewFrame;
         [activityView startAnimating];
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            PKGrid *grid = [self.detailItem.details getGrid];
             
-            GobanDetector gd(false);
-            cv::vector<cv::Point> corners = gd.detectGoban(self.detailItem.fullImage);
+            if (grid == nil)
+            {
+                GobanDetector gd(false);
+                UIImage *image = [UIImage imageWithData: self.detailItem.details.photo]; // TODO: cache this?
+                cv::vector<cv::Point> corners = gd.detectGoban(image);
+                
+                grid = [[PKGrid alloc] init];
+                grid.corner1 = CGPointMake(corners[0].x, corners[0].y);
+                grid.corner2 = CGPointMake(corners[1].x, corners[1].y);
+                grid.corner3 = CGPointMake(corners[2].x, corners[2].y);
+                grid.corner4 = CGPointMake(corners[3].x, corners[3].y);
+            }
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 // hide loading activity and refresh view with loaded data
                 
-                self.polygonView = [[UIDynamicPolygonView alloc] initWithImageView: self.imageView andScrollView: self.scrollView andCorners: corners];
+                self.polygonView = [[UIDynamicPolygonView alloc] initWithImageView: self.imageView andScrollView: self.scrollView andGrid: grid];
                 self.polygonView.backgroundColor = [UIColor clearColor];
                 
                 self.polygonView.HasCornerPostionChanged = _cornerPositionHasChanged;
+                
+                [self.detailItem.details setGrid: grid];
                 
                 [self.scrollView addSubview: self.polygonView];
                 [self.polygonView viewWillAppear:NO];
@@ -176,6 +189,25 @@ CGRect _scrollViewFrame;
         
         // 6
         [self centerScrollViewContents];
+    }
+}
+
+- (void) didMoveToParentViewController:(UIViewController *)parent
+{
+    if (![parent isEqual:self.parentViewController]) {
+        
+        if (self.polygonView.HasCornerPostionChanged)
+        {
+            PKGrid *grid = self.polygonView.grid;
+            
+            [self.detailItem.details setGrid: grid];
+        }
+        
+        NSError *error;
+        if (![self.managedObjectContext save:&error])
+        {
+            NSLog(@"Could not save update to corners: %@", [error localizedDescription]);
+        }
     }
 }
 
@@ -275,18 +307,16 @@ CGRect _scrollViewFrame;
 
             if (self.polygonView.HasCornerPostionChanged)
             {
-                NSMutableArray *corners = self.polygonView.corners;
+                PKGrid *grid = self.polygonView.grid;
                 
                 GobanDetector gd(false);
                 
                 cv::vector<cv::Point> points;
                 
-                for (int i = 0; i < corners.count; i++)
-                {
-                    CGPoint cornerPoint = [corners[i] CGPointValue];
-                    
-                    points.push_back(cv::Point(cornerPoint.x, cornerPoint.y));
-                }
+                points.push_back(cv::Point(grid.corner1.x, grid.corner1.y));
+                points.push_back(cv::Point(grid.corner2.x, grid.corner2.y));
+                points.push_back(cv::Point(grid.corner3.x, grid.corner3.y));
+                points.push_back(cv::Point(grid.corner4.x, grid.corner4.y));
                 
                 GobanDetectorResult result = gd.extractGobanState(self.imageView.image, points);
                 

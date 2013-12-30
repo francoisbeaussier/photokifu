@@ -10,10 +10,6 @@
 
 @implementation GobanScanData
 
-@synthesize title = _title;
-@synthesize thumbImage = _thumbImage;
-@synthesize fullImage = _fullImage;
-
 - (id) initWithTitle: (NSString *) title thumbImage: (UIImage *) thumbImage fullImage: (UIImage *) fullImage;
 {
     if ((self = [super init]))

@@ -13,14 +13,9 @@
 
 @implementation UIDynamicPolygonView
 
-@synthesize imageView = _imageView;
-@synthesize scrollView = _scrollView;
-@synthesize buttons = _buttons;
-@synthesize corners = _corners;
-
 @synthesize gridSize;
 
-- (id) initWithImageView: (UIImageView *) contentImageView andScrollView: (UIScrollView *) scrollView andCorners: (cv::vector<cv::Point>) points;
+- (id) initWithImageView: (UIImageView *) contentImageView andScrollView: (UIScrollView *) scrollView andGrid:(PKGrid *)grid;
 {
     self = [super initWithFrame: contentImageView.frame];
     
@@ -30,7 +25,7 @@
         self.scrollView = scrollView;
         
         self.buttons = [[NSMutableArray alloc] init];
-        self.corners = [[NSMutableArray alloc] init];
+        self.grid = [[PKGrid alloc] init];
         
         UIImage *targetImage = [UIImage imageNamed: @"target.png"];
         
@@ -41,9 +36,10 @@
             UIButton *button = [UIButton buttonWithType: UIButtonTypeCustom];
             [button setFrame: CGRectMake(0, 0, 60, 60)];
             
-            if (points.size() == 4)
+            if (grid != nil)
             {
-                [button setCenter: CGPointMake(points[i].x, points[i].y)];
+                CGPoint point = [grid getCornerAtZeroBasedIndex: i];
+                [button setCenter: CGPointMake(point.x, point.y)];
             }
             else
             {
@@ -62,7 +58,8 @@
             [button addGestureRecognizer: gestureMagnifier];
             
             [self.buttons addObject: button];
-            [self.corners addObject: [NSValue valueWithCGPoint: button.center]];
+            
+            [self.grid setCorner:button.center atZeroBasedIndex:i];
         }
         
         for (UIButton *button in self.buttons)
@@ -87,7 +84,7 @@ float deltaTouchX, deltaTouchY;
 - (void) setMagnifyingClassCenterAtX: (int) x andY: (int) y
 {
     CGRect bounds = self.scrollView.bounds;
-    CGRect frame = self.scrollView.frame;
+    //CGRect frame = self.scrollView.frame;
     
     if (y - bounds.origin.y > 66)
     {
@@ -164,8 +161,7 @@ float deltaTouchX, deltaTouchY;
 
             button.center = location;
 
-//            CGPoint imageViewLocation = [self convertPoint: location toView: self.imageView];
-            self.corners[button.tag] = [NSValue valueWithCGPoint: imageViewLocation];
+            [self.grid setCorner:imageViewLocation atZeroBasedIndex:button.tag];
             
             self.HasCornerPostionChanged = true;
             
@@ -198,7 +194,8 @@ float deltaTouchX, deltaTouchY;
     center.y += p.y - pPrev.y;
     button.center = center;
     
-    self.corners[button.tag] = [NSValue valueWithCGPoint: [self convertPoint: center toView: self.imageView]];
+    CGPoint pointInImageView = [self convertPoint: center toView: self.imageView];
+    [self.grid setCorner: pointInImageView atZeroBasedIndex:button.tag];
     
     [self updateGrid];
 }
@@ -207,7 +204,7 @@ float deltaTouchX, deltaTouchY;
 {
     for (UIButton *button in self.buttons)
     {
-        CGPoint cornerPoint = [self.corners[button.tag] CGPointValue];
+        CGPoint cornerPoint = [self.grid getCornerAtZeroBasedIndex:button.tag];
         CGPoint viewPoint = [self.imageView convertPoint: cornerPoint toView: self];
         
         NSLog(@"updateAfterZoom: set button from (%.0f, %.0f) to (%.0f, %.0f)", button.center.x, button.center.y, viewPoint.x, viewPoint.y);
@@ -247,7 +244,7 @@ float deltaTouchX, deltaTouchY;
     
     PerspectiveGrid pg;
     
-    cv::vector<cv::Point> cornerPoints = [self getCornersAsVector];
+    cv::vector<cv::Point> cornerPoints = [self getCornersAsVector: self.grid];
 
     cv::vector<cv::Point> sortedCorners = pg.sortCorners(cornerPoints);
 
@@ -284,17 +281,17 @@ float deltaTouchX, deltaTouchY;
 
     if (pg.checkPolygonIsConvex(sortedCorners))
     {
-        [self drawGrid: context withRect: self.corners withRows: gridSize withCols: gridSize];
+        [self drawGrid: context withGrid: self.grid withRows: gridSize withCols: gridSize];
     }
 }
 
-- (cv::vector<cv::Point>) getCornersAsVector
+- (cv::vector<cv::Point>) getCornersAsVector:(PKGrid *) grid
 {
     cv::vector<cv::Point> cornerPoints;
     
-    for (int i = 0 ; i < self.corners.count; i++)
+    for (int i = 0 ; i < 4; i++)
     {
-        CGPoint cornerPoint = [self.corners[i] CGPointValue];
+        CGPoint cornerPoint = [grid getCornerAtZeroBasedIndex:i];
         
         cornerPoints.push_back(cv::Point(cornerPoint.x, cornerPoint.y));
     }
@@ -302,9 +299,9 @@ float deltaTouchX, deltaTouchY;
     return cornerPoints;
 }
 
-- (void) drawGrid: (CGContextRef) context withRect: (NSMutableArray *) corners withRows: (int) rows withCols: (int) cols
+- (void) drawGrid: (CGContextRef) context withGrid: (PKGrid *) grid withRows: (int) rows withCols: (int) cols
 {
-    cv::vector<cv::Point> cornerPoints = [self getCornersAsVector];
+    cv::vector<cv::Point> cornerPoints = [self getCornersAsVector:grid];
     
     PerspectiveGrid pg;
     

@@ -7,9 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ScanDisplay.h"
+#import "ScanData.h"
 
 @interface MasterViewController : UITableViewController<UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIActionSheetDelegate>
 
 @property (strong) NSMutableArray *scans;
+@property (nonatomic, strong) NSManagedObjectContext* managedObjectContext;
 
 @end

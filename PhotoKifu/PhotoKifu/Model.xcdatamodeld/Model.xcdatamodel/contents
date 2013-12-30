@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="3401" systemVersion="13A603" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="ScanData" representedClassName="ScanData" syncable="YES">
+        <attribute name="blackPlaysNext" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="gridCorners" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="komi" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="photo" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES" syncable="YES"/>
+        <attribute name="player1Name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="player2Name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="stones" optional="YES" attributeType="Binary" syncable="YES"/>
+        <relationship name="parent" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ScanDisplay" inverseName="details" inverseEntity="ScanDisplay" syncable="YES"/>
+    </entity>
+    <entity name="ScanDisplay" representedClassName="ScanDisplay" syncable="YES">
+        <attribute name="scanDate" optional="YES" attributeType="Date" indexed="YES" syncable="YES"/>
+        <attribute name="thumbnail" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="details" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="ScanData" inverseName="parent" inverseEntity="ScanData" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="ScanData" positionX="-14202" positionY="-3672" width="128" height="148"/>
+        <element name="ScanDisplay" positionX="-14202" positionY="-3447" width="128" height="103"/>
+    </elements>
+</model>

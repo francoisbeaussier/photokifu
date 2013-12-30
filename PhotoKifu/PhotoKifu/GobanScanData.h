@@ -14,6 +14,16 @@
 @property (strong) UIImage *thumbImage;
 @property (strong) UIImage *fullImage;
 
+@property (strong) NSArray *gridCorners;
+
+@property (strong) NSArray *stones;
+//@property (strong) NSString *svgFileContent;
+
+@property (strong) NSString *player1Name;
+@property (strong) NSString *player2Name;
+@property (assign) double komi;
+@property (assign) bool nextPlayerIsBlack;
+
 - (id) initWithTitle: (NSString *) title thumbImage: (UIImage *) thumbImage fullImage: (UIImage *) fullImage;
 
 @end

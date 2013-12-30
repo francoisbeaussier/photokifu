@@ -43,6 +43,12 @@
 		B2B7370D17C72AB500283DFE /* GobanView.mm in Sources */ = {isa = PBXBuildFile; fileRef = B2D6623B178F2F19001C6436 /* GobanView.mm */; };
 		B2B7370E17C72AB500283DFE /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B23C27CD176A16FD001837B4 /* main.m */; };
 		B2B7370F17C72AB500283DFE /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = B2D6624017944E8B001C6436 /* Utils.m */; };
+		B2BD8E361871ABC500B9DDB9 /* PKGrid.m in Sources */ = {isa = PBXBuildFile; fileRef = B2BD8E351871ABC500B9DDB9 /* PKGrid.m */; };
+		B2C19138186FC13D0016B072 /* DataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C19137186FC13D0016B072 /* DataManager.m */; };
+		B2C1913B186FC89C0016B072 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B2C19139186FC89C0016B072 /* Model.xcdatamodeld */; };
+		B2C19187186FCFAF0016B072 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2C19186186FCFAF0016B072 /* CoreData.framework */; };
+		B2C1918A186FD36B0016B072 /* ScanData.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C19189186FD36B0016B072 /* ScanData.m */; };
+		B2C1918D186FD36C0016B072 /* ScanDisplay.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C1918C186FD36C0016B072 /* ScanDisplay.m */; };
 		B2D6623E17909ADD001C6436 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2D6623D17909ADD001C6436 /* MessageUI.framework */; };
 		B2F0AD1E1866F3BD007B5404 /* OptionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B2F0AD1D1866F3BD007B5404 /* OptionsViewController.m */; };
 		B2F676BD186912F000DDE56D /* arrow-down@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B2F676B7186912F000DDE56D /* arrow-down@2x.png */; };
@@ -99,6 +105,17 @@
 		B2B2F99B1866B9E6000CA134 /* libPhotoKifuCore.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPhotoKifuCore.a; path = "../../../../Library/Developer/Xcode/DerivedData/PhotoKifu-dwvbbkqucvmxhrgrnuudkmdejtgo/Build/Products/Debug-iphoneos/libPhotoKifuCore.a"; sourceTree = "<group>"; };
 		B2B7370317C728E100283DFE /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = opencv2.framework; path = "../xcode frameworks/opencv2.framework"; sourceTree = "<group>"; };
 		B2B7371217C72B2000283DFE /* libPhotoKifuCore.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPhotoKifuCore.a; path = "../PhotoKifuCore/build/Release-iphoneos/libPhotoKifuCore.a"; sourceTree = "<group>"; };
+		B2BD8E341871ABC500B9DDB9 /* PKGrid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKGrid.h; sourceTree = "<group>"; };
+		B2BD8E351871ABC500B9DDB9 /* PKGrid.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKGrid.m; sourceTree = "<group>"; };
+		B2C19133186FBEF70016B072 /* CommonMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonMacros.h; sourceTree = "<group>"; };
+		B2C19136186FC13D0016B072 /* DataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataManager.h; sourceTree = "<group>"; };
+		B2C19137186FC13D0016B072 /* DataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataManager.m; sourceTree = "<group>"; };
+		B2C1913A186FC89C0016B072 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		B2C19186186FCFAF0016B072 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		B2C19188186FD36B0016B072 /* ScanData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScanData.h; sourceTree = "<group>"; };
+		B2C19189186FD36B0016B072 /* ScanData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScanData.m; sourceTree = "<group>"; };
+		B2C1918B186FD36C0016B072 /* ScanDisplay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScanDisplay.h; sourceTree = "<group>"; };
+		B2C1918C186FD36C0016B072 /* ScanDisplay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScanDisplay.m; sourceTree = "<group>"; };
 		B2D66237178F2AE8001C6436 /* PreviewViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreviewViewController.h; sourceTree = "<group>"; };
 		B2D66238178F2AE8001C6436 /* PreviewViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PreviewViewController.mm; sourceTree = "<group>"; };
 		B2D6623A178F2F19001C6436 /* GobanView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GobanView.h; sourceTree = "<group>"; };
@@ -122,6 +139,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B2C19187186FCFAF0016B072 /* CoreData.framework in Frameworks */,
 				B2B2F99C1866B9E6000CA134 /* libPhotoKifuCore.a in Frameworks */,
 				B2B7370417C728E100283DFE /* opencv2.framework in Frameworks */,
 				B2D6623E17909ADD001C6436 /* MessageUI.framework in Frameworks */,
@@ -161,6 +179,7 @@
 		B23C27C0176A16FD001837B4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B2C19186186FCFAF0016B072 /* CoreData.framework */,
 				B2B2F99B1866B9E6000CA134 /* libPhotoKifuCore.a */,
 				B2A8781A1770A4B6002059D6 /* QuartzCore.framework */,
 				B2A878181770A4AD002059D6 /* CoreMedia.framework */,
@@ -186,6 +205,7 @@
 				B23C27C8176A16FD001837B4 /* Supporting Files */,
 				B2D6623F17944E8B001C6436 /* Utils.h */,
 				B2D6624017944E8B001C6436 /* Utils.m */,
+				B2C19133186FBEF70016B072 /* CommonMacros.h */,
 			);
 			path = PhotoKifu;
 			sourceTree = "<group>";
@@ -233,6 +253,15 @@
 			children = (
 				B23C27E9176A1839001837B4 /* GobanScanData.h */,
 				B23C27EA176A1839001837B4 /* GobanScanData.m */,
+				B2C19136186FC13D0016B072 /* DataManager.h */,
+				B2C19137186FC13D0016B072 /* DataManager.m */,
+				B2C19139186FC89C0016B072 /* Model.xcdatamodeld */,
+				B2C1918B186FD36C0016B072 /* ScanDisplay.h */,
+				B2C1918C186FD36C0016B072 /* ScanDisplay.m */,
+				B2C19188186FD36B0016B072 /* ScanData.h */,
+				B2C19189186FD36B0016B072 /* ScanData.m */,
+				B2BD8E341871ABC500B9DDB9 /* PKGrid.h */,
+				B2BD8E351871ABC500B9DDB9 /* PKGrid.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -363,15 +392,20 @@
 			buildActionMask = 2147483647;
 			files = (
 				B2B7370517C72AB500283DFE /* GobanScanData.m in Sources */,
+				B2C19138186FC13D0016B072 /* DataManager.m in Sources */,
 				B2B7370617C72AB500283DFE /* AppDelegate.m in Sources */,
 				B2B7370717C72AB500283DFE /* MasterViewController.m in Sources */,
+				B2BD8E361871ABC500B9DDB9 /* PKGrid.m in Sources */,
 				B2B7370817C72AB500283DFE /* DetailViewController.mm in Sources */,
 				B2B7370917C72AB500283DFE /* UIDynamicPolygonView.mm in Sources */,
+				B2C1918D186FD36C0016B072 /* ScanDisplay.m in Sources */,
 				B2B7370A17C72AB500283DFE /* MagnifierView.mm in Sources */,
 				B2B7370C17C72AB500283DFE /* PreviewViewController.mm in Sources */,
+				B2C1918A186FD36B0016B072 /* ScanData.m in Sources */,
 				B2B7370D17C72AB500283DFE /* GobanView.mm in Sources */,
 				B2B7370E17C72AB500283DFE /* main.m in Sources */,
 				B2B7370F17C72AB500283DFE /* Utils.m in Sources */,
+				B2C1913B186FC89C0016B072 /* Model.xcdatamodeld in Sources */,
 				B2F0AD1E1866F3BD007B5404 /* OptionsViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -520,6 +554,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		B2C19139186FC89C0016B072 /* Model.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				B2C1913A186FC89C0016B072 /* Model.xcdatamodel */,
+			);
+			currentVersion = B2C1913A186FC89C0016B072 /* Model.xcdatamodel */;
+			path = Model.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = B23C27B6176A16FD001837B4 /* Project object */;
 }
