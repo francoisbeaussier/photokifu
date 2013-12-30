@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "MagnifierView.h"
+#import "PKGrid.h"
 
 @interface UIDynamicPolygonView : UIView
 {
@@ -17,17 +18,13 @@
 
 @property (assign, nonatomic) bool HasCornerPostionChanged;
 @property (strong, nonatomic) NSMutableArray *buttons;
-@property (strong, nonatomic) NSMutableArray *corners;
+@property (strong, nonatomic) PKGrid *grid;
 
 @property (strong, nonatomic) UIImageView *imageView;
 @property (strong, nonatomic) UIScrollView *scrollView;
 @property (assign, nonatomic) int gridSize;
 
-#ifdef __cplusplus
-
-- (id) initWithImageView: (UIImageView *) contentImageView andScrollView: (UIScrollView *) scrollView andCorners: (cv::vector<cv::Point>) points;
-
-#endif
+- (id) initWithImageView: (UIImageView *) contentImageView andScrollView: (UIScrollView *) scrollView andGrid: (PKGrid *) grid;
 
 - (void) viewWillAppear:(BOOL)animated;
 

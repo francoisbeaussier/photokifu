@@ -10,6 +10,8 @@
 #import "GobanScanData.h"
 #import "UIDynamicPolygonView.h"
 #import "MagnifierView.h"
+#import "ScanDisplay.h"
+#import "ScanData.h"
 
 @interface DetailViewController : UIViewController<UITextFieldDelegate, UINavigationControllerDelegate, UIScrollViewDelegate>
 {
@@ -26,7 +28,9 @@
     bool _cornerPositionHasChanged;
 }
 
-@property (strong, nonatomic) GobanScanData *detailItem;
+@property (nonatomic, strong) NSManagedObjectContext* managedObjectContext;
+
+@property (strong, nonatomic) ScanDisplay *detailItem;
 
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (strong, nonatomic) IBOutlet UIButton *gridSizeButton;
