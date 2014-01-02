@@ -13,6 +13,5 @@
 @interface MasterViewController : UITableViewController<UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIActionSheetDelegate>
 
 @property (strong) NSMutableArray *scans;
-@property (nonatomic, strong) NSManagedObjectContext* managedObjectContext;
 
 @end

@@ -25,4 +25,5 @@
 @property (nonatomic, strong) PKStones *stones;
 @property (assign, atomic) bool WarpedImageIsVisible;
 @property (assign, atomic) int WarpedImageRotationAngle;
+
 @end

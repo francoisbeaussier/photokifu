@@ -9,12 +9,14 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 #import "PKGrid.h"
+#import "PKStones.h"
 
 @interface ScanData : NSManagedObject
 
-@property (nonatomic, retain) NSData * photo;
-@property (nonatomic, retain) NSData * gridCorners;
-@property (nonatomic, retain) NSData * stones;
+@property (nonatomic, retain) NSData * photoData;
+@property (nonatomic, retain) NSData * gridData;
+@property (nonatomic, retain) NSData * stonesData;
+
 @property (nonatomic, retain) NSString * player1Name;
 @property (nonatomic, retain) NSNumber * komi;
 @property (nonatomic, retain) NSString * player2Name;
@@ -22,5 +24,8 @@
 
 - (void) setGrid: (PKGrid *) grid;
 - (PKGrid *) getGrid;
+
+- (void) setStones: (PKStones *) stones;
+- (PKStones *) getStones;
 
 @end

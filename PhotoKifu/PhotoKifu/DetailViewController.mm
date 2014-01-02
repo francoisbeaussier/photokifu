@@ -17,17 +17,7 @@
 #import "UIDynamicPolygonView.h"
 #import "PreviewViewController.h"
 #import "Utils.h"
-
-@interface DetailViewController()
-
-@property (nonatomic, strong) UIImageView *imageView;
-
-- (void) configureView;
-- (void) centerScrollViewContents;
-- (void) scrollViewDoubleTapped: (UITapGestureRecognizer*) recognizer;
-- (void) scrollViewTwoFingerTapped: (UITapGestureRecognizer*) recognizer;
-
-@end
+#import "DataManager.h"
 
 @implementation DetailViewController
 
@@ -38,43 +28,22 @@
 
 #pragma mark - Managing the detail item
 
-- (void)setDetailItem: (id) newDetailItem
-{
-    if (_detailItem != newDetailItem) {
-        _detailItem = newDetailItem;
-        
-        // Update the view.
-        [self configureView];
-    }
-}
-
-- (void) configureView
-{
-    if (self.detailItem)
-    {
-        // self.titleField.text = self.detailItem.title;
-        // self.imageView.image = self.detailItem.fullImage;
-    }
-}
-
 - (void) viewDidLoad
 {
     [super viewDidLoad];
     
     self.title = @"Kifu";
         
-    UIImage *image = [UIImage imageWithData: self.detailItem.details.photo];
+    ScanDisplay *activeScan = [DataManager sharedInstance].activeScan;
+    
+    UIImage *image = [UIImage imageWithData: activeScan.details.photoData];
 
-    // 1
     self.imageView = [[UIImageView alloc] initWithImage: image];
     self.imageView.frame = (CGRect) { .origin = CGPointMake(0.0f, 0.0f), .size = image.size };
     [self.scrollView addSubview: self.imageView];
 
-    // 2
     self.scrollView.contentSize = image.size;
     
-    // 3
-        
     UITapGestureRecognizer *doubleTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action: @selector(scrollViewDoubleTapped:)];
     doubleTapRecognizer.numberOfTapsRequired = 2;
     doubleTapRecognizer.numberOfTouchesRequired = 1;
@@ -85,39 +54,25 @@
     twoFingerTapRecognizer.numberOfTouchesRequired = 2;
     [self.scrollView addGestureRecognizer: twoFingerTapRecognizer];
 
-    /*
-    UITapGestureRecognizer *singleTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action: @selector(scrollViewSingleTapped:)];
-    singleTapRecognizer.numberOfTapsRequired = 1;
-    singleTapRecognizer.numberOfTouchesRequired = 1;
-    [singleTapRecognizer requireGestureRecognizerToFail: doubleTapRecognizer];
-    [self.scrollView addGestureRecognizer: singleTapRecognizer];
-    */
     self.scrollView.canCancelContentTouches = NO;
     
     // used to know where the UI layout has changed the position / size of the scrollView
     _scrollViewFrame = CGRectMake(0, 0, 0, 0);
     
-    //self.goButton.layer.cornerRadius = 9;
-    //self.goButton.layer.borderWidth = 1;
-    //self.goButton.layer.borderColor = [UIColor blackColor].CGColor;
-    
     [self.UIToolBarItemScan setEnabled: NO];
-    
-    [self configureView];
     
     // disable back navigation swipe, this conflicts with the movement of the grid corners
     if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
         self.navigationController.interactivePopGestureRecognizer.enabled = NO;
     }
     
-    _cornerPositionHasChanged = true;
+    _cornerPositionHasChanged = false;
 }
 
 CGRect _scrollViewFrame;
 
 - (void) viewDidLayoutSubviews
 {
-    // 4
     CGRect scrollViewFrame = self.scrollView.frame;
     
     if (_scrollViewFrame.origin.x != scrollViewFrame.origin.x ||
@@ -132,7 +87,6 @@ CGRect _scrollViewFrame;
         CGFloat minScale = MIN(scaleWidth, scaleHeight);
         self.scrollView.minimumZoomScale = minScale;
         
-        // 5
         self.scrollView.maximumZoomScale = 0.5f;
         self.scrollView.zoomScale = minScale;
         
@@ -150,12 +104,14 @@ CGRect _scrollViewFrame;
         [activityView startAnimating];
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            PKGrid *grid = [self.detailItem.details getGrid];
+            
+            ScanDisplay *activeScan = [DataManager sharedInstance].activeScan;
+            PKGrid *grid = [activeScan.details getGrid];
             
             if (grid == nil)
             {
                 GobanDetector gd(false);
-                UIImage *image = [UIImage imageWithData: self.detailItem.details.photo]; // TODO: cache this?
+                UIImage *image = [UIImage imageWithData: activeScan.details.photoData]; // TODO: cache this?
                 cv::vector<cv::Point> corners = gd.detectGoban(image);
                 
                 grid = [[PKGrid alloc] init];
@@ -163,6 +119,8 @@ CGRect _scrollViewFrame;
                 grid.corner2 = CGPointMake(corners[1].x, corners[1].y);
                 grid.corner3 = CGPointMake(corners[2].x, corners[2].y);
                 grid.corner4 = CGPointMake(corners[3].x, corners[3].y);
+                
+                _cornerPositionHasChanged = true;
             }
             
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -173,7 +131,7 @@ CGRect _scrollViewFrame;
                 
                 self.polygonView.HasCornerPostionChanged = _cornerPositionHasChanged;
                 
-                [self.detailItem.details setGrid: grid];
+                [activeScan.details setGrid: grid];
                 
                 [self.scrollView addSubview: self.polygonView];
                 [self.polygonView viewWillAppear:NO];
@@ -187,28 +145,30 @@ CGRect _scrollViewFrame;
             });
         });
         
-        // 6
         [self centerScrollViewContents];
     }
 }
 
 - (void) didMoveToParentViewController:(UIViewController *)parent
 {
-    if (![parent isEqual:self.parentViewController]) {
-        
-        if (self.polygonView.HasCornerPostionChanged)
-        {
-            PKGrid *grid = self.polygonView.grid;
-            
-            [self.detailItem.details setGrid: grid];
-        }
-        
-        NSError *error;
-        if (![self.managedObjectContext save:&error])
-        {
-            NSLog(@"Could not save update to corners: %@", [error localizedDescription]);
-        }
+    if (![parent isEqual:self.parentViewController])
+    {
+        [self save];
     }
+}
+
+- (void) save
+{
+    if (self.polygonView.HasCornerPostionChanged)
+    {
+        ScanDisplay *activeScan = [DataManager sharedInstance].activeScan;
+        
+        PKGrid *grid = self.polygonView.grid;
+        
+        [activeScan.details setGrid: grid];
+    }
+    
+    [[DataManager sharedInstance] save];
 }
 
 - (void) centerScrollViewContents
@@ -297,26 +257,35 @@ CGRect _scrollViewFrame;
     
     [activityView startAnimating];
     
+    [self save];
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
         dispatch_async(dispatch_get_main_queue(), ^{
             // hide loading activity and refresh view with loaded data
 
-            if (self.polygonView.HasCornerPostionChanged)
+            ScanDisplay *activeScan = [DataManager sharedInstance].activeScan;
+            
+            self.stones = [activeScan.details getStones];
+            
+            PKGrid *grid = self.polygonView.grid;
+            
+            GobanDetector gd(false);
+            
+            cv::vector<cv::Point> points;
+            
+            points.push_back(cv::Point(grid.corner1.x, grid.corner1.y));
+            points.push_back(cv::Point(grid.corner2.x, grid.corner2.y));
+            points.push_back(cv::Point(grid.corner3.x, grid.corner3.y));
+            points.push_back(cv::Point(grid.corner4.x, grid.corner4.y));
+            
+            GobanDetectorResult result = gd.extractGobanState(self.imageView.image, points);
+            
+            // because we don't save the warpedImage, we need to re-extract the goban state. We don't however copy the stones if we already have some, unless the corners have changed
+            _warpedImage = result.warpedImage;
+            
+            if (self.polygonView.HasCornerPostionChanged || self.stones == nil)
             {
-                PKGrid *grid = self.polygonView.grid;
-                
-                GobanDetector gd(false);
-                
-                cv::vector<cv::Point> points;
-                
-                points.push_back(cv::Point(grid.corner1.x, grid.corner1.y));
-                points.push_back(cv::Point(grid.corner2.x, grid.corner2.y));
-                points.push_back(cv::Point(grid.corner3.x, grid.corner3.y));
-                points.push_back(cv::Point(grid.corner4.x, grid.corner4.y));
-                
-                GobanDetectorResult result = gd.extractGobanState(self.imageView.image, points);
-                
                 self.stones = [[PKStones alloc] init];
                 
                 for (int i = 0; i < result.Stones[0].size(); i++)
@@ -332,8 +301,6 @@ CGRect _scrollViewFrame;
                     
                     [self.stones addWhiteStone: CGPointMake(point.x, point.y)];
                 }
-                
-                _warpedImage = result.warpedImage;
                 
                 self.polygonView.HasCornerPostionChanged = false;
             }
@@ -412,6 +379,12 @@ CGRect _scrollViewFrame;
 {
     if ([[segue identifier] isEqualToString: @"ShowPreview"])
     {
+        ScanDisplay *activeScan = [DataManager sharedInstance].activeScan;
+        
+        [activeScan.details setStones: self.stones];
+        
+        [[DataManager sharedInstance] save];
+        
         // Get destination view
         PreviewViewController *preview = [segue destinationViewController];
         

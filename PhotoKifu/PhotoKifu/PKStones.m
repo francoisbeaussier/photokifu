@@ -64,12 +64,12 @@ const int PKStonesWhite = 2;
 
 - (void) removeBlackStone:(CGPoint) coordinates
 {
-    [self.blackStones addObject: [NSValue valueWithCGPoint: coordinates]];
+    [self.blackStones removeObject: [NSValue valueWithCGPoint: coordinates]];
 }
 
 - (void) removeWhiteStone:(CGPoint) coordinates
 {
-    [self.whiteStones addObject: [NSValue valueWithCGPoint: coordinates]];
+    [self.whiteStones removeObject: [NSValue valueWithCGPoint: coordinates]];
 }
 
 - (NSString *) generateSgfContent
@@ -137,6 +137,25 @@ const int PKStonesWhite = 2;
         
         [self.whiteStones replaceObjectAtIndex: i withObject:value];
     }
+}
+
+- (void) encodeWithCoder:(NSCoder *)coder
+{
+    [coder encodeObject:self.blackStones forKey:@"blackStones"];
+    [coder encodeObject:self.whiteStones forKey:@"whiteStones"];
+}
+
+- (id)initWithCoder:(NSCoder *)coder
+{
+    self = [super init];
+    
+    if (self)
+    {
+        self.blackStones = [coder decodeObjectForKey:@"blackStones"];
+        self.whiteStones = [coder decodeObjectForKey:@"whiteStones"];
+    }
+    
+    return self;
 }
 
 @end

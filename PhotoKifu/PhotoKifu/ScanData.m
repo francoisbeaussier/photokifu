@@ -8,12 +8,11 @@
 
 #import "ScanData.h"
 
-
 @implementation ScanData
 
-@dynamic photo;
-@dynamic gridCorners;
-@dynamic stones;
+@dynamic photoData;
+@dynamic gridData;
+@dynamic stonesData;
 @dynamic player1Name;
 @dynamic komi;
 @dynamic player2Name;
@@ -30,17 +29,17 @@
     
     NSData *data = [[NSData alloc] initWithBytes:&array length:sizeof(CGPoint) * 4];
     
-   [self setGridCorners:data];
+    self.gridData = data;
 }
 
 - (PKGrid *) getGrid
 {
-    if (self.gridCorners == nil)
+    if (self.gridData == nil)
         return nil;
     
     CGPoint array[4];
     
-    [self.gridCorners getBytes: &array length: sizeof(CGPoint) * 4];
+    [self.gridData getBytes: &array length: sizeof(CGPoint) * 4];
 
     PKGrid *grid = [[PKGrid alloc] init];
     
@@ -50,6 +49,23 @@
     grid.corner4 = array[3];
     
     return grid;
+}
+
+- (void) setStones: (PKStones *) stones
+{
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject: stones];
+    
+    self.stonesData = data;
+}
+
+- (PKStones *) getStones
+{
+    if (self.stonesData == nil)
+        return nil;
+    
+    PKStones *stones = [NSKeyedUnarchiver unarchiveObjectWithData: self.stonesData];
+    
+    return stones;
 }
 
 @end

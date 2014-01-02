@@ -12,7 +12,7 @@
 
 @implementation ScanDisplay
 
-@dynamic thumbnail;
+@dynamic thumbnailData;
 @dynamic title;
 @dynamic scanDate;
 @dynamic details;

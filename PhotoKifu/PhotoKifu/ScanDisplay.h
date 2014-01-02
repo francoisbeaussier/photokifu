@@ -13,7 +13,7 @@
 
 @interface ScanDisplay : NSManagedObject
 
-@property (nonatomic, retain) NSData * thumbnail;
+@property (nonatomic, retain) NSData * thumbnailData;
 @property (nonatomic, retain) NSString * title;
 @property (nonatomic, retain) NSDate * scanDate;
 @property (nonatomic, retain) ScanData *details;

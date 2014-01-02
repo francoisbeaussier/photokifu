@@ -25,9 +25,7 @@
     bool _cornerPositionHasChanged;
 }
 
-@property (nonatomic, strong) NSManagedObjectContext* managedObjectContext;
-
-@property (strong, nonatomic) ScanDisplay *detailItem;
+@property (nonatomic, strong) UIImageView *imageView;
 
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (strong, nonatomic) IBOutlet UIButton *gridSizeButton;
@@ -35,9 +33,13 @@
 @property (strong, nonatomic) UIDynamicPolygonView *polygonView;
 @property (strong, nonatomic) PKStones *stones;
 
-- (IBAction) gridSizeButtonPressed: (id) sender;
-
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *UIToolBarItemScan;
+
+- (void) centerScrollViewContents;
+- (void) scrollViewDoubleTapped: (UITapGestureRecognizer*) recognizer;
+- (void) scrollViewTwoFingerTapped: (UITapGestureRecognizer*) recognizer;
+
+- (IBAction) gridSizeButtonPressed: (id) sender;
 - (IBAction) UIToolBarItemScan:(id)sender;
 
 @end

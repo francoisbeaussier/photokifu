@@ -11,6 +11,7 @@
 #import "GobanScanData.h"
 #import "AppDelegate.h"
 #import "Utils.h"
+#import "DataManager.h"
 
 @interface MasterViewController () {
     NSMutableArray *_objects;
@@ -18,9 +19,6 @@
 @end
 
 @implementation MasterViewController
-
-@synthesize scans = _scans;
-
 
 - (void) awakeFromNib
 {
@@ -38,19 +36,7 @@
 
     self.title = @"Kifu List";
     
-    NSManagedObjectContext *context = [self managedObjectContext];
-    
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"ScanDisplay" inManagedObjectContext:context];
-    [fetchRequest setEntity:entity];
-    
-    NSError *error;
-    
-    _scans = [NSMutableArray arrayWithArray: [context executeFetchRequest:fetchRequest error:&error]];
-    
-    if (error != nil) {
-        NSLog(@"Could not fetch ScanDisplays: %@", [error localizedDescription]);
-    }
+    self.scans = [[DataManager sharedInstance] loadScans];
 }
 
 - (void) didReceiveMemoryWarning
@@ -62,9 +48,9 @@
 - (void) insertNewObject:(id)sender
 {
     if (!_objects) {
-        _scans = [[NSMutableArray alloc] init];
+        self.scans = [[NSMutableArray alloc] init];
     }
-    [_scans insertObject: [NSDate date] atIndex: 0];
+    [self.scans insertObject: [NSDate date] atIndex: 0];
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow: 0 inSection: 0];
     [self.tableView insertRowsAtIndexPaths: @[indexPath] withRowAnimation: UITableViewRowAnimationAutomatic];
 }
@@ -132,12 +118,12 @@
     
     newScan.title = @"New";
     newScan.scanDate = [NSDate date];
-    newScan.thumbnail = UIImageJPEGRepresentation(thumb, 0.0);
-    newScan.details.photo = UIImageJPEGRepresentation(image, 0.0);
+    newScan.thumbnailData = UIImageJPEGRepresentation(thumb, 0.0);
+    newScan.details.photoData = UIImageJPEGRepresentation(image, 0.0);
     
-    [_scans addObject: newScan];
+    [self.scans addObject: newScan];
     
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow: _scans.count - 1 inSection: 0];
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow: self.scans.count - 1 inSection: 0];
     NSArray *indexPaths = [NSArray arrayWithObject: indexPath];
     [self.tableView insertRowsAtIndexPaths: indexPaths withRowAnimation: YES];
     
@@ -155,7 +141,7 @@
 
 - (NSInteger) tableView: (UITableView *) tableView numberOfRowsInSection: (NSInteger) section
 {
-    return _scans.count;
+    return self.scans.count;
 }
 
 - (UITableViewCell *) tableView: (UITableView *) tableView cellForRowAtIndexPath: (NSIndexPath *) indexPath
@@ -163,7 +149,7 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: @"MyBasicCell"];
     ScanDisplay *scan = [self.scans objectAtIndex: indexPath.row];
     cell.textLabel.text = scan.title;
-    cell.imageView.image = [UIImage imageWithData:scan.thumbnail]; // TODO: cache this, probably in the ScanDisplay object
+    cell.imageView.image = [UIImage imageWithData:scan.thumbnailData]; // TODO: cache this, probably in the ScanDisplay object
     return cell;
 }
 
@@ -177,15 +163,17 @@
 {
     if (editingStyle == UITableViewCellEditingStyleDelete)
     {
-        ScanDisplay *objectToDelete = [_scans objectAtIndex: indexPath.row];
-        [self.managedObjectContext deleteObject: objectToDelete];
+        NSManagedObjectContext *context = [DataManager sharedInstance].context;
+        
+        ScanDisplay *objectToDelete = [self.scans objectAtIndex: indexPath.row];
+        [context deleteObject: objectToDelete];
 
         NSError *error;
-        if (![self.managedObjectContext save:&error]) {
+        if (![context save:&error]) {
             NSLog(@"Could not save deletion: %@", [error localizedDescription]);
         }
         
-        [_scans removeObjectAtIndex: indexPath.row];
+        [self.scans removeObjectAtIndex: indexPath.row];
         
         [tableView deleteRowsAtIndexPaths: @[indexPath] withRowAnimation: UITableViewRowAnimationFade];
     }
@@ -214,12 +202,9 @@
 
 - (void) prepareForSegue: (UIStoryboardSegue *) segue sender: (id) sender
 {
-    DetailViewController *detailController = segue.destinationViewController;
-
     ScanDisplay *scan = [self.scans objectAtIndex: self.tableView.indexPathForSelectedRow.row];
-    
-    detailController.detailItem = scan;
-    detailController.managedObjectContext = self.managedObjectContext;
+
+    [DataManager sharedInstance].activeScan = scan;
 }
 
 @end

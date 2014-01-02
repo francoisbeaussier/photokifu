@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-@interface OptionsViewController : UIViewController
+@interface OptionsViewController : UIViewController<UITextFieldDelegate>
+
+@property (strong, nonatomic) IBOutlet UITextField *UiTextFieldBlackPlayer;
+@property (strong, nonatomic) IBOutlet UITextField *UITextFieldWhitePlayer;
 
 @end

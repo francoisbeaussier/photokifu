@@ -13,6 +13,7 @@
 #import "ScanDisplay.h"
 #import "ScanData.h"
 #import <UIKit/UIImage.h>
+#import "DataManager.h"
 
 @implementation AppDelegate
 
@@ -49,14 +50,14 @@
                                 insertNewObjectForEntityForName:@"ScanDisplay"
                                 inManagedObjectContext:context];
     scanDisplay.title = photoName;
-    scanDisplay.thumbnail = UIImageJPEGRepresentation(thumb, 0.0);
+    scanDisplay.thumbnailData = UIImageJPEGRepresentation(thumb, 0.0);
     scanDisplay.scanDate = [NSDate date];
     
     ScanData *scanData = [NSEntityDescription
                           insertNewObjectForEntityForName:@"ScanData"
                           inManagedObjectContext:context];
     
-    scanData.photo = UIImageJPEGRepresentation(image, 0.0);
+    scanData.photoData = UIImageJPEGRepresentation(image, 0.0);
     scanData.komi = [NSNumber numberWithDouble: 6.5];
     scanData.blackPlaysNext = [NSNumber numberWithBool: true];
     
@@ -94,9 +95,11 @@
     
     // Pass the managedObjectContext down to the view controller
     
-    UINavigationController * navController = (UINavigationController *) self.window.rootViewController;
-    MasterViewController *masterController = [navController.viewControllers objectAtIndex: 0];
-    masterController.managedObjectContext = self.managedObjectContext;
+    [DataManager sharedInstance].context = self.managedObjectContext;
+    
+//    UINavigationController * navController = (UINavigationController *) self.window.rootViewController;
+//    MasterViewController *masterController = [navController.viewControllers objectAtIndex: 0];
+//    masterController.managedObjectContext = self.managedObjectContext;
     
     return YES;
 }
@@ -109,8 +112,21 @@
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
-    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
+    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+    
+    __block UIBackgroundTaskIdentifier bgTask = [application beginBackgroundTaskWithExpirationHandler:^{
+        [application endBackgroundTask:bgTask];
+        bgTask = UIBackgroundTaskInvalid;
+    }];
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        
+        [[DataManager sharedInstance] save];
+        
+        [[UIApplication sharedApplication] endBackgroundTask:bgTask];
+        bgTask = UIBackgroundTaskInvalid;
+    });
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application

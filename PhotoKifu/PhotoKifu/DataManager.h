@@ -7,11 +7,20 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "ScanDisplay.h"
+#import "ScanData.h"
 
 @interface DataManager : NSObject
 
+@property (nonatomic, strong) NSManagedObjectContext *context;
+@property (nonatomic, strong) ScanDisplay *activeScan;
+
 + (instancetype) sharedInstance;
 
-- (NSArray *) LoadData;
+- (id) init;
+
+- (void) save;
+
+- (NSMutableArray *) loadScans;
 
 @end
