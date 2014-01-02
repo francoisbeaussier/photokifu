@@ -33,6 +33,24 @@
 		B2A8781B1770A4B6002059D6 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2A8781A1770A4B6002059D6 /* QuartzCore.framework */; };
 		B2B2F99C1866B9E6000CA134 /* libPhotoKifuCore.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B2B2F99B1866B9E6000CA134 /* libPhotoKifuCore.a */; };
 		B2B338D7187426280075CF8C /* PKStones.m in Sources */ = {isa = PBXBuildFile; fileRef = B2B338D6187426280075CF8C /* PKStones.m */; };
+		B2B338ED1875A9C40075CF8C /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B2B338EC1875A9C40075CF8C /* Images.xcassets */; };
+		B2B3390B1875AEB00075CF8C /* Icon-40.png in Resources */ = {isa = PBXBuildFile; fileRef = B2B338FA1875AEB00075CF8C /* Icon-40.png */; };
+		B2B3390C1875AEB00075CF8C /* Icon-40@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B2B338FB1875AEB00075CF8C /* Icon-40@2x.png */; };
+		B2B3390D1875AEB00075CF8C /* Icon-60@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B2B338FC1875AEB00075CF8C /* Icon-60@2x.png */; };
+		B2B3390E1875AEB00075CF8C /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = B2B338FD1875AEB00075CF8C /* Icon-72.png */; };
+		B2B3390F1875AEB00075CF8C /* Icon-72@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B2B338FE1875AEB00075CF8C /* Icon-72@2x.png */; };
+		B2B339101875AEB00075CF8C /* Icon-76.png in Resources */ = {isa = PBXBuildFile; fileRef = B2B338FF1875AEB00075CF8C /* Icon-76.png */; };
+		B2B339111875AEB00075CF8C /* Icon-76@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B2B339001875AEB00075CF8C /* Icon-76@2x.png */; };
+		B2B339121875AEB00075CF8C /* Icon-120.png in Resources */ = {isa = PBXBuildFile; fileRef = B2B339011875AEB00075CF8C /* Icon-120.png */; };
+		B2B339131875AEB00075CF8C /* Icon-152.png in Resources */ = {isa = PBXBuildFile; fileRef = B2B339021875AEB00075CF8C /* Icon-152.png */; };
+		B2B339141875AEB00075CF8C /* Icon-Small-50.png in Resources */ = {isa = PBXBuildFile; fileRef = B2B339031875AEB00075CF8C /* Icon-Small-50.png */; };
+		B2B339151875AEB00075CF8C /* Icon-Small-50@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B2B339041875AEB00075CF8C /* Icon-Small-50@2x.png */; };
+		B2B339161875AEB00075CF8C /* Icon-Small.png in Resources */ = {isa = PBXBuildFile; fileRef = B2B339051875AEB00075CF8C /* Icon-Small.png */; };
+		B2B339171875AEB00075CF8C /* Icon-Small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B2B339061875AEB00075CF8C /* Icon-Small@2x.png */; };
+		B2B339181875AEB00075CF8C /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = B2B339071875AEB00075CF8C /* Icon.png */; };
+		B2B339191875AEB00075CF8C /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B2B339081875AEB00075CF8C /* Icon@2x.png */; };
+		B2B3391A1875AEB00075CF8C /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = B2B339091875AEB00075CF8C /* iTunesArtwork */; };
+		B2B3391B1875AEB00075CF8C /* iTunesArtwork@2x in Resources */ = {isa = PBXBuildFile; fileRef = B2B3390A1875AEB00075CF8C /* iTunesArtwork@2x */; };
 		B2B7370417C728E100283DFE /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2B7370317C728E100283DFE /* opencv2.framework */; };
 		B2B7370517C72AB500283DFE /* GobanScanData.m in Sources */ = {isa = PBXBuildFile; fileRef = B23C27EA176A1839001837B4 /* GobanScanData.m */; };
 		B2B7370617C72AB500283DFE /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B23C27D1176A16FD001837B4 /* AppDelegate.m */; };
@@ -106,6 +124,24 @@
 		B2B2F99B1866B9E6000CA134 /* libPhotoKifuCore.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPhotoKifuCore.a; path = "../../../../Library/Developer/Xcode/DerivedData/PhotoKifu-dwvbbkqucvmxhrgrnuudkmdejtgo/Build/Products/Debug-iphoneos/libPhotoKifuCore.a"; sourceTree = "<group>"; };
 		B2B338D5187426280075CF8C /* PKStones.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKStones.h; sourceTree = "<group>"; };
 		B2B338D6187426280075CF8C /* PKStones.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKStones.m; sourceTree = "<group>"; };
+		B2B338EC1875A9C40075CF8C /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		B2B338FA1875AEB00075CF8C /* Icon-40.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-40.png"; sourceTree = "<group>"; };
+		B2B338FB1875AEB00075CF8C /* Icon-40@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-40@2x.png"; sourceTree = "<group>"; };
+		B2B338FC1875AEB00075CF8C /* Icon-60@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-60@2x.png"; sourceTree = "<group>"; };
+		B2B338FD1875AEB00075CF8C /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-72.png"; sourceTree = "<group>"; };
+		B2B338FE1875AEB00075CF8C /* Icon-72@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-72@2x.png"; sourceTree = "<group>"; };
+		B2B338FF1875AEB00075CF8C /* Icon-76.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-76.png"; sourceTree = "<group>"; };
+		B2B339001875AEB00075CF8C /* Icon-76@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-76@2x.png"; sourceTree = "<group>"; };
+		B2B339011875AEB00075CF8C /* Icon-120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-120.png"; sourceTree = "<group>"; };
+		B2B339021875AEB00075CF8C /* Icon-152.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-152.png"; sourceTree = "<group>"; };
+		B2B339031875AEB00075CF8C /* Icon-Small-50.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small-50.png"; sourceTree = "<group>"; };
+		B2B339041875AEB00075CF8C /* Icon-Small-50@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small-50@2x.png"; sourceTree = "<group>"; };
+		B2B339051875AEB00075CF8C /* Icon-Small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small.png"; sourceTree = "<group>"; };
+		B2B339061875AEB00075CF8C /* Icon-Small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small@2x.png"; sourceTree = "<group>"; };
+		B2B339071875AEB00075CF8C /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
+		B2B339081875AEB00075CF8C /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
+		B2B339091875AEB00075CF8C /* iTunesArtwork */ = {isa = PBXFileReference; lastKnownFileType = file; path = iTunesArtwork; sourceTree = "<group>"; };
+		B2B3390A1875AEB00075CF8C /* iTunesArtwork@2x */ = {isa = PBXFileReference; lastKnownFileType = file; path = "iTunesArtwork@2x"; sourceTree = "<group>"; };
 		B2B7370317C728E100283DFE /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = opencv2.framework; path = "../xcode frameworks/opencv2.framework"; sourceTree = "<group>"; };
 		B2B7371217C72B2000283DFE /* libPhotoKifuCore.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPhotoKifuCore.a; path = "../PhotoKifuCore/build/Release-iphoneos/libPhotoKifuCore.a"; sourceTree = "<group>"; };
 		B2BD8E341871ABC500B9DDB9 /* PKGrid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKGrid.h; sourceTree = "<group>"; };
@@ -163,6 +199,23 @@
 		B23C27B5176A16FD001837B4 = {
 			isa = PBXGroup;
 			children = (
+				B2B338FA1875AEB00075CF8C /* Icon-40.png */,
+				B2B338FB1875AEB00075CF8C /* Icon-40@2x.png */,
+				B2B338FC1875AEB00075CF8C /* Icon-60@2x.png */,
+				B2B338FD1875AEB00075CF8C /* Icon-72.png */,
+				B2B338FE1875AEB00075CF8C /* Icon-72@2x.png */,
+				B2B338FF1875AEB00075CF8C /* Icon-76.png */,
+				B2B339001875AEB00075CF8C /* Icon-76@2x.png */,
+				B2B339011875AEB00075CF8C /* Icon-120.png */,
+				B2B339021875AEB00075CF8C /* Icon-152.png */,
+				B2B339031875AEB00075CF8C /* Icon-Small-50.png */,
+				B2B339041875AEB00075CF8C /* Icon-Small-50@2x.png */,
+				B2B339051875AEB00075CF8C /* Icon-Small.png */,
+				B2B339061875AEB00075CF8C /* Icon-Small@2x.png */,
+				B2B339071875AEB00075CF8C /* Icon.png */,
+				B2B339081875AEB00075CF8C /* Icon@2x.png */,
+				B2B339091875AEB00075CF8C /* iTunesArtwork */,
+				B2B3390A1875AEB00075CF8C /* iTunesArtwork@2x */,
 				B2B7371217C72B2000283DFE /* libPhotoKifuCore.a */,
 				B2A8781C1770A4CF002059D6 /* xcode frameworks */,
 				B23C27C7176A16FD001837B4 /* PhotoKifu */,
@@ -209,6 +262,7 @@
 				B2D6623F17944E8B001C6436 /* Utils.h */,
 				B2D6624017944E8B001C6436 /* Utils.m */,
 				B2C19133186FBEF70016B072 /* CommonMacros.h */,
+				B2B338EC1875A9C40075CF8C /* Images.xcassets */,
 			);
 			path = PhotoKifu;
 			sourceTree = "<group>";
@@ -364,20 +418,37 @@
 			buildActionMask = 2147483647;
 			files = (
 				B23C27CC176A16FD001837B4 /* InfoPlist.strings in Resources */,
+				B2B339191875AEB00075CF8C /* Icon@2x.png in Resources */,
 				B23C27D4176A16FD001837B4 /* Default.png in Resources */,
+				B2B339151875AEB00075CF8C /* Icon-Small-50@2x.png in Resources */,
 				B2F676C2186912F000DDE56D /* tick@2x.png in Resources */,
 				B2F676C0186912F000DDE56D /* action@2x.png in Resources */,
 				B23C27D6176A16FD001837B4 /* Default@2x.png in Resources */,
+				B2B339171875AEB00075CF8C /* Icon-Small@2x.png in Resources */,
+				B2B3390E1875AEB00075CF8C /* Icon-72.png in Resources */,
 				B2F676BE186912F000DDE56D /* envelope@2x.png in Resources */,
+				B2B339161875AEB00075CF8C /* Icon-Small.png in Resources */,
+				B2B339181875AEB00075CF8C /* Icon.png in Resources */,
+				B2B338ED1875A9C40075CF8C /* Images.xcassets in Resources */,
+				B2B339121875AEB00075CF8C /* Icon-120.png in Resources */,
 				B23C27D8176A16FD001837B4 /* Default-568h@2x.png in Resources */,
 				B2F676BD186912F000DDE56D /* arrow-down@2x.png in Resources */,
+				B2B339141875AEB00075CF8C /* Icon-Small-50.png in Resources */,
+				B2B3391B1875AEB00075CF8C /* iTunesArtwork@2x in Resources */,
+				B2B3390C1875AEB00075CF8C /* Icon-40@2x.png in Resources */,
 				B23C27DB176A16FD001837B4 /* MainStoryboard.storyboard in Resources */,
+				B2B339111875AEB00075CF8C /* Icon-76@2x.png in Resources */,
 				B2F676BF186912F000DDE56D /* options@2x.png in Resources */,
 				B23C27F4176A1C6F001837B4 /* photo_5.jpg in Resources */,
 				B2F676C1186912F000DDE56D /* refresh@2x.png in Resources */,
+				B2B3391A1875AEB00075CF8C /* iTunesArtwork in Resources */,
+				B2B3390D1875AEB00075CF8C /* Icon-60@2x.png in Resources */,
 				B23C27F5176A1C6F001837B4 /* photo_6.jpg in Resources */,
+				B2B339131875AEB00075CF8C /* Icon-152.png in Resources */,
+				B2B339101875AEB00075CF8C /* Icon-76.png in Resources */,
 				B23C27F6176A1C6F001837B4 /* photo_3.jpg in Resources */,
 				B2F676C41869580500DDE56D /* outgoing@2x.png in Resources */,
+				B2B3390F1875AEB00075CF8C /* Icon-72@2x.png in Resources */,
 				B23C27F7176A1C6F001837B4 /* photo_2.jpg in Resources */,
 				B23C27F8176A1C6F001837B4 /* photo_1.jpg in Resources */,
 				B23C27F9176A1C6F001837B4 /* photo_4.jpg in Resources */,
@@ -386,6 +457,7 @@
 				B2A8780F176F8CF5002059D6 /* target.xcf in Resources */,
 				B24F0B911773184400769CF3 /* magnify-mask@2x.png in Resources */,
 				B24F0B921773184400769CF3 /* magnify@2x.png in Resources */,
+				B2B3390B1875AEB00075CF8C /* Icon-40.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -498,6 +570,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../xcode frameworks\"",
@@ -520,6 +594,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../xcode frameworks\"",

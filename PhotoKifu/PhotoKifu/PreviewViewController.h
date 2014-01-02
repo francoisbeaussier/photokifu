@@ -15,10 +15,11 @@
 @interface PreviewViewController : UIViewController<MFMailComposeViewControllerDelegate, UIScrollViewDelegate>
 {
     UIImage *_warpedImage;
+    int _angle;
     UIDocumentInteractionController *_docController;
 }
 
-- (void) setStones: (PKStones *) stones andWarpedImage: (UIImage *) warpedImage;
+- (void) setStones: (PKStones *) stones andWarpedImage: (UIImage *) warpedImage andAngle: (int) angle;
 
 @property PKStones *stones;
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;

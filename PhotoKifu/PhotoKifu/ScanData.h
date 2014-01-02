@@ -19,6 +19,7 @@
 
 @property (nonatomic, retain) NSString * player1Name;
 @property (nonatomic, retain) NSNumber * komi;
+@property (nonatomic, retain) NSNumber * rotation;
 @property (nonatomic, retain) NSString * player2Name;
 @property (nonatomic, retain) NSNumber * blackPlaysNext;
 

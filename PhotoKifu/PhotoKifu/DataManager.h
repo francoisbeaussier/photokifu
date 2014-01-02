@@ -23,4 +23,7 @@
 
 - (NSMutableArray *) loadScans;
 
+- (ScanDisplay *) addNewScanFromBundle: (NSString *) photoName;
+- (ScanDisplay *) addNewScan: (UIImage *) image withTitle: (NSString *) title;
+
 @end

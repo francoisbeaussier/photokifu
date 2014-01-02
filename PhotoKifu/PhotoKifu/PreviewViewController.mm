@@ -55,6 +55,7 @@
     
     [self.gobanView setStones: self.stones];
     [self.gobanView setWarpedImage: _warpedImage];
+    self.gobanView.WarpedImageRotationAngle = _angle;
     
     UITapGestureRecognizer *singleTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action: @selector(scrollViewSingleTapped:)];
     singleTapRecognizer.numberOfTapsRequired = 1;
@@ -174,10 +175,11 @@ public:
     [self.scrollView zoomToRect: rectToZoomTo animated:YES];
 }
 
-- (void) setStones: (PKStones *) stones andWarpedImage: (UIImage *) warpedImage
+- (void) setStones: (PKStones *) stones andWarpedImage: (UIImage *) warpedImage andAngle:(int)angle
 {
     _stones = stones;
     _warpedImage = warpedImage;
+    _angle = angle;
 }
 
 - (IBAction)UIBarButtonItemOpenIn:(id)sender {
@@ -220,19 +222,10 @@ public:
     ScanDisplay *activeScan = [DataManager sharedInstance].activeScan;
     
     [activeScan.details setStones: self.stones];
+    activeScan.details.rotation = [NSNumber numberWithInt: self.gobanView.WarpedImageRotationAngle];
     
     [[DataManager sharedInstance] save];
 }
-
-/*
-- (IBAction) sliderAction:(id)sender
-{
-    UISlider *slider = (UISlider *) sender;
-    float value = (float) roundf(slider.value);
-    value = value - 0.5;
-    [self.UILabelKomi setText: [NSString stringWithFormat:@"Komi is %.1f", value]];
-}
-*/
 
 - (NSString *) createSGF
 {

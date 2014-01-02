@@ -15,6 +15,7 @@
 @dynamic stonesData;
 @dynamic player1Name;
 @dynamic komi;
+@dynamic rotation;
 @dynamic player2Name;
 @dynamic blackPlaysNext;
 
