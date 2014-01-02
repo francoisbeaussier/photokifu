@@ -20,51 +20,6 @@
     return newImage;
 }
 
-+ (NSString *) generateSgfContent: (cv::vector<cv::vector<cv::Point>>) stones
-{
-    NSString *letters = @"abcdefghijklmnopqrstuvwxyz";
-
-    NSMutableString *content = [NSMutableString stringWithString: @"(;GM[1]SZ[19]FF[4]"];
-
-    cv::vector<cv::Point> blackStones = stones[0];
-
-    if (blackStones.size() > 0)
-    {
-        [content appendFormat: @"AB"];
-        
-        for (cv::vector<cv::Point>::iterator it = blackStones.begin(); it < blackStones.end(); it++)
-        {
-            cv::Point point = *it;
-            
-            NSString *x = [letters substringWithRange: NSMakeRange(point.x, 1)];
-            NSString *y = [letters substringWithRange: NSMakeRange(point.y, 1)];
-            
-            [content appendFormat: @"[%@%@]", x , y];
-        }
-    }
-    
-    cv::vector<cv::Point> whiteStones = stones[1];
-    
-    if (whiteStones.size() > 0)
-    {
-        [content appendFormat: @"AW"];
-        
-        for (cv::vector<cv::Point>::iterator it = whiteStones.begin(); it < whiteStones.end(); it++)
-        {
-            cv::Point point = *it;
-            
-            NSString *x = [letters substringWithRange: NSMakeRange(point.x, 1)];
-            NSString *y = [letters substringWithRange: NSMakeRange(point.y, 1)];
-            
-            [content appendFormat: @"[%@%@]", x , y];
-        }
-    }
-    
-    [content appendString: @")"];
-    
-    return content;
-}
-
 + (cv::Mat) cvMatFromUIImage: (UIImage *)image
 {
     CGColorSpaceRef colorSpace = CGImageGetColorSpace(image.CGImage);

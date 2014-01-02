@@ -22,6 +22,4 @@
 
 + (UIImage *) UIImageFromCVMat: (cv::Mat) cvMat;
 
-+ (NSString *) generateSgfContent: (cv::vector<cv::vector<cv::Point>>) stones;
-
 @end

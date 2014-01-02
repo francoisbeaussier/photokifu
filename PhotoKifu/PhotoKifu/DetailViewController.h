@@ -12,15 +12,12 @@
 #import "MagnifierView.h"
 #import "ScanDisplay.h"
 #import "ScanData.h"
+#import "PKStones.h"
 
 @interface DetailViewController : UIViewController<UITextFieldDelegate, UINavigationControllerDelegate, UIScrollViewDelegate>
 {
     CGFloat _panStartX;
 	CGFloat _panStartY;
-        
-#ifdef __cplusplus
-    cv::vector<cv::vector<cv::Point>> _stones;
-#endif
     
     UIImage *_warpedImage;
     MagnifierView *loop;
@@ -36,6 +33,7 @@
 @property (strong, nonatomic) IBOutlet UIButton *gridSizeButton;
 
 @property (strong, nonatomic) UIDynamicPolygonView *polygonView;
+@property (strong, nonatomic) PKStones *stones;
 
 - (IBAction) gridSizeButtonPressed: (id) sender;
 
