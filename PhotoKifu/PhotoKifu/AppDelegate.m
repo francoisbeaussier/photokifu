@@ -21,81 +21,37 @@
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 
-+ (UIImage *) generateThumb: (UIImage *) image
-{
-    CGSize targetSize = (CGSize) { 100, 80 };
-    UIGraphicsBeginImageContext(targetSize);
-    
-    CGRect thumbnailRect = (CGRect){ 0, 0, targetSize.width, targetSize.height };
-    
-    [image drawInRect: thumbnailRect];
-    
-    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
-    
-    UIGraphicsEndImageContext();
-    
-    return newImage;
-}
-
-- (void) StoreScanPhoto: (NSString *) photoName
-{
-    NSManagedObjectContext *context = [self managedObjectContext];
-    
-    UIImage *image = [UIImage imageNamed: photoName];
-    //    CGSize newSize = CGSizeMake(1600, 1200);
-    //    image = [Utils resizeImage:image scaledToSize:newSize];
-    UIImage *thumb = [AppDelegate generateThumb: image];
-    
-    ScanDisplay *scanDisplay = [NSEntityDescription
-                                insertNewObjectForEntityForName:@"ScanDisplay"
-                                inManagedObjectContext:context];
-    scanDisplay.title = photoName;
-    scanDisplay.thumbnailData = UIImageJPEGRepresentation(thumb, 0.0);
-    scanDisplay.scanDate = [NSDate date];
-    
-    ScanData *scanData = [NSEntityDescription
-                          insertNewObjectForEntityForName:@"ScanData"
-                          inManagedObjectContext:context];
-    
-    scanData.photoData = UIImageJPEGRepresentation(image, 0.0);
-    scanData.komi = [NSNumber numberWithDouble: 6.5];
-    scanData.blackPlaysNext = [NSNumber numberWithBool: true];
-    
-    scanDisplay.details = scanData;
-    
-    NSError *error;
-    if (![context save:&error]) {
-        NSLog(@"Could not save ScanDisplay or ScanData: %@", [error localizedDescription]);
-    }
-}
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    NSManagedObjectContext *context = [self managedObjectContext];
+    DataManager *dataManager = [DataManager sharedInstance];
     
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"ScanDisplay" inManagedObjectContext:context];
-    [fetchRequest setEntity:entity];
+    dataManager.context = self.managedObjectContext;
+//    
+//    NSManagedObjectContext *context = [self managedObjectContext];
+//    
+//    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+//    NSEntityDescription *entity = [NSEntityDescription entityForName:@"ScanDisplay" inManagedObjectContext:context];
+//    [fetchRequest setEntity:entity];
+//    
+//    NSError *error;
+//    NSArray *fetchedObjects = [context executeFetchRequest:fetchRequest error:&error];
     
-    NSError *error;
-    NSArray *fetchedObjects = [context executeFetchRequest:fetchRequest error:&error];
+    NSArray *fetchedObjects = [dataManager loadScans];
     
     if (fetchedObjects.count == 0)
     {
-        [self StoreScanPhoto: @"photo_0.jpg"];
-        [self StoreScanPhoto: @"photo_1.jpg"];
-        [self StoreScanPhoto: @"photo_2.jpg"];
-        [self StoreScanPhoto: @"photo_3.jpg"];
-        [self StoreScanPhoto: @"photo_4.jpg"];
-        [self StoreScanPhoto: @"photo_5.jpg"];
-        [self StoreScanPhoto: @"photo_6.jpg"];
+        [dataManager addNewScanFromBundle: @"photo_0.jpg"];
+        [dataManager addNewScanFromBundle: @"photo_1.jpg"];
+        [dataManager addNewScanFromBundle: @"photo_2.jpg"];
+        [dataManager addNewScanFromBundle: @"photo_3.jpg"];
+        [dataManager addNewScanFromBundle: @"photo_4.jpg"];
+        [dataManager addNewScanFromBundle: @"photo_5.jpg"];
+        [dataManager addNewScanFromBundle: @"photo_6.jpg"];
         
-        [context save: &error];
+        [dataManager save];
     }
     
     // Pass the managedObjectContext down to the view controller
-    
-    [DataManager sharedInstance].context = self.managedObjectContext;
     
 //    UINavigationController * navController = (UINavigationController *) self.window.rootViewController;
 //    MasterViewController *masterController = [navController.viewControllers objectAtIndex: 0];

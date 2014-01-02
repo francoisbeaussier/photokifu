@@ -112,14 +112,9 @@
 //    [self.imageView setImage: image];
     
     [self dismissViewControllerAnimated: YES completion:nil];
-    UIImage *thumb = [AppDelegate generateThumb: image];
     
-    ScanDisplay *newScan = [[ScanDisplay alloc] init]; //]WithTitle: @"new" thumbImage: thumb fullImage: image];
     
-    newScan.title = @"New";
-    newScan.scanDate = [NSDate date];
-    newScan.thumbnailData = UIImageJPEGRepresentation(thumb, 0.0);
-    newScan.details.photoData = UIImageJPEGRepresentation(image, 0.0);
+    ScanDisplay *newScan = [[DataManager sharedInstance] addNewScan: image withTitle: @"New"];
     
     [self.scans addObject: newScan];
     
@@ -129,8 +124,18 @@
     
     [self.tableView selectRowAtIndexPath: indexPath animated: YES scrollPosition: UITableViewScrollPositionMiddle];
     [self performSegueWithIdentifier: @"MySegue" sender: self];
+    
+    [self.tableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO];
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    NSSortDescriptor *sort=[NSSortDescriptor sortDescriptorWithKey:@"scanDate" ascending:NO];
+    [self.scans sortUsingDescriptors:[NSArray arrayWithObject:sort]];
+    
+    [self.tableView reloadData];
+}
 
 #pragma mark - Table View
 
@@ -152,6 +157,13 @@
     cell.imageView.image = [UIImage imageWithData:scan.thumbnailData]; // TODO: cache this, probably in the ScanDisplay object
     return cell;
 }
+
+//- (void) refreshTableRowAtIndex: (int) index
+//{
+//    NSIndexPath *path = [NSIndexPath indexPathForRow:index inSection:0];
+//    
+//    [self.tableView reloadRowsAtIndexPaths:@[path] withRowAnimation:UITableViewRowAnimationNone];
+//}
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {

@@ -114,11 +114,14 @@ CGRect _scrollViewFrame;
                 UIImage *image = [UIImage imageWithData: activeScan.details.photoData]; // TODO: cache this?
                 cv::vector<cv::Point> corners = gd.detectGoban(image);
                 
-                grid = [[PKGrid alloc] init];
-                grid.corner1 = CGPointMake(corners[0].x, corners[0].y);
-                grid.corner2 = CGPointMake(corners[1].x, corners[1].y);
-                grid.corner3 = CGPointMake(corners[2].x, corners[2].y);
-                grid.corner4 = CGPointMake(corners[3].x, corners[3].y);
+                if (corners.size() == 4)
+                {
+                    grid = [[PKGrid alloc] init];
+                    grid.corner1 = CGPointMake(corners[0].x, corners[0].y);
+                    grid.corner2 = CGPointMake(corners[1].x, corners[1].y);
+                    grid.corner3 = CGPointMake(corners[2].x, corners[2].y);
+                    grid.corner4 = CGPointMake(corners[3].x, corners[3].y);
+                }
                 
                 _cornerPositionHasChanged = true;
             }
@@ -388,7 +391,7 @@ CGRect _scrollViewFrame;
         // Get destination view
         PreviewViewController *preview = [segue destinationViewController];
         
-        [preview setStones: self.stones andWarpedImage: _warpedImage];
+        [preview setStones: self.stones andWarpedImage: _warpedImage andAngle: [activeScan.details.rotation intValue]];
     }
 }
 
