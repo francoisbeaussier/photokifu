@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PKStones.h"
 
 @interface GobanView : UIScrollView
 {
@@ -14,21 +15,14 @@
     float _gridCellWidth;
     float _gridLeftPadding;
 
-#ifdef __cplusplus
-    cv::vector<cv::vector<cv::Point>> _stones;
-#endif
     UIImage * _warpedImage;
 }
-
-#ifdef __cplusplus
-- (void) setStones: (cv::vector<cv::vector<cv::Point>>) stones;
-#endif
-
 
 - (void) setWarpedImage: (UIImage *) image;
 
 - (CGPoint) coordinateFromPoint: (CGPoint) point;
 
+@property (nonatomic, strong) PKStones *stones;
 @property (assign, atomic) bool WarpedImageIsVisible;
 @property (assign, atomic) int WarpedImageRotationAngle;
 @end

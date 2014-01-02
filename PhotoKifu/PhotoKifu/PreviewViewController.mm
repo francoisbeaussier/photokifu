@@ -28,11 +28,6 @@
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
-
-    // Adjust the goban, it needs to stay just under the navigation bar
-    // self.gobanView.frame = CGRectMake(0, self.topLayoutGuide.length, self.view.frame.size.width, 19 * 17);
-    
-    //self.gobanView.frame = self.scrollView.frame;//CGRectMake(0, 0, 1000, 1000);
     
     [self.scrollView setContentSize: CGSizeMake(1000, 1000)];
     
@@ -41,7 +36,6 @@
     CGFloat minScale = MIN(scaleWidth, scaleHeight);
     self.scrollView.minimumZoomScale = minScale;
     
-    // 5
     self.scrollView.maximumZoomScale = 2.0f;
     self.scrollView.zoomScale = minScale;
 }
@@ -50,36 +44,21 @@
 {
     [super viewDidLoad];
     
-    // 1
-    //self.imageView = [[UIImageView alloc] initWithImage: image];
-    //self.imageView.frame = (CGRect) { .origin = CGPointMake(0.0f, 0.0f), .size = image.size };
-    //[self.scrollView addSubview: self.imageView];
-    
-    // 2
-    //self.scrollView.contentSize = image.size;
-    
+   
     self.gobanView = [[GobanView alloc] initWithFrame: CGRectMake(0, 0, 1000, 1000)];
     self.gobanView.backgroundColor = [UIColor colorWithRed:234.0f/255.0f green:198.0f/255.0f blue:139.0f/255.0f alpha:1.0f];
-//    self.gobanView.frame = CGRectMake(0, 0, 1000, 1000);
+
     [self.scrollView addSubview: self.gobanView];
     [self.scrollView setContentSize: CGSizeMake(1000, 1000)];
     self.scrollView.delegate = self;
     
-    [self.gobanView setStones: _stones];
+    [self.gobanView setStones: self.stones];
     [self.gobanView setWarpedImage: _warpedImage];
-    
-    // Custom initialization
-    UITapGestureRecognizer *doubleTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action: @selector(scrollViewDoubleTapped:)];
-    doubleTapRecognizer.numberOfTapsRequired = 2;
-    doubleTapRecognizer.numberOfTouchesRequired = 1;
-    //[self.gobanView addGestureRecognizer: doubleTapRecognizer];
     
     UITapGestureRecognizer *singleTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action: @selector(scrollViewSingleTapped:)];
     singleTapRecognizer.numberOfTapsRequired = 1;
     singleTapRecognizer.numberOfTouchesRequired = 1;
-    //[singleTapRecognizer requireGestureRecognizerToFail: doubleTapRecognizer];
     [self.gobanView addGestureRecognizer: singleTapRecognizer];
-    
     
     UISwitch *photoSwitch = [[UISwitch alloc] init];
     [photoSwitch setOn:NO];
@@ -133,33 +112,6 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (int) getStoneColor:(CGPoint) coordinates
-{
-    cv::vector<cv::Point> blackStones = _stones[0];
-    
-    for (int i = 0; i < blackStones.size(); i++)
-    {
-        cv::Point point = blackStones[i];
-        if (point.x == coordinates.x && point.y == coordinates.y)
-        {
-            return 1; // black stone
-        }
-    }
-
-    cv::vector<cv::Point> whiteStones = _stones[1];
-    
-    for (int i = 0; i < whiteStones.size(); i++)
-    {
-        cv::Point point = whiteStones[i];
-        if (point.x == coordinates.x && point.y == coordinates.y)
-        {
-            return 2; // black stone
-        }
-    }
-    
-    return 0;
-}
-
 struct Remover : public std::binary_function<cv::Point, CGPoint, bool>
 {
 public:
@@ -181,24 +133,20 @@ public:
     
     CGPoint gobanCoordinates = [self.gobanView coordinateFromPoint:pointInView];
 
-    int color = [self getStoneColor: gobanCoordinates];
+    int color = [self.stones getStoneColor: gobanCoordinates];
     
-    if (color == 0)
+    if (color == PKStonesEmpty)
     {
-        // no stone, add a black one;
-        _stones[0].push_back(cv::Point(gobanCoordinates.x, gobanCoordinates.y));
+        [self.stones addBlackStone: gobanCoordinates];
     }
-    else if (color == 1)
+    else if (color == PKStonesBlack)
     {
-        // black stone, switch to white
-        [self removeStone: _stones[0] atCoordinate:gobanCoordinates];
-        
-        _stones[1].push_back(cv::Point(gobanCoordinates.x, gobanCoordinates.y));
+        [self.stones removeBlackStone: gobanCoordinates];
+        [self.stones addWhiteStone: gobanCoordinates];
     }
-    else if (color == 2)
+    else if (color == PKStonesWhite)
     {
-        // white stone, remove it
-        [self removeStone: _stones[1] atCoordinate:gobanCoordinates];
+        [self.stones removeWhiteStone: gobanCoordinates];
     }
     
     [self.gobanView setStones: _stones];
@@ -241,7 +189,7 @@ public:
     [self.scrollView zoomToRect: rectToZoomTo animated:YES];
 }
 
-- (void) setStones: (cv::vector<cv::vector<cv::Point>>) stones andWarpedImage: (UIImage *) warpedImage
+- (void) setStones: (PKStones *) stones andWarpedImage: (UIImage *) warpedImage
 {
     _stones = stones;
     _warpedImage = warpedImage;
@@ -279,33 +227,10 @@ public:
 }
 */
 
-/*
-- (void) tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item
-{
-    switch (item.tag)
-    {
-        case 0:
-            [self exportSGF];
-            break;
-        case 1:
-            [self emailSGF];
-            break;
-        case 2:
-            [self rotateBoard];
-            break;
-        case 3:
-            [self displayOptions];
-            break;
-        default:
-            NSLog(@"Invalid tabBar item: tag = %i", item.tag);
-    }
-    
-    [tabBar setSelectedItem:nil];
-}*/
 
 - (NSString *) createSGF
 {
-    NSString *sgfContent = [PhotoKifuCore generateSgfContent: _stones];
+    NSString *sgfContent = [self.stones generateSgfContent];
     
     NSString *guid = [[NSProcessInfo processInfo] globallyUniqueString];
     
@@ -392,29 +317,9 @@ public:
 
 - (void) rotateBoard
 {
-    int boardSize = 19;
+    [self.stones rotate];
+    [self.gobanView setStones: self.stones];
     
-//  0,  0 -> 19, 0
-// 19,  0 -> 19, 19
-// 19, 19 -> 0, 19
-//  0, 19 -> 0, 0
-    
-//    3,  1 -> 19 - 1, 3
-//   18,  3 -> 19 - 3, 18
-    
-// x, y -> 19 - y, x
-    
-    for (int stoneList = 0; stoneList < 2; stoneList++)
-    {
-        for (int i = 0; i < _stones[stoneList].size(); i++)
-        {
-            cv::Point point = _stones[stoneList][i];
-            
-            _stones[stoneList][i] = cv::Point(boardSize - 1 - point.y, point.x);
-        }
-    }
-    
-    [self.gobanView setStones: _stones];
     self.gobanView.WarpedImageRotationAngle = (self.gobanView.WarpedImageRotationAngle + 90) % 360;
     [self.gobanView setNeedsDisplay];
 }

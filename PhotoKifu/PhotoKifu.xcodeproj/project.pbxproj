@@ -32,6 +32,7 @@
 		B2A878191770A4AD002059D6 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2A878181770A4AD002059D6 /* CoreMedia.framework */; };
 		B2A8781B1770A4B6002059D6 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2A8781A1770A4B6002059D6 /* QuartzCore.framework */; };
 		B2B2F99C1866B9E6000CA134 /* libPhotoKifuCore.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B2B2F99B1866B9E6000CA134 /* libPhotoKifuCore.a */; };
+		B2B338D7187426280075CF8C /* PKStones.m in Sources */ = {isa = PBXBuildFile; fileRef = B2B338D6187426280075CF8C /* PKStones.m */; };
 		B2B7370417C728E100283DFE /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2B7370317C728E100283DFE /* opencv2.framework */; };
 		B2B7370517C72AB500283DFE /* GobanScanData.m in Sources */ = {isa = PBXBuildFile; fileRef = B23C27EA176A1839001837B4 /* GobanScanData.m */; };
 		B2B7370617C72AB500283DFE /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B23C27D1176A16FD001837B4 /* AppDelegate.m */; };
@@ -103,6 +104,8 @@
 		B2A8781A1770A4B6002059D6 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		B2A8781D1770A4CF002059D6 /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = opencv2.framework; sourceTree = "<group>"; };
 		B2B2F99B1866B9E6000CA134 /* libPhotoKifuCore.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPhotoKifuCore.a; path = "../../../../Library/Developer/Xcode/DerivedData/PhotoKifu-dwvbbkqucvmxhrgrnuudkmdejtgo/Build/Products/Debug-iphoneos/libPhotoKifuCore.a"; sourceTree = "<group>"; };
+		B2B338D5187426280075CF8C /* PKStones.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKStones.h; sourceTree = "<group>"; };
+		B2B338D6187426280075CF8C /* PKStones.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKStones.m; sourceTree = "<group>"; };
 		B2B7370317C728E100283DFE /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = opencv2.framework; path = "../xcode frameworks/opencv2.framework"; sourceTree = "<group>"; };
 		B2B7371217C72B2000283DFE /* libPhotoKifuCore.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPhotoKifuCore.a; path = "../PhotoKifuCore/build/Release-iphoneos/libPhotoKifuCore.a"; sourceTree = "<group>"; };
 		B2BD8E341871ABC500B9DDB9 /* PKGrid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKGrid.h; sourceTree = "<group>"; };
@@ -262,6 +265,8 @@
 				B2C19189186FD36B0016B072 /* ScanData.m */,
 				B2BD8E341871ABC500B9DDB9 /* PKGrid.h */,
 				B2BD8E351871ABC500B9DDB9 /* PKGrid.m */,
+				B2B338D5187426280075CF8C /* PKStones.h */,
+				B2B338D6187426280075CF8C /* PKStones.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -392,6 +397,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B2B7370517C72AB500283DFE /* GobanScanData.m in Sources */,
+				B2B338D7187426280075CF8C /* PKStones.m in Sources */,
 				B2C19138186FC13D0016B072 /* DataManager.m in Sources */,
 				B2B7370617C72AB500283DFE /* AppDelegate.m in Sources */,
 				B2B7370717C72AB500283DFE /* MasterViewController.m in Sources */,

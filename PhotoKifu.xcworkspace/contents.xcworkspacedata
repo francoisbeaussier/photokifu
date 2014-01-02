@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:TestCoreData/TestCoreData.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:PhotoKifuCore/PhotoKifuCore.xcodeproj">
    </FileRef>
    <FileRef

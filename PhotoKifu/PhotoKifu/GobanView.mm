@@ -34,11 +34,6 @@
     _gridLeftPadding = padding + (width - _gridCellWidth * 18) / 2;
 }
 
-- (void) setStones: (cv::vector<cv::vector<cv::Point>>) stones
-{
-    _stones = stones;
-}
-
 - (CGPoint) coordinateFromPoint: (CGPoint) point
 {
     int x = (point.x - _gridLeftPadding + _gridCellWidth / 2) / _gridCellWidth;
@@ -52,7 +47,6 @@
 - (void) drawRect:(CGRect)rect
 {
     [self configure];
-    
    
     CGContextRef context = UIGraphicsGetCurrentContext();
 
@@ -94,21 +88,19 @@
     
     CGContextStrokePath(context);
     
-    if (_stones.size() == 0)
+    if (self.stones.blackStones.count == 0 && self.stones.whiteStones.count == 0)
     {
         return;
     }
     
     //CGContextSetLineWidth(context, 3.0);
     
-    cv::vector<cv::Point> blackStones = _stones[0];
-    
     CGContextSetFillColorWithColor(context, [UIColor blackColor].CGColor);
     CGContextSetStrokeColorWithColor(context, [UIColor grayColor].CGColor);
 
-    for (int i = 0; i < blackStones.size(); i++)
+    for (NSValue *value in self.stones.blackStones)
     {
-        cv::Point point = blackStones[i];
+        CGPoint point = [value CGPointValue];
 
         float diameter = (_gridCellWidth - 2);
         float radius = diameter / 2;
@@ -140,11 +132,9 @@
     CGContextSetFillColorWithColor(context, [UIColor whiteColor].CGColor);
     CGContextSetStrokeColorWithColor(context, [UIColor blackColor].CGColor);
 
-    cv::vector<cv::Point> whiteStones = _stones[1];
-
-    for (int i = 0; i < whiteStones.size(); i++)
+    for (NSValue *value in self.stones.whiteStones)
     {
-        cv::Point point = whiteStones[i];
+        CGPoint point = [value CGPointValue];
         
         float diameter = (_gridCellWidth - 2);
         float radius = diameter / 2;

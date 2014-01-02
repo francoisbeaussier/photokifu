@@ -299,9 +299,6 @@ CGRect _scrollViewFrame;
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
-        //GobanDetector gd(false);
-        //cv::vector<cv::Point> corners = gd.detectGoban(self.detailItem.fullImage);
-        
         dispatch_async(dispatch_get_main_queue(), ^{
             // hide loading activity and refresh view with loaded data
 
@@ -320,7 +317,22 @@ CGRect _scrollViewFrame;
                 
                 GobanDetectorResult result = gd.extractGobanState(self.imageView.image, points);
                 
-                _stones = result.Stones;
+                self.stones = [[PKStones alloc] init];
+                
+                for (int i = 0; i < result.Stones[0].size(); i++)
+                {
+                    cv::Point point = result.Stones[0][i];
+                    
+                    [self.stones addBlackStone: CGPointMake(point.x, point.y)];
+                }
+                
+                for (int i = 0; i < result.Stones[1].size(); i++)
+                {
+                    cv::Point point = result.Stones[1][i];
+                    
+                    [self.stones addWhiteStone: CGPointMake(point.x, point.y)];
+                }
+                
                 _warpedImage = result.warpedImage;
                 
                 self.polygonView.HasCornerPostionChanged = false;
@@ -403,7 +415,7 @@ CGRect _scrollViewFrame;
         // Get destination view
         PreviewViewController *preview = [segue destinationViewController];
         
-        [preview setStones: _stones andWarpedImage: _warpedImage];
+        [preview setStones: self.stones andWarpedImage: _warpedImage];
     }
 }
 
