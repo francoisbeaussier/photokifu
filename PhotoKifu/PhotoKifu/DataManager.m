@@ -23,12 +23,43 @@
     return sharedInstance;
 }
 
-- (NSArray *) LoadData
+- (id) init
 {
-    //Model *ds = [Model sharedDataStore];
-    //NSManagedObjectContext context = [dataStore context];
+    self = [super init];
     
-    return nil;
+    if (self != nil)
+    {
+    }
+    
+    return self;
+}
+
+
+- (void) save
+{
+    NSError *error;
+    if (![self.context save:&error])
+    {
+        NSLog(@"Could not save update to corners: %@", [error localizedDescription]);
+    }
+}
+
+- (NSMutableArray *) loadScans
+{
+   
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"ScanDisplay" inManagedObjectContext:self.context];
+    [fetchRequest setEntity:entity];
+    
+    NSError *error;
+    
+    NSMutableArray *result = [NSMutableArray arrayWithArray: [self.context executeFetchRequest:fetchRequest error:&error]];
+    
+    if (error != nil) {
+        NSLog(@"Could not fetch ScanDisplays: %@", [error localizedDescription]);
+    }
+    
+    return result;
 }
 
 @end

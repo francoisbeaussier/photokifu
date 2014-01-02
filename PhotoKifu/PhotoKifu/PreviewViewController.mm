@@ -9,6 +9,7 @@
 #import "PreviewViewController.h"
 #import <PhotoKifuCore/PhotoKifuCore.h>
 #import "OptionsViewController.h"
+#import "DataManager.h"
 
 @interface PreviewViewController ()
 
@@ -151,22 +152,6 @@ public:
     
     [self.gobanView setStones: _stones];
     [self.gobanView setNeedsDisplay];
-    
-    /*
-    CGFloat newZoomScale = self.scrollView.zoomScale * 1.5f;
-    newZoomScale = MIN(newZoomScale, self.scrollView.maximumZoomScale);
-    
-    CGSize scrollViewSize = self.scrollView.bounds.size;
-    
-    CGFloat w = scrollViewSize.width / newZoomScale;
-    CGFloat h = scrollViewSize.height / newZoomScale;
-    CGFloat x = pointInView.x - (w / 2.0f);
-    CGFloat y = pointInView.y - (h / 2.0f);
-    
-    CGRect rectToZoomTo = CGRectMake(x, y, w, h);
-    
-    [self.scrollView zoomToRect: rectToZoomTo animated:YES];
-     */
 }
 
 - (void) scrollViewDoubleTapped: (UITapGestureRecognizer*) recognizer
@@ -196,10 +181,14 @@ public:
 }
 
 - (IBAction)UIBarButtonItemOpenIn:(id)sender {
+    [self save];
+    
     [self exportSGF];
 }
 
 - (IBAction)UIBarButtonItemEmail:(id)sender {
+    [self save];
+    
      [self emailSGF];
 }
 
@@ -217,6 +206,24 @@ public:
 
     [self.gobanView setNeedsDisplay];
 }
+
+- (void) didMoveToParentViewController:(UIViewController *)parent
+{
+    if (![parent isEqual:self.parentViewController])
+    {
+        [self save];
+    }
+}
+
+- (void) save
+{
+    ScanDisplay *activeScan = [DataManager sharedInstance].activeScan;
+    
+    [activeScan.details setStones: self.stones];
+    
+    [[DataManager sharedInstance] save];
+}
+
 /*
 - (IBAction) sliderAction:(id)sender
 {
@@ -226,7 +233,6 @@ public:
     [self.UILabelKomi setText: [NSString stringWithFormat:@"Komi is %.1f", value]];
 }
 */
-
 
 - (NSString *) createSGF
 {
@@ -326,6 +332,8 @@ public:
 
 - (void) displayOptions
 {
+    [self save];
+    
     OptionsViewController *options = [self.storyboard instantiateViewControllerWithIdentifier:@"OptionsViewController"];
     
     [self.navigationController pushViewController: options animated: YES];
