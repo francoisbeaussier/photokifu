@@ -12,7 +12,7 @@
 
 @interface UIDynamicPolygonView : UIView
 {
-    MagnifierView *loop;
+    // MagnifierView *loop;
     int gridSize;
 }
 
@@ -23,6 +23,8 @@
 @property (strong, nonatomic) UIImageView *imageView;
 @property (strong, nonatomic) UIScrollView *scrollView;
 @property (assign, nonatomic) int gridSize;
+
+@property (strong, nonatomic) MagnifierView *magnifier;
 
 - (id) initWithImageView: (UIImageView *) contentImageView andScrollView: (UIScrollView *) scrollView andGrid: (PKGrid *) grid;
 

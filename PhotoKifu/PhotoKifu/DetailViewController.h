@@ -20,7 +20,7 @@
 	CGFloat _panStartY;
     
     UIImage *_warpedImage;
-    MagnifierView *loop;
+    MagnifierView *_magnifier;
     
     bool _cornerPositionHasChanged;
 }

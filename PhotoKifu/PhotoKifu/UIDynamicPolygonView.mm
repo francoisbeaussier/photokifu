@@ -27,6 +27,9 @@
         self.buttons = [[NSMutableArray alloc] init];
         self.grid = [[PKGrid alloc] init];
         
+        //self.alpha = 0.5f;
+        //self.backgroundColor = [UIColor greenColor];
+        
         UIImage *targetImage = [UIImage imageNamed: @"target.png"];
         
         int defaultPositions[4 * 2] = {100, 100, 900, 100, 900, 900, 100, 900};
@@ -66,9 +69,6 @@
         {
             [self addSubview: button];
         }
-        
-        loop = [[MagnifierView alloc] init];
-        loop.viewToMagnify = self.imageView;
     }
     
     return self;
@@ -80,25 +80,6 @@
 }
 
 float deltaTouchX, deltaTouchY;
-
-- (void) setMagnifyingClassCenterAtX: (int) x andY: (int) y
-{
-    CGRect bounds = self.scrollView.bounds;
-    //CGRect frame = self.scrollView.frame;
-    
-    if (y - bounds.origin.y > 66)
-    {
-        loop.center = CGPointMake(x, y - 66);
-    }
-    else if (x - bounds.origin.x > 66)
-    {
-        loop.center = CGPointMake(x - 66, y);
-    }
-    else
-    {
-        loop.center = CGPointMake(x + 66, y);
-    }
-}
 
 //- (CGPoint) boundLocationAtX: (int) x andY: (int) y withFrame:(CGRect) frame
 //{
@@ -117,6 +98,8 @@ float deltaTouchX, deltaTouchY;
 
 - (void) handleMagnifier: (UILongPressGestureRecognizer*) recognizer
 {
+    //NSLog(@"(imgview = %i, %i)", (int) self.imageView.bounds.size.width, (int) self.imageView.bounds.size.height);
+    
     CGPoint location = [recognizer locationInView: self];
 
     UIView *button = recognizer.view;
@@ -135,44 +118,52 @@ float deltaTouchX, deltaTouchY;
             location = button.center;
             
             CGPoint imageViewLocation = [self convertPoint: location toView: self.imageView];
-            loop.touchPoint = imageViewLocation;
-
-            [self setMagnifyingClassCenterAtX: location.x andY: location.y];
+            _magnifier.touchPoint = imageViewLocation;
             
-            [self addSubview: loop];
-            [loop setNeedsDisplay];
+            [_magnifier trySetPosition:imageViewLocation];
+            
+            [_magnifier addToPreconfiguredView];
+            [_magnifier setNeedsDisplay];
         }
         break;
             
         case UIGestureRecognizerStateChanged:
         {
             // offset the touchlocation to be consistent with the button's center
-            //location = CGPointMake(location.x - deltaTouchX, location.y - deltaTouchY);
-            
-            //location = [self boundLocationAtX: location.x - deltaTouchX andY:location.y - deltaTouchY withFrame: self.scrollView.frame];
-            
-            //NSLog(@"handleLongPress: StateChanged (loc = %i, %i)", (int) location.x, (int) location.y);
+            location = CGPointMake(location.x - deltaTouchX, location.y - deltaTouchY);
+
             CGPoint imageViewLocation = [self convertPoint: location toView: self.imageView];
-            loop.touchPoint = imageViewLocation;
+            _magnifier.touchPoint = imageViewLocation;
             
-            [self setMagnifyingClassCenterAtX: location.x andY: location.y];
+            //NSLog(@"(loc = %i, %i)", (int) imageViewLocation.x, (int) imageViewLocation.y);
+            
+            if (imageViewLocation.x < 0 || imageViewLocation.x > self.imageView.bounds.size.width)
+                break;
+            
+            if (imageViewLocation.y < 0 || imageViewLocation.y > self.imageView.bounds.size.height)
+                break;
+            
+            bool canMove = [_magnifier trySetPosition:imageViewLocation];
            
-            [loop setNeedsDisplay];
-
-            button.center = location;
-
-            [self.grid setCorner:imageViewLocation atZeroBasedIndex:button.tag];
-            
-            self.HasCornerPostionChanged = true;
-            
-            [self updateGrid];
+            if (canMove)
+            {
+                [_magnifier setNeedsDisplay];
+                
+                button.center = location;
+                
+                [self.grid setCorner:imageViewLocation atZeroBasedIndex:button.tag];
+                
+                self.HasCornerPostionChanged = true;
+                
+                [self updateGrid];
+            }
         }
         break;
             
         case UIGestureRecognizerStateEnded:
         {
             //NSLog(@"handleLongPress: StateEnded");
-            [loop removeFromSuperview];
+            [_magnifier removeFromPreconfiguredView];
         }
         break;
             
