@@ -129,9 +129,12 @@ CGRect _scrollViewFrame;
             dispatch_async(dispatch_get_main_queue(), ^{
                 // hide loading activity and refresh view with loaded data
                 
+                _magnifier = [[MagnifierView alloc] initWithFrame: CGRectMake(0, 0, 10, 10) andBoundingView: self.scrollView];
+                _magnifier.viewToMagnify = self.imageView;
+                
                 self.polygonView = [[UIDynamicPolygonView alloc] initWithImageView: self.imageView andScrollView: self.scrollView andGrid: grid];
                 self.polygonView.backgroundColor = [UIColor clearColor];
-                
+                self.polygonView.magnifier = _magnifier;
                 self.polygonView.HasCornerPostionChanged = _cornerPositionHasChanged;
                 
                 [activeScan.details setGrid: grid];
@@ -230,8 +233,8 @@ CGRect _scrollViewFrame;
     [self setGridSize: nextGridSize];
 }
 
-- (IBAction)UIToolBarItemScan:(id)sender {
-    
+- (IBAction)UIToolBarItemScan:(id)sender
+{
     [self.UIToolBarItemScan setEnabled: NO];
     
     [self showPreview];

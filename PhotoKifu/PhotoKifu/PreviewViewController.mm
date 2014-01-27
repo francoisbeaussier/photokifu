@@ -62,7 +62,10 @@
     singleTapRecognizer.numberOfTouchesRequired = 1;
     [self.gobanView addGestureRecognizer: singleTapRecognizer];
     
+    UIColor *tintColor = [[[UIApplication sharedApplication] delegate] window].tintColor;
     UISwitch *photoSwitch = [[UISwitch alloc] init];
+    [photoSwitch setTintColor: tintColor];
+    [photoSwitch setOnTintColor: tintColor];
     [photoSwitch setOn:NO];
     [photoSwitch addTarget: self action: @selector(UISwitchPhotoValueChanged:) forControlEvents:UIControlEventValueChanged];
 

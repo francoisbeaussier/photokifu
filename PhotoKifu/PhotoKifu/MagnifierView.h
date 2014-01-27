@@ -14,9 +14,19 @@
     
     CGImageRef mask;
     UIImage *glass;
+    
+    UIView *_boundingView;
 }
 
 @property (nonatomic, retain) UIView *viewToMagnify;
 @property (assign) CGPoint touchPoint;
+
+- (id) initWithFrame: (CGRect) frame andBoundingView: (UIView *) boundingView;
+- (id) initWithFrame: (CGRect) frame andRadius: (int) r andBoundingView: (UIView *) boundingView;
+
+- (bool) trySetPosition:(CGPoint)center;
+
+- (void) addToPreconfiguredView;
+- (void) removeFromPreconfiguredView;
 
 @end

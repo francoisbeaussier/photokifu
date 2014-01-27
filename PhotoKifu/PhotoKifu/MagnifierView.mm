@@ -18,14 +18,16 @@
 @synthesize viewToMagnify;
 @dynamic touchPoint;
 
-- (id) initWithFrame: (CGRect) frame
+- (id) initWithFrame: (CGRect) frame andBoundingView: (UIView *) boundingView
 {
-    return [self initWithFrame: frame radius: 118];
+    return [self initWithFrame: frame andRadius: 118 andBoundingView: (UIView *) boundingView];
 }
 
-- (id) initWithFrame: (CGRect) frame radius: (int)r
+- (id) initWithFrame: (CGRect) frame andRadius: (int) r andBoundingView: (UIView *) boundingView
 {
     int radius = r;
+    
+    _boundingView = boundingView;
     
     if ((self = [super initWithFrame: CGRectMake(0, 0, radius, radius)]))
     {
@@ -35,19 +37,67 @@
         
         mask = [UIImage imageNamed: @"magnify-mask@2x.png"].CGImage;
         glass = [UIImage imageNamed: @"magnify@2x.png"];
-
     }
     
     return self;
 }
 
+- (void) addToPreconfiguredView
+{
+    //[_parentView addSubview: self];
+    
+    [[[[UIApplication sharedApplication] delegate] window] addSubview: self];
+}
+
+- (void) removeFromPreconfiguredView
+{
+    [self removeFromSuperview];
+}
+
+- (bool) trySetPosition:(CGPoint)center
+{
+    // Ugly: should not rely on the superview to be the top level view
+    
+    UIScrollView * scrollView = (UIScrollView *) _boundingView;
+    
+    
+    float origX = 0;
+    float origY = 0;
+    float widthCropper = 0;
+    float heightCropper = 0;
+    
+    
+    if (scrollView.contentOffset.x > 0){
+        origX = (scrollView.contentOffset.x) * (1/scrollView.zoomScale);
+    }
+    if (scrollView.contentOffset.y > 0){
+        origY = (scrollView.contentOffset.y) * (1/scrollView.zoomScale);
+    }
+    widthCropper = (scrollView.frame.size.width * (1/scrollView.zoomScale));
+    heightCropper = (scrollView.frame.size.height * (1/scrollView.zoomScale));
+    
+    NSLog(@"center = (%i, %i) x = %i, y = %i, w = %i, h = %i", (int) center.x, (int) center.y, (int) origX, (int) origY, (int) widthCropper, (int) heightCropper);
+    
+    UIView *topLevelView = [_boundingView superview];
+    
+    CGPoint imageViewLocation = [topLevelView convertPoint: center fromView: viewToMagnify];
+ 
+    CGRect bounds = _boundingView.frame;
+    
+    if (imageViewLocation.x < 0 || imageViewLocation.x > bounds.size.width)
+        return false;
+    
+    if (imageViewLocation.y < 0 || imageViewLocation.y > bounds.size.height)
+        return false;
+    
+    self.center = CGPointMake(imageViewLocation.x, imageViewLocation. y - 16);
+    
+    return true;
+}
+
 - (void) setTouchPoint: (CGPoint) pt
 {
     touchPoint = pt;
-    // whenever touchPoint is set, update the position of the magnifier (to just above what's being magnified)
-//    self.center = CGPointMake(pt.x, pt.y-66);
-    //NSLog(@"setTouchPoint (%i, %i)", (int) pt.x, (int) pt.y);
-
 }
 
 - (CGPoint)getTouchPoint
