@@ -27,6 +27,8 @@
 
 - (void) viewDidLoad
 {
+    // http://stackoverflow.com/questions/9079907/why-does-uinavigationbar-steal-touch-events
+    
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     self.navigationItem.leftBarButtonItem = self.editButtonItem;

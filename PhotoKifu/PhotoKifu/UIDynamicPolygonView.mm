@@ -32,7 +32,12 @@
         
         UIImage *targetImage = [UIImage imageNamed: @"target.png"];
         
-        int defaultPositions[4 * 2] = {100, 100, 900, 100, 900, 900, 100, 900};
+
+        float width = self.scrollView.contentSize.width / self.scrollView.zoomScale;
+        float height = self.scrollView.contentSize.height / self.scrollView.zoomScale;
+       
+        float margin = width / 10;
+        float defaultPositions[4 * 2] = {margin, margin, width - margin, margin, width - margin, height - margin, margin, height - margin};
         
         for (int i = 0; i < 4; i++)
         {
@@ -229,9 +234,42 @@ float deltaTouchX, deltaTouchY;
     
     CGContextRef context = UIGraphicsGetCurrentContext();
     
-    CGContextSetLineWidth(context, 2.0);
+//    //CGMutablePathRef path = CGPathCreateMutable();
+//    
+//    //CGContextBeginPath(context);
+//    CGContextAddRect(context, CGRectMake(1000, 1000, 800, 800));
+//    //CGContextAddRect(context, CGRectMake(1500, 1500, 400, 400));
+//    
+//    //CGContextClosePath(context);
+//    CGContextClip(context);
+//    
+////    CGContextMoveToPoint(context, 500, 500);
+////    CGContextAddLineToPoint(context, 1500, 500);
+////    CGContextAddLineToPoint(context, 1500, 1500);
+////    CGContextAddLineToPoint(context, 500, 1500);
+////    CGContextClosePath(context);
+//    
+//    // Inner subpath: the area inside the whole rect
+//    //CGContextMoveToPoint(context, 1000, 1000);
+//    // Close the inner subpath
+//    //CGContextClosePath(context);
+//    
+//    //CGContextAddRect(context, CGRectInfinite);
+//    //CGContextAddPath(context, path);
+//    //CGContextEOClip(context);
+//    
+//    CGContextSetFillColorWithColor(context, [UIColor colorWithRed:50/255. green:57/255. blue:63/255. alpha: 1].CGColor);    // Fill the path
+//    CGContextFillRect(context, rect);
+//    CGContextDrawPath(context, kCGPathEOFill);
+//    
+//    
+//    
+//    //CGPathRelease(path);
+//
+//    return;
     
-    CGContextSetStrokeColorWithColor(context, [UIColor redColor].CGColor);
+    
+    CGContextSetShouldAntialias(context, YES);
     
     PerspectiveGrid pg;
     
@@ -239,6 +277,24 @@ float deltaTouchX, deltaTouchY;
 
     cv::vector<cv::Point> sortedCorners = pg.sortCorners(cornerPoints);
 
+    if (pg.checkPolygonIsConvex(sortedCorners))
+    {
+        
+        CGContextSetStrokeColorWithColor(context, [UIColor colorWithRed:50/255. green:50/255. blue:200/255. alpha: 1].CGColor);
+        [self drawGrid: context withGrid: self.grid withRows: gridSize withCols: gridSize];
+    }
+    
+    // Draw the outline
+    
+    CGContextSetLineWidth(context, 2.0);
+    
+    CGContextSetStrokeColorWithColor(context, [UIColor colorWithRed:180/255. green:57/255. blue:63/255. alpha: 1].CGColor);
+    
+    CGContextBeginPath(context);
+    
+    int midX = 0;
+    int midY = 0;
+    
     for (cv::vector<cv::Point>::iterator iter = sortedCorners.begin(); iter < sortedCorners.end(); iter++)
     {
         cv::Point corner = *iter;
@@ -246,7 +302,7 @@ float deltaTouchX, deltaTouchY;
         CGPoint cornerPoint = CGPointMake(corner.x, corner.y);
         
         CGPoint viewPoint = [self.imageView convertPoint: cornerPoint toView: self];
-    
+        
         if (iter == sortedCorners.begin())
         {
             CGContextMoveToPoint(context, viewPoint.x, viewPoint.y);
@@ -255,26 +311,30 @@ float deltaTouchX, deltaTouchY;
         {
             CGContextAddLineToPoint(context, viewPoint.x, viewPoint.y);
         }
+        
+        midX += viewPoint.x;
+        midY += viewPoint.y;
     }
     
-    cv::Point corner = sortedCorners.front();
-    
-    CGPoint cornerPoint = CGPointMake(corner.x, corner.y);
-    CGPoint viewPoint = [self.imageView convertPoint: cornerPoint toView: self];
-    
-    CGContextAddLineToPoint(context, viewPoint.x, viewPoint.y);
+    CGContextClosePath(context);
     
     CGContextStrokePath(context);
-
-    CGContextSetLineWidth(context, 1.0);
     
-    CGContextSetStrokeColorWithColor(context, [UIColor blueColor].CGColor);
-
-    if (pg.checkPolygonIsConvex(sortedCorners))
+    /*
+    CGContextSaveGState(context);
     {
-        [self drawGrid: context withGrid: self.grid withRows: gridSize withCols: gridSize];
+        CGContextBeginPath(context);
+        CGContextAddPath(context, path);
+        CGContextAddRect(context, CGRectInfinite);
+        CGContextEOClip(context);
+        
+        // drawing code here is clipped to the exterior of myRect
+        CGContextSetFillColorWithColor(context, [UIColor orangeColor].CGColor);
+        CGContextFillRect(context, rect);
+        
     }
-}
+    CGContextRestoreGState(context);*/
+    }
 
 - (cv::vector<cv::Point>) getCornersAsVector:(PKGrid *) grid
 {
