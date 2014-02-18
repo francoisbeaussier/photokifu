@@ -11,15 +11,17 @@
 #import "MessageUI/MessageUI.h"
 #import "MessageUI/MFMailComposeViewController.h"
 #import "PKStones.h"
+#import "ScanDisplay.h"
 
 @interface PreviewViewController : UIViewController<MFMailComposeViewControllerDelegate, UIScrollViewDelegate>
 {
     UIImage *_warpedImage;
     int _angle;
     UIDocumentInteractionController *_docController;
+    ScanDisplay *_scanDisplay;
 }
 
-- (void) setStones: (PKStones *) stones andWarpedImage: (UIImage *) warpedImage andAngle: (int) angle;
+- (void) setStones: (PKStones *) stones andWarpedImage: (UIImage *) warpedImage andAngle: (int) angle andScanDisplay: (ScanDisplay *) scanDisplay;
 
 @property PKStones *stones;
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;

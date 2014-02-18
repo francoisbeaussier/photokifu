@@ -38,15 +38,24 @@
     
     NSArray *fetchedObjects = [dataManager loadScans];
     
-    if (fetchedObjects.count == 0)
+    NSManagedObjectContext *context = [DataManager sharedInstance].context;
+    
+    for (ScanDisplay *scan in fetchedObjects)
     {
-        [dataManager addNewScanFromBundle: @"photo_0.jpg"];
-        [dataManager addNewScanFromBundle: @"photo_1.jpg"];
-        [dataManager addNewScanFromBundle: @"photo_2.jpg"];
-        [dataManager addNewScanFromBundle: @"photo_3.jpg"];
-        [dataManager addNewScanFromBundle: @"photo_4.jpg"];
-        [dataManager addNewScanFromBundle: @"photo_5.jpg"];
-        [dataManager addNewScanFromBundle: @"photo_6.jpg"];
+        [context deleteObject: scan];
+    }
+    
+    //[dataManager addNewScanFromBundle: @"photo_0.jpg"];
+    
+    //if (fetchedObjects.count == 0)
+    {
+        [dataManager addNewScanFromBundle: @"photo_6.jpg" withTitle: @"Sample 7"];
+        [dataManager addNewScanFromBundle: @"photo_5.jpg" withTitle: @"Sample 6"];
+        [dataManager addNewScanFromBundle: @"photo_4.jpg" withTitle: @"Sample 5"];
+        [dataManager addNewScanFromBundle: @"photo_3.jpg" withTitle: @"Sample 4"];
+        [dataManager addNewScanFromBundle: @"photo_2.jpg" withTitle: @"Sample 3"];
+        [dataManager addNewScanFromBundle: @"photo_1.jpg" withTitle: @"Sample 2"];
+        [dataManager addNewScanFromBundle: @"photo_0.jpg" withTitle: @"Sample 1"];
         
         [dataManager save];
     }

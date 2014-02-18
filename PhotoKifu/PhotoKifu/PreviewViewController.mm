@@ -178,11 +178,12 @@ public:
     [self.scrollView zoomToRect: rectToZoomTo animated:YES];
 }
 
-- (void) setStones: (PKStones *) stones andWarpedImage: (UIImage *) warpedImage andAngle:(int)angle
+- (void) setStones: (PKStones *) stones andWarpedImage: (UIImage *) warpedImage andAngle:(int)angle andScanDisplay: (ScanDisplay *) scanDisplay
 {
     _stones = stones;
     _warpedImage = warpedImage;
     _angle = angle;
+    _scanDisplay = scanDisplay;
 }
 
 - (IBAction)UIBarButtonItemOpenIn:(id)sender {
@@ -232,11 +233,11 @@ public:
 
 - (NSString *) createSGF
 {
-    NSString *sgfContent = [self.stones generateSgfContent];
+    NSString *sgfContent = [self.stones generateSgfContentWithScanDisplay: _scanDisplay];
     
     NSString *guid = [[NSProcessInfo processInfo] globallyUniqueString];
     
-    NSString *uniqueFileName = [NSString stringWithFormat: @"photokifu_%@.sgf", guid];
+    NSString *uniqueFileName = [NSString stringWithFormat: @"photokifu_%@_%@_%@_%@.sgf", _scanDisplay.scanDate, _scanDisplay.details.player1Name, _scanDisplay.details.player2Name, guid];
     
     // Create a filePath for the pdf.
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -286,6 +287,17 @@ public:
     return [NSString stringWithFormat: @"%@%@%@", prefix, fileDate, suffix];
 }
 
+- (NSString *) serializeDateTime:(NSDate *) date
+{
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    NSLocale *enUSPOSIXLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
+    [dateFormatter setLocale:enUSPOSIXLocale];
+    [dateFormatter setTimeZone:[NSTimeZone systemTimeZone]];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd"];
+    NSString *fileDate = [dateFormatter stringFromDate:date];
+    return fileDate;
+}
+
 - (void) emailSGF
 {
     if ([MFMailComposeViewController canSendMail])
@@ -299,7 +311,8 @@ public:
         
         NSMutableData *data=[NSMutableData dataWithContentsOfFile:filePath];
         
-        NSString *attachmentFileName = [self getTimeFileNameWithPrefix:@"PhotoKifu-" andSuffix:@".sgf"];
+        NSString *attachmentFileName = [NSString stringWithFormat: @"photokifu_%@_%@_%@.sgf", [self serializeDateTime: _scanDisplay.scanDate], _scanDisplay.details.player1Name, _scanDisplay.details.player2Name];
+
         [viewController addAttachmentData:data mimeType:@"application/x-go-sgf" fileName:attachmentFileName];
         
         [self presentViewController:viewController animated:YES completion:nil];
@@ -310,7 +323,6 @@ public:
         [alert show];
     }
 }
-
 
 - (void) mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error
 {

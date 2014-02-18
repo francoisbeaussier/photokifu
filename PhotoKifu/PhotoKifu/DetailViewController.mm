@@ -394,7 +394,7 @@ CGRect _scrollViewFrame;
         // Get destination view
         PreviewViewController *preview = [segue destinationViewController];
         
-        [preview setStones: self.stones andWarpedImage: _warpedImage andAngle: [activeScan.details.rotation intValue]];
+        [preview setStones: self.stones andWarpedImage: _warpedImage andAngle: [activeScan.details.rotation intValue] andScanDisplay: activeScan];
     }
 }
 

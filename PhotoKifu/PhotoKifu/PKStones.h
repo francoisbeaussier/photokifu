@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "ScanDisplay.h"
 
 extern const int PKStonesEmpty;
 extern const int PKStonesBlack;
@@ -17,6 +18,9 @@ extern const int PKStonesWhite;
 @property (nonatomic, strong) NSMutableArray *blackStones;
 @property (nonatomic, strong) NSMutableArray *whiteStones;
 
+@property (nonatomic, strong) NSString *blackPlayerName;
+@property (nonatomic, strong) NSString *whitePlayerName;
+
 - (int) getStoneColor:(CGPoint) coordinates;
 
 - (void) addBlackStone:(CGPoint) coordinates;
@@ -25,7 +29,7 @@ extern const int PKStonesWhite;
 - (void) removeBlackStone:(CGPoint) coordinates;
 - (void) removeWhiteStone:(CGPoint) coordinates;
 
-- (NSString *) generateSgfContent;
+- (NSString *) generateSgfContentWithScanDisplay: (ScanDisplay *) scanDisplay;
 
 - (void) rotate;
 

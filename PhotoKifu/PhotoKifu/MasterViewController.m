@@ -35,6 +35,8 @@
 
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera target:self action:@selector(getPhotoTapped:)];
     self.navigationItem.rightBarButtonItem = addButton;
+    
+    self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
 
     self.title = @"Kifu List";
     
@@ -89,8 +91,6 @@
 
     if (buttonIndex == 1)
     {
-        NSLog(@"ok Library");
-        
         UIImagePickerController * picker = [[UIImagePickerController alloc] init];
         picker.delegate = self;
         [picker setSourceType: UIImagePickerControllerSourceTypePhotoLibrary];
@@ -137,6 +137,7 @@
     [self.scans sortUsingDescriptors:[NSArray arrayWithObject:sort]];
     
     [self.tableView reloadData];
+    self.tableView.frame = CGRectMake(-20, 0, self.tableView.frame.size.width + 20.0, self.tableView.frame.size.height);
 }
 
 #pragma mark - Table View
@@ -151,21 +152,29 @@
     return self.scans.count;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 60;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 60;
+}
+
 - (UITableViewCell *) tableView: (UITableView *) tableView cellForRowAtIndexPath: (NSIndexPath *) indexPath
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: @"MyBasicCell"];
     ScanDisplay *scan = [self.scans objectAtIndex: indexPath.row];
     cell.textLabel.text = scan.title;
-    cell.imageView.image = [UIImage imageWithData:scan.thumbnailData]; // TODO: cache this, probably in the ScanDisplay object
+    
+    UIImage *thumb = [UIImage imageWithData:scan.thumbnailData scale: UIScreen.mainScreen.scale];
+    
+    cell.imageView.contentMode = UIViewContentModeCenter;
+    cell.imageView.image = thumb; // TODO: cache this, probably in the ScanDisplay object
+    
     return cell;
 }
-
-//- (void) refreshTableRowAtIndex: (int) index
-//{
-//    NSIndexPath *path = [NSIndexPath indexPathForRow:index inSection:0];
-//    
-//    [self.tableView reloadRowsAtIndexPaths:@[path] withRowAnimation:UITableViewRowAnimationNone];
-//}
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {

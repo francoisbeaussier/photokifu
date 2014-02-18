@@ -7,6 +7,7 @@
 //
 
 #import "PKStones.h"
+#import "ScanData.h"
 
 const int PKStonesEmpty = 0;
 const int PKStonesBlack = 1;
@@ -72,15 +73,32 @@ const int PKStonesWhite = 2;
     [self.whiteStones removeObject: [NSValue valueWithCGPoint: coordinates]];
 }
 
-- (NSString *) generateSgfContent
+- (NSString *) generateSgfContentWithScanDisplay: (ScanDisplay *) scanDisplay
 {
     NSString *letters = @"abcdefghijklmnopqrstuvwxyz";
     
     NSMutableString *content = [NSMutableString stringWithString: @"(;GM[1]SZ[19]FF[4]"];
     
-   if (self.blackStones.count > 0)
+    if (scanDisplay.details.player1Name != nil)
     {
-        [content appendFormat: @"AB"];
+        [content appendFormat: @"PB[%@]", scanDisplay.details.player1Name];
+    }
+
+    if (scanDisplay.details.player2Name != nil)
+    {
+        [content appendFormat: @"PW[%@]", scanDisplay.details.player2Name];
+    }
+    
+    if (scanDisplay.scanDate != nil)
+    {
+        [content appendFormat: @"DT[%@]", scanDisplay.scanDate];
+    }
+    
+    [content appendString: @"AP[PhotoKifu]"];
+    
+    if (self.blackStones.count > 0)
+    {
+        [content appendString: @"AB"];
         
         for (NSValue *value in self.blackStones)
         {
@@ -95,7 +113,7 @@ const int PKStonesWhite = 2;
     
     if (self.whiteStones.count > 0)
     {
-        [content appendFormat: @"AW"];
+        [content appendString: @"AW"];
         
         for (NSValue *value in self.whiteStones)
         {
@@ -106,6 +124,11 @@ const int PKStonesWhite = 2;
             
             [content appendFormat: @"[%@%@]", x , y];
         }
+    }
+    
+    if ([scanDisplay.details.blackPlaysNext intValue] == 0)
+    {
+        [content appendString: @";AB[]"];
     }
     
     [content appendString: @")"];
