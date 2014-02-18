@@ -44,11 +44,11 @@
     }
 }
 
-- (ScanDisplay *) addNewScanFromBundle: (NSString *) photoName
+- (ScanDisplay *) addNewScanFromBundle: (NSString *) photoName withTitle: (NSString *) title
 {
     UIImage *image = [UIImage imageNamed: photoName];
     
-    ScanDisplay *scanDisplay = [self addNewScan: image withTitle: photoName];
+    ScanDisplay *scanDisplay = [self addNewScan: image withTitle: title];
     
     return scanDisplay;
 }
@@ -87,8 +87,16 @@
 
 - (UIImage *) generateThumb: (UIImage *) image
 {
-    CGSize targetSize = (CGSize) { 100, 80 };
-    UIGraphicsBeginImageContext(targetSize);
+    const int targetHeight = 58;
+    
+    
+    CGSize targetSize = CGSizeMake(targetHeight / 3 * 4, targetHeight);
+    
+    UIImage *croped = [self cropImage: image cropSize: targetSize];
+    
+    return croped;
+    
+    UIGraphicsBeginImageContextWithOptions(targetSize, NO, UIScreen.mainScreen.scale);
     
     CGRect thumbnailRect = (CGRect){ 0, 0, targetSize.width, targetSize.height };
     
@@ -101,9 +109,60 @@
     return newImage;
 }
 
+- (UIImage *) cropImage:(UIImage *)originalImage cropSize:(CGSize)cropSize
+{
+    //calculate scale factor to go between cropframe and original image
+    float SF = originalImage.size.width / cropSize.width;
+    
+    //find the centre x,y coordinates of image
+    float centreX = originalImage.size.width / 2;
+    float centreY = originalImage.size.height / 2;
+    
+    //calculate crop parameters
+    float cropX = centreX - ((cropSize.width / 2) * SF);
+    float cropY = centreY - ((cropSize.height / 2) * SF);
+    
+    CGRect cropRect = CGRectMake(cropX, cropY, (cropSize.width *SF), (cropSize.height * SF));
+    
+    CGAffineTransform rectTransform;
+    switch (originalImage.imageOrientation)
+    {
+        case UIImageOrientationLeft:
+            rectTransform = CGAffineTransformTranslate(CGAffineTransformMakeRotation(M_PI_2), 0, -originalImage.size.height);
+            break;
+        case UIImageOrientationRight:
+            rectTransform = CGAffineTransformTranslate(CGAffineTransformMakeRotation(-M_PI_2), -originalImage.size.width, 0);
+            break;
+        case UIImageOrientationDown:
+            rectTransform = CGAffineTransformTranslate(CGAffineTransformMakeRotation(-M_PI), -originalImage.size.width, -originalImage.size.height);
+            break;
+        default:
+            rectTransform = CGAffineTransformIdentity;
+    };
+    rectTransform = CGAffineTransformScale(rectTransform, originalImage.scale, originalImage.scale);
+    
+    CGImageRef imageRef = CGImageCreateWithImageInRect([originalImage CGImage], CGRectApplyAffineTransform(cropRect, rectTransform));
+    UIImage *result = [UIImage imageWithCGImage:imageRef scale:originalImage.scale orientation:originalImage.imageOrientation];
+    CGImageRelease(imageRef);
+    
+    //Now want to scale down cropped image!
+    //want to multiply frames by 2 to get retina resolution
+    CGRect scaledImgRect = CGRectMake(0, 0, cropSize.width, cropSize.height);
+    
+    UIGraphicsBeginImageContextWithOptions(cropSize, NO, [UIScreen mainScreen].scale);
+    
+    [result drawInRect:scaledImgRect];
+    
+    UIImage *scaledNewImage = UIGraphicsGetImageFromCurrentImageContext();
+    
+    UIGraphicsEndImageContext();
+    
+    return scaledNewImage;
+    
+}
+
 - (NSMutableArray *) loadScans
 {
-   
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"ScanDisplay" inManagedObjectContext:self.context];
     [fetchRequest setEntity:entity];
