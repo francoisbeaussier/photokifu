@@ -73,10 +73,20 @@ const int PKStonesWhite = 2;
     [self.whiteStones removeObject: [NSValue valueWithCGPoint: coordinates]];
 }
 
-- (NSString *) generateSgfContentWithScanDisplay: (ScanDisplay *) scanDisplay
+- (void) appendStone: (NSMutableString *) content withValue: (NSValue *) value
 {
     NSString *letters = @"abcdefghijklmnopqrstuvwxyz";
     
+    CGPoint point = [value CGPointValue];
+    
+    NSString *x = [letters substringWithRange: NSMakeRange(point.x, 1)];
+    NSString *y = [letters substringWithRange: NSMakeRange(point.y, 1)];
+    
+    [content appendFormat: @"[%@%@]", x , y];
+}
+
+- (NSString *) generateSgfContentWithScanDisplay: (ScanDisplay *) scanDisplay
+{
     NSMutableString *content = [NSMutableString stringWithString: @"(;GM[1]SZ[19]FF[4]"];
     
     if (scanDisplay.details.player1Name != nil)
@@ -94,6 +104,11 @@ const int PKStonesWhite = 2;
         [content appendFormat: @"DT[%@]", scanDisplay.scanDate];
     }
     
+    if ([scanDisplay.details.blackPlaysNext intValue] == 0)
+    {
+        [content appendString: @"PL[W]"];
+    }
+    
     [content appendString: @"AP[PhotoKifu]"];
     
     if (self.blackStones.count > 0)
@@ -102,12 +117,7 @@ const int PKStonesWhite = 2;
         
         for (NSValue *value in self.blackStones)
         {
-            CGPoint point = [value CGPointValue];
-            
-            NSString *x = [letters substringWithRange: NSMakeRange(point.x, 1)];
-            NSString *y = [letters substringWithRange: NSMakeRange(point.y, 1)];
-            
-            [content appendFormat: @"[%@%@]", x , y];
+            [self appendStone: content withValue: value];
         }
     }
     
@@ -117,18 +127,8 @@ const int PKStonesWhite = 2;
         
         for (NSValue *value in self.whiteStones)
         {
-            CGPoint point = [value CGPointValue];
-            
-            NSString *x = [letters substringWithRange: NSMakeRange(point.x, 1)];
-            NSString *y = [letters substringWithRange: NSMakeRange(point.y, 1)];
-            
-            [content appendFormat: @"[%@%@]", x , y];
+            [self appendStone: content withValue: value];
         }
-    }
-    
-    if ([scanDisplay.details.blackPlaysNext intValue] == 0)
-    {
-        [content appendString: @";AB[]"];
     }
     
     [content appendString: @")"];

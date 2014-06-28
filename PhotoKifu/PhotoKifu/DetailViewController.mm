@@ -226,7 +226,7 @@ CGRect _scrollViewFrame;
             nextGridSize = 19;
             break;
         default:
-            NSLog(@"Unknow grid size: %i", self.gridSizeButton.tag);
+            NSLog(@"Unknow grid size: %li", (long) self.gridSizeButton.tag);
             nextGridSize = 19;
     }
 
